@@ -22,8 +22,8 @@ public class TbUsersServiceImpl implements TbUsersService {
             return ToData.builder().status("0").message("用户已存在").build();
 
         }else{
-              return ToData.builder().status("1")
+              return ToData.builder().status("1");
         }
-        return null;
+
     }
 }
