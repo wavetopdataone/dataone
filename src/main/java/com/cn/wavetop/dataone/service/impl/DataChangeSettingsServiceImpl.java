@@ -5,9 +5,12 @@ import com.cn.wavetop.dataone.entity.DataChangeSettings;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.DataChangeSettingsService;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,10 +41,15 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
 
     @Override
     public Object addDataChange(DataChangeSettings dataChangeSettings) {
-        if (repository.findByJobId(dataChangeSettings.getJobId()).size()<=0){
-            return ToData.builder().status("0").message( "任务不存在").build();
+        if (repository.findByJobId(dataChangeSettings.getJobId()).size()>0){
+            return ToData.builder().status("0").message( "任务已存在").build();
         }else {
-            return "";
+            DataChangeSettings saveData = repository.save(dataChangeSettings);
+            HashMap<Object, Object> map = new HashMap();
+            map.put("status", "1");
+            map.put("message", "添加成功");
+            map.put("data", saveData);
+            return map;
         }
     }
 }

@@ -38,8 +38,7 @@ public class DataChangeSettingsController {
 
     @PostMapping("/add_data_change")
     public Object add_data_change(DataChangeSettings dataChangeSettings) {
-
-
+        System.out.println(dataChangeSettings);
         return service.addDataChange(dataChangeSettings);
     }
 
