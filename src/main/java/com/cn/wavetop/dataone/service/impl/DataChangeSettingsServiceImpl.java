@@ -27,7 +27,7 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
     }
 
     @Override
-    public Object getCheckDataChangeByjobid(String job_id) {
+    public Object getCheckDataChangeByjobid(long job_id) {
         List<DataChangeSettings> dataChangeSettings = repository.findByJobId(job_id);
         if (dataChangeSettings.size()<=0){
             return ToDataFailure.builder().status("0").message( "任务不存在").build();

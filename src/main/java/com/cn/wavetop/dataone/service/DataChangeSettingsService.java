@@ -18,5 +18,5 @@ public interface DataChangeSettingsService {
 
   Object getDataChangeSettingsAll();
 
-  Object getCheckDataChangeByjobid(String job_id);
+  Object getCheckDataChangeByjobid(long job_id);
 }
