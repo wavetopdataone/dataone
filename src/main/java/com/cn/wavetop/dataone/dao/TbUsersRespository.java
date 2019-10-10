@@ -8,4 +8,6 @@ import java.util.List;
 public interface TbUsersRespository extends JpaRepository<TbUsers,Long> {
 
 
+    List<TbUsers> findByName(String name);
+
 }
