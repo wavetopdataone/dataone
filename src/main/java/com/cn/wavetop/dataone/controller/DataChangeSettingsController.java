@@ -20,7 +20,7 @@ import java.util.List;
  * @Date 2019/10/10、12:56
  * # 数据源变化设置
  */
-@Controller
+@RestController
 @RequestMapping("/data_change_settings")
 public class DataChangeSettingsController {
 
@@ -29,15 +29,13 @@ public class DataChangeSettingsController {
 
     @ApiOperation(value = "查看全部",httpMethod = "GET",protocols = "HTTP",produces = "application/json",notes = "查询用户信息")
     @GetMapping("/data_change_all")
-    public ToData data_change_all() {
+    public Object data_change_all() {
         return service.getDataChangeSettingsAll();
     }
 
-
-
-
+    @ApiImplicitParam(name = "job_id",value = "job_id",dataType = "String")
     @PostMapping("/check_data_change")
-    public ToData check_data_change(String job_id) {
+    public Object check_data_change(String job_id) {
         return service.getCheckDataChangeByjobid(job_id);
     }
 
