@@ -28,11 +28,20 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
     public Object getCheckDataChangeByjobid(long job_id) {
         List<DataChangeSettings> dataChangeSettings = repository.findByJobId(job_id);
         if (dataChangeSettings.size()<=0){
-            return ToDataMessage.builder().status("0").message( "任务不存在").build();
+            return ToData.builder().status("0").message( "任务不存在").build();
         }else {
             return ToData.builder().status("1").data( dataChangeSettings).build();
         }
 
 
+    }
+
+    @Override
+    public Object addDataChange(DataChangeSettings dataChangeSettings) {
+        if (repository.findByJobId(dataChangeSettings.getJobId()).size()<=0){
+            return ToData.builder().status("0").message( "任务不存在").build();
+        }else {
+            return "";
+        }
     }
 }

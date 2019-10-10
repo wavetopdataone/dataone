@@ -38,16 +38,9 @@ public class DataChangeSettingsController {
 
     @PostMapping("/add_data_change")
     public Object add_data_change(DataChangeSettings dataChangeSettings) {
-        Object checkDataChangeByjobid = service.getCheckDataChangeByjobid(dataChangeSettings.getJobId());
 
-        if (checkDataChangeByjobid instanceof ToData) {
-            return ToDataMessage.builder().status("0").message( "任务已存在").build();
-        } else {
 
-        }
-
-        System.out.println(dataChangeSettings);
-        return dataChangeSettings;
+        return service.addDataChange(dataChangeSettings);
     }
 
 }

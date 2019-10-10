@@ -18,5 +18,6 @@ import java.util.List;
 public class ToData {
    private String status;
    private List data;
+   private String message;
 
 }

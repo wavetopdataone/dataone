@@ -19,4 +19,6 @@ public interface DataChangeSettingsService {
   Object getDataChangeSettingsAll();
 
   Object getCheckDataChangeByjobid(long job_id);
+
+  Object addDataChange(DataChangeSettings dataChangeSettings);
 }
