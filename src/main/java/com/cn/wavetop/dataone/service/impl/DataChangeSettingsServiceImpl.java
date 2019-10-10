@@ -1,11 +1,9 @@
 package com.cn.wavetop.dataone.service.impl;
 
 import com.cn.wavetop.dataone.dao.DataChangeSettingsRespository;
-import com.cn.wavetop.dataone.dao.UserRepository;
 import com.cn.wavetop.dataone.entity.DataChangeSettings;
-import com.cn.wavetop.dataone.entity.UserTest;
 import com.cn.wavetop.dataone.entity.vo.ToData;
-import com.cn.wavetop.dataone.entity.vo.ToDataFailure;
+import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.DataChangeSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +28,7 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
     public Object getCheckDataChangeByjobid(long job_id) {
         List<DataChangeSettings> dataChangeSettings = repository.findByJobId(job_id);
         if (dataChangeSettings.size()<=0){
-            return ToDataFailure.builder().status("0").message( "任务不存在").build();
+            return ToDataMessage.builder().status("0").message( "任务不存在").build();
         }else {
             return ToData.builder().status("1").data( dataChangeSettings).build();
         }

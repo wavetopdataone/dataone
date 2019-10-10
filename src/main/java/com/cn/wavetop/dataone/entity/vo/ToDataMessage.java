@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class ToDataFailure {
+public class ToDataMessage{
    private String status;
    private String message;
 }
