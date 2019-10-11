@@ -32,13 +32,14 @@ public class SysFieldruleController {
     @ApiImplicitParam
     @PostMapping("/check_fieldrule")
     public Object check_fieldrule(long job_id) {
+
         return service.checkFieldruleByJobId(job_id);
     }
 
     @ApiImplicitParam
     @PostMapping("/add_fieldrule")
-    public Object add_fieldrule(SysFieldrule sysFieldrule) {
-        System.out.println(sysFieldrule);
+    public Object add_fieldrule(SysFieldrule sysFieldrule,String list_data) {
+       System.out.println(sysFieldrule+list_data);
         return service.addFieldrule(sysFieldrule);
     }
 

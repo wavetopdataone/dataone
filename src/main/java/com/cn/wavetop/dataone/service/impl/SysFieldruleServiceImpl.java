@@ -46,9 +46,14 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
 
     @Override
     public Object addFieldrule(SysFieldrule sysFieldrule) {
+
         if (sysFieldrule == null || sysFieldrule.getDestName().equals("")) {
             sysFieldrule.setDestName(sysFieldrule.getSourceName());
         }
+
+        repository.findByJobId(sysFieldrule.getJobId());
+        sysJobrelaRespository.findByJobId(sysFieldrule.getJobId());
+
         List<SysFieldrule> sysFieldrules = repository.findByJobId(sysFieldrule.getJobId());
         //List<SysJobrela> sysJobrelas = sysJobrelaRespository.findById(sysFieldrule.getJobId());
 
