@@ -1,14 +1,15 @@
 package com.cn.wavetop.dataone.entity;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Date;
+
 
 /**
  * @Author yongz
@@ -19,7 +20,7 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class ErrorLog {
   @Id // 标识主键
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
@@ -30,7 +31,8 @@ public class ErrorLog {
   private String destName;
   private String optType;
   private String optContext;
-  private java.sql.Timestamp optTime;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private Date optTime;
   private String content;
   private String jobName;
 

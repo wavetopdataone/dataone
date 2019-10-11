@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -21,4 +22,8 @@ public interface DataChangeSettingsService {
   Object getCheckDataChangeByjobid(long job_id);
 
   Object addDataChange(DataChangeSettings dataChangeSettings);
+
+  Object editDataChange(DataChangeSettings dataChangeSettings);
+
+  Object deleteDataChange(long  job_id);
 }
