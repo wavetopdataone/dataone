@@ -19,20 +19,19 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class SysFieldrule {
   @Id // 标识主键
-  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
-  private long id;
-  private long jobId;
+  private Long id;
+  private Long jobId;
   private String fieldName;
   private String destFieldName;
   private String scale;
-  private long notNull;
+  private Long notNull;
   private String type;
-  private long tableId;
+  private Long tableId;
   private String accuracy;
-  private long primaryKey;
+  private Long primaryKey;
   private String sourceName;
   private String destName;
 
