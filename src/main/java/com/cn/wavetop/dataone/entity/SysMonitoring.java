@@ -34,7 +34,7 @@ public class SysMonitoring {
   private String sourceTable;
   private String destTable;
   private Long sqlCount;
-  //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date optTime;
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

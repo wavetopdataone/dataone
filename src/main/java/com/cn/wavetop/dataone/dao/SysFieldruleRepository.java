@@ -6,14 +6,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
 public interface SysFieldruleRepository extends JpaRepository<SysFieldrule,Long> {
      List<SysFieldrule> findByJobId(long job_id);
 
-    @Transactional
+
     @Modifying
     @Query("delete from SysFieldrule where jobId = :job_id")
     int deleteByJobId(long job_id);

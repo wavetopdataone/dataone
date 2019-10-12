@@ -11,6 +11,8 @@ import com.cn.wavetop.dataone.util.DBConn;
 import com.cn.wavetop.dataone.util.DBHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,100 +49,119 @@ public class SysTableruleServiceImpl implements SysTableruleService {
         }
 
     }
-
+    @Transactional
     @Override
     public Object addTablerule(SysTablerule sysTablerule) {
-        System.out.println(sysTablerule+"-----------"+sysTablerule.getId());
-        List<SysTablerule> sysTableruleList =sysTableruleRepository.findByJobId(sysTablerule.getJobId());
-        String[] b= sysTablerule.getSourceTable().split(",");
-        List<SysTablerule> list=new ArrayList<SysTablerule>();
-        String[]c=null;
-        if(sysTableruleList!=null&&sysTableruleList.size()>0){
-            return ToDataMessage.builder().status("0").message("任务已存在").build();
-        }else{
-            String destTable=sysTablerule.getDestTable();
-            if(destTable!=null&&!"".equals(destTable)){
-                c= sysTablerule.getDestTable().split(",");
-            }
-            SysTablerule sysTablerule1=null;
-            for(int i=0;i<b.length;i++){
-                if(c!=null&&c.length>0){
-                    sysTablerule.setDestTable(c[i]);
-                }else{
-                    destTable=b[i];
-                    sysTablerule.setDestTable(destTable);
+        try{
+            System.out.println(sysTablerule+"-----------"+sysTablerule.getId());
+            List<SysTablerule> sysTableruleList =sysTableruleRepository.findByJobId(sysTablerule.getJobId());
+            String[] b= sysTablerule.getSourceTable().split(",");
+            List<SysTablerule> list=new ArrayList<SysTablerule>();
+            String[]c=null;
+            if(sysTableruleList!=null&&sysTableruleList.size()>0){
+                return ToDataMessage.builder().status("0").message("任务已存在").build();
+            }else{
+                String destTable=sysTablerule.getDestTable();
+                if(destTable!=null&&!"".equals(destTable)){
+                    c= sysTablerule.getDestTable().split(",");
                 }
-                sysTablerule.setSourceTable(b[i]);
-                sysTablerule1= sysTableruleRepository.save(sysTablerule);
-                list.add(sysTablerule1);
+                SysTablerule sysTablerule1=null;
+                for(int i=0;i<b.length;i++){
+                    if(c!=null&&c.length>0){
+                        sysTablerule.setDestTable(c[i]);
+                    }else{
+                        destTable=b[i];
+                        sysTablerule.setDestTable(destTable);
+                    }
+                    sysTablerule.setSourceTable(b[i]);
+                    sysTablerule1= sysTableruleRepository.save(sysTablerule);
+                    list.add(sysTablerule1);
+                }
+                return ToData.builder().status("1").data(list).build();
             }
-            return ToData.builder().status("1").data(list).build();
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ToDataMessage.builder().status("0").message("发生错误").build();
         }
-    }
 
+    }
+    @Transactional
     @Override
     public Object editTablerule(SysTablerule sysTablerule) {
-        System.out.println(sysTablerule+"-----------"+sysTablerule.getId());
-        List<SysTablerule> sysTableruleList =sysTableruleRepository.findByJobId(sysTablerule.getJobId());
-        String[] b= sysTablerule.getSourceTable().split(",");
-        List<SysTablerule> list=new ArrayList<SysTablerule>();
-        String[]c=null;
-        if(sysTableruleList!=null&&sysTableruleList.size()>0){
-            int a= sysTableruleRepository.deleteByJobId(sysTablerule.getJobId());
-            System.out.println(a);
-            String destTable=sysTablerule.getDestTable();
+        try{
+            System.out.println(sysTablerule+"-----------"+sysTablerule.getId());
+            List<SysTablerule> sysTableruleList =sysTableruleRepository.findByJobId(sysTablerule.getJobId());
+            String[] b= sysTablerule.getSourceTable().split(",");
+            List<SysTablerule> list=new ArrayList<SysTablerule>();
+            String[]c=null;
+            if(sysTableruleList!=null&&sysTableruleList.size()>0){
+                int a= sysTableruleRepository.deleteByJobId(sysTablerule.getJobId());
+                System.out.println(a);
+                String destTable=sysTablerule.getDestTable();
 
-            if(destTable!=null&&!"".equals(destTable)){
-                c= sysTablerule.getDestTable().split(",");
-            }
-            SysTablerule sysTablerule1=null;
-            for(int i=0;i<b.length;i++){
-                if(c!=null&&c.length>0){
-                    sysTablerule.setDestTable(c[i]);
-                }else{
-                    destTable=b[i];
-                    sysTablerule.setDestTable(destTable);
+                if(destTable!=null&&!"".equals(destTable)){
+                    c= sysTablerule.getDestTable().split(",");
                 }
-                sysTablerule.setSourceTable(b[i]);
-                sysTablerule1= sysTableruleRepository.save(sysTablerule);
-                list.add(sysTablerule1);
-            }
-            return ToData.builder().status("1").message("修改成功").data(list).build();
-        }else{
-            String destTable=sysTablerule.getDestTable();
-            if(destTable!=null&&!"".equals(destTable)){
-                c= sysTablerule.getDestTable().split(",");
-            }
-            SysTablerule sysTablerule1=null;
-            for(int i=0;i<b.length;i++){
-                if(c!=null&&c.length>0){
-                    sysTablerule.setDestTable(c[i]);
-                }else{
-                    destTable=b[i];
-                    sysTablerule.setDestTable(destTable);
+                SysTablerule sysTablerule1=null;
+                for(int i=0;i<b.length;i++){
+                    if(c!=null&&c.length>0){
+                        sysTablerule.setDestTable(c[i]);
+                    }else{
+                        destTable=b[i];
+                        sysTablerule.setDestTable(destTable);
+                    }
+                    sysTablerule.setSourceTable(b[i]);
+                    sysTablerule1= sysTableruleRepository.save(sysTablerule);
+                    list.add(sysTablerule1);
                 }
-                sysTablerule.setSourceTable(b[i]);
-                sysTablerule1= sysTableruleRepository.save(sysTablerule);
-                list.add(sysTablerule1);
+                return ToData.builder().status("1").message("修改成功").data(list).build();
+            }else{
+                String destTable=sysTablerule.getDestTable();
+                if(destTable!=null&&!"".equals(destTable)){
+                    c= sysTablerule.getDestTable().split(",");
+                }
+                SysTablerule sysTablerule1=null;
+                for(int i=0;i<b.length;i++){
+                    if(c!=null&&c.length>0){
+                        sysTablerule.setDestTable(c[i]);
+                    }else{
+                        destTable=b[i];
+                        sysTablerule.setDestTable(destTable);
+                    }
+                    sysTablerule.setSourceTable(b[i]);
+                    sysTablerule1= sysTableruleRepository.save(sysTablerule);
+                    list.add(sysTablerule1);
+                }
+                return ToData.builder().status("2").message("新增成功").data(list).build();
             }
-            return ToData.builder().status("2").message("新增成功").data(list).build();
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ToDataMessage.builder().status("0").message("发生错误").build();
         }
+
     }
 
+    @Transactional
     @Override
     public Object deleteTablerule(long job_id) {
-    List<SysTablerule> sysTableruleList=sysTableruleRepository.findByJobId(job_id);
-    List<SysFieldrule> sysFieldruleList=sysFieldruleRepository.findByJobId(job_id);
-        if(sysTableruleList!=null&&sysTableruleList.size()>0){
-          int result= sysTableruleRepository.deleteByJobId(job_id);
-            if(sysFieldruleList!=null&&sysFieldruleList.size()>0) {
-                int result2 = sysFieldruleRepository.deleteByJobId(job_id);
-            }
-            return ToDataMessage.builder().status("1").message("删除成功").build();
+        try{
+            List<SysTablerule> sysTableruleList=sysTableruleRepository.findByJobId(job_id);
+            List<SysFieldrule> sysFieldruleList=sysFieldruleRepository.findByJobId(job_id);
+            if(sysTableruleList!=null&&sysTableruleList.size()>0){
+                int result= sysTableruleRepository.deleteByJobId(job_id);
+                if(sysFieldruleList!=null&&sysFieldruleList.size()>0) {
+                    int result2 = sysFieldruleRepository.deleteByJobId(job_id);
+                }
+                return ToDataMessage.builder().status("1").message("删除成功").build();
 
-        }else{
-            return ToDataMessage.builder().status("0").message("任务不存在").build();
+            }else{
+                return ToDataMessage.builder().status("0").message("任务不存在").build();
+            }
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ToDataMessage.builder().status("0").message("发生错误").build();
         }
+
     }
 
     @Override
@@ -162,12 +183,19 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     tableName = ret.getString(1);
                     list.add(tableName);
                 }//显示数据
-                ret.close();
-                db1.close();//关闭连接
+
                 return ToData.builder().data(list).build();
             } catch (SQLException e) {
                 e.printStackTrace();
                 return  ToDataMessage.builder().status("0").message("数据库连接错误").build();
+            }finally {
+                try {
+                    ret.close();
+                    db1.close();//关闭连接
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
         else if("1".equals(type)){
@@ -185,13 +213,20 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     list.add(tableName);
                     System.out.println(tableName);
                 }//显示数据
-                ret.close();
-                pst.close();
-                DBConn.close(con);
+
                 return ToData.builder().data(list).build();
             } catch (SQLException e) {
                 e.printStackTrace();
                 return  ToDataMessage.builder().status("0").message("数据库连接错误").build();
+            }finally {
+                try {
+                    ret.close();
+                    pst.close();
+                    DBConn.close(con);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
         else{

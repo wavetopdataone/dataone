@@ -8,6 +8,8 @@ import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysRelaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,62 +36,79 @@ public class SysRelaServiceImpl implements SysRelaService {
         }
 
     }
-
+    @Transactional
     @Override
     public Object update(SysRela sysRela) {
-        List<SysRela> sysUserList= sysRelaRepository.findByDbinfoId(sysRela.getDbinfoId());
-        System.out.println(sysUserList);
-        List<SysRela> userList=new ArrayList<SysRela>();
-        if(sysUserList!=null&&sysUserList.size()>0){
-            //sysUserList.get(0).setId(sysRela.getId());
-            sysUserList.get(0).setDbinfoId(sysRela.getDbinfoId());
-            sysUserList.get(0).setType(sysRela.getType());
+        try{
+            List<SysRela> sysUserList= sysRelaRepository.findByDbinfoId(sysRela.getDbinfoId());
+            System.out.println(sysUserList);
+            List<SysRela> userList=new ArrayList<SysRela>();
+            if(sysUserList!=null&&sysUserList.size()>0){
+                //sysUserList.get(0).setId(sysRela.getId());
+                sysUserList.get(0).setDbinfoId(sysRela.getDbinfoId());
+                sysUserList.get(0).setType(sysRela.getType());
 
-            SysRela user=  sysRelaRepository.save(sysUserList.get(0));
-            System.out.println(user);
-            sysUserList= sysRelaRepository.findById(user.getId());
-            if(user!=null&&!"".equals(user)){
-                return ToData.builder().status("1").data(sysUserList).message("修改成功").build();
+                SysRela user=  sysRelaRepository.save(sysUserList.get(0));
+                System.out.println(user);
+                sysUserList= sysRelaRepository.findById(user.getId());
+                if(user!=null&&!"".equals(user)){
+                    return ToData.builder().status("1").data(sysUserList).message("修改成功").build();
+                }else{
+                    return ToDataMessage.builder().status("0").message("修改失败").build();
+                }
+
             }else{
-                return ToDataMessage.builder().status("0").message("修改失败").build();
+                SysRela user= sysRelaRepository.save(sysRela);
+                userList.add(user);
+                return ToData.builder().status("1").data(userList).message("添加成功").build();
+
             }
 
-        }else{
-            SysRela user= sysRelaRepository.save(sysRela);
-            userList.add(user);
-            return ToData.builder().status("1").data(userList).message("添加成功").build();
-
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ToDataMessage.builder().status("0").message("发生错误").build();
         }
 
     }
-
+    @Transactional
     @Override
     public Object addSysUser(SysRela sysRela) {
-        System.out.println(sysRela+"-----------"+sysRela.getId());
-        if(sysRelaRepository.findByDbinfoId(sysRela.getDbinfoId())!=null&&sysRelaRepository.findByDbinfoId(sysRela.getDbinfoId()).size()>0){
+        try{
+            System.out.println(sysRela+"-----------"+sysRela.getId());
+            if(sysRelaRepository.findByDbinfoId(sysRela.getDbinfoId())!=null&&sysRelaRepository.findByDbinfoId(sysRela.getDbinfoId()).size()>0){
 
-            return ToDataMessage.builder().status("0").message("已存在").build();
-        }else{
-            SysRela user= sysRelaRepository.save(sysRela);
-            List<SysRela> userList=new ArrayList<SysRela>();
-            userList.add(user);
-            return ToData.builder().status("1").data(userList).message("添加成功").build();
+                return ToDataMessage.builder().status("0").message("已存在").build();
+            }else{
+                SysRela user= sysRelaRepository.save(sysRela);
+                List<SysRela> userList=new ArrayList<SysRela>();
+                userList.add(user);
+                return ToData.builder().status("1").data(userList).message("添加成功").build();
+            }
+
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ToDataMessage.builder().status("0").message("发生错误").build();
         }
 
     }
-
+    @Transactional
     @Override
     public Object delete(long dbinfo_id) {
-        List<SysRela> sysUserList= sysRelaRepository.findByDbinfoId(dbinfo_id);
-        if(sysUserList!=null&&sysUserList.size()>0){
-            int result=sysRelaRepository.delete(dbinfo_id);
-            if(result>0){
-                return ToDataMessage.builder().status("1").message("删除成功").build();
+        try{
+            List<SysRela> sysUserList= sysRelaRepository.findByDbinfoId(dbinfo_id);
+            if(sysUserList!=null&&sysUserList.size()>0){
+                int result=sysRelaRepository.delete(dbinfo_id);
+                if(result>0){
+                    return ToDataMessage.builder().status("1").message("删除成功").build();
+                }else{
+                    return ToDataMessage.builder().status("0").message("删除失败").build();
+                }
             }else{
-                return ToDataMessage.builder().status("0").message("删除失败").build();
+                return ToDataMessage.builder().status("0").message("没有删除目标").build();
             }
-        }else{
-            return ToDataMessage.builder().status("0").message("没有删除目标").build();
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ToDataMessage.builder().status("0").message("发生错误").build();
         }
 
     }

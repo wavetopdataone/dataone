@@ -12,6 +12,8 @@ import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysMonitoringService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,76 +42,94 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
             return ToDataMessage.builder().status("0").message("没有找到").build();
         }
     }
-
+    @Transactional
     @Override
     public Object update(SysMonitoring sysMonitoring) {
-        List<SysMonitoring> sysMonitoringList= sysMonitoringRepository.findByJobId(sysMonitoring.getJobId());
-        System.out.println(sysMonitoringList);
-        List<SysMonitoring> userList=new ArrayList<SysMonitoring>();
-        if(sysMonitoringList!=null&&sysMonitoringList.size()>0){
-            //sysMonitoringList.get(0).setId(sysMonitoring.getId());
-            sysMonitoringList.get(0).setJobId(sysMonitoring.getJobId());
-            sysMonitoringList.get(0).setJobName(sysMonitoring.getJobName());
-            sysMonitoringList.get(0).setSyncRange(sysMonitoring.getSyncRange());
-            sysMonitoringList.get(0).setSourceTable(sysMonitoring.getSourceTable());
-            sysMonitoringList.get(0).setDestTable(sysMonitoring.getDestTable());
-            sysMonitoringList.get(0).setSqlCount(sysMonitoring.getSqlCount());
-            sysMonitoringList.get(0).setOptTime(sysMonitoring.getOptTime());
-            sysMonitoringList.get(0).setNeedTime(sysMonitoring.getNeedTime());
-            sysMonitoringList.get(0).setFulldataRate(sysMonitoring.getFulldataRate());
-            sysMonitoringList.get(0).setIncredataRate(sysMonitoring.getIncredataRate());
-            sysMonitoringList.get(0).setStocksdataRate(sysMonitoring.getStocksdataRate());
-            sysMonitoringList.get(0).setTableRate(sysMonitoring.getTableRate());
-            sysMonitoringList.get(0).setReadRate(sysMonitoring.getReadRate());
-            sysMonitoringList.get(0).setDisposeRate(sysMonitoring.getDisposeRate());
-            sysMonitoringList.get(0).setJobStatus(sysMonitoring.getJobStatus());
-            sysMonitoringList.get(0).setReadData(sysMonitoring.getReadData());
-            sysMonitoringList.get(0).setWriteData(sysMonitoring.getWriteData());
-            sysMonitoringList.get(0).setErrorData(sysMonitoring.getErrorData());
+        try{
+            List<SysMonitoring> sysMonitoringList= sysMonitoringRepository.findByJobId(sysMonitoring.getJobId());
+            System.out.println(sysMonitoringList);
+            List<SysMonitoring> userList=new ArrayList<SysMonitoring>();
+            if(sysMonitoringList!=null&&sysMonitoringList.size()>0){
+                //sysMonitoringList.get(0).setId(sysMonitoring.getId());
+                sysMonitoringList.get(0).setJobId(sysMonitoring.getJobId());
+                sysMonitoringList.get(0).setJobName(sysMonitoring.getJobName());
+                sysMonitoringList.get(0).setSyncRange(sysMonitoring.getSyncRange());
+                sysMonitoringList.get(0).setSourceTable(sysMonitoring.getSourceTable());
+                sysMonitoringList.get(0).setDestTable(sysMonitoring.getDestTable());
+                sysMonitoringList.get(0).setSqlCount(sysMonitoring.getSqlCount());
+                sysMonitoringList.get(0).setOptTime(sysMonitoring.getOptTime());
+                sysMonitoringList.get(0).setNeedTime(sysMonitoring.getNeedTime());
+                sysMonitoringList.get(0).setFulldataRate(sysMonitoring.getFulldataRate());
+                sysMonitoringList.get(0).setIncredataRate(sysMonitoring.getIncredataRate());
+                sysMonitoringList.get(0).setStocksdataRate(sysMonitoring.getStocksdataRate());
+                sysMonitoringList.get(0).setTableRate(sysMonitoring.getTableRate());
+                sysMonitoringList.get(0).setReadRate(sysMonitoring.getReadRate());
+                sysMonitoringList.get(0).setDisposeRate(sysMonitoring.getDisposeRate());
+                sysMonitoringList.get(0).setJobStatus(sysMonitoring.getJobStatus());
+                sysMonitoringList.get(0).setReadData(sysMonitoring.getReadData());
+                sysMonitoringList.get(0).setWriteData(sysMonitoring.getWriteData());
+                sysMonitoringList.get(0).setErrorData(sysMonitoring.getErrorData());
 
-            SysMonitoring user=  sysMonitoringRepository.save(sysMonitoringList.get(0));
-            System.out.println(user);
-            userList= sysMonitoringRepository.findById(user.getId());
-            if(user!=null&&!"".equals(user)){
-                return ToData.builder().status("1").data(userList).message("修改成功").build();
+                SysMonitoring user=  sysMonitoringRepository.save(sysMonitoringList.get(0));
+                System.out.println(user);
+                userList= sysMonitoringRepository.findById(user.getId());
+                if(user!=null&&!"".equals(user)){
+                    return ToData.builder().status("1").data(userList).message("修改成功").build();
+                }else{
+                    return ToDataMessage.builder().status("0").message("修改失败").build();
+                }
+
             }else{
                 return ToDataMessage.builder().status("0").message("修改失败").build();
+
             }
-
-        }else{
-            return ToDataMessage.builder().status("0").message("修改失败").build();
-
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ToDataMessage.builder().status("0").message("发生错误").build();
         }
-    }
 
+    }
+    @Transactional
     @Override
     public Object addSysMonitoring(SysMonitoring sysMonitoring) {
-        System.out.println(sysMonitoring+"-----------"+sysMonitoring.getJobId());
-        if(sysMonitoringRepository.findByJobId(sysMonitoring.getJobId())!=null&&sysMonitoringRepository.findByJobId(sysMonitoring.getJobId()).size()>0){
+        try{
+            System.out.println(sysMonitoring+"-----------"+sysMonitoring.getJobId());
+            if(sysMonitoringRepository.findByJobId(sysMonitoring.getJobId())!=null&&sysMonitoringRepository.findByJobId(sysMonitoring.getJobId()).size()>0){
 
-            return ToDataMessage.builder().status("0").message("已存在").build();
-        }else{
-            SysMonitoring user= sysMonitoringRepository.save(sysMonitoring);
-            List<SysMonitoring> userList=new ArrayList<SysMonitoring>();
-            userList.add(user);
-            return ToData.builder().status("1").data(userList).message("添加成功").build();
+                return ToDataMessage.builder().status("0").message("已存在").build();
+            }else{
+                SysMonitoring user= sysMonitoringRepository.save(sysMonitoring);
+                List<SysMonitoring> userList=new ArrayList<SysMonitoring>();
+                userList.add(user);
+                return ToData.builder().status("1").data(userList).message("添加成功").build();
+            }
+
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ToDataMessage.builder().status("0").message("发生错误").build();
         }
 
     }
-
+    @Transactional
     @Override
     public Object delete(long job_id) {
-        List<SysMonitoring> sysUserList= sysMonitoringRepository.findByJobId(job_id);
-        if(sysUserList!=null&&sysUserList.size()>0){
-            int result=sysMonitoringRepository.deleteByJobId(job_id);
-            if(result>0){
-                return ToDataMessage.builder().status("1").message("删除成功").build();
+        try{
+            List<SysMonitoring> sysUserList= sysMonitoringRepository.findByJobId(job_id);
+            if(sysUserList!=null&&sysUserList.size()>0){
+                int result=sysMonitoringRepository.deleteByJobId(job_id);
+                if(result>0){
+                    return ToDataMessage.builder().status("1").message("删除成功").build();
+                }else{
+                    return ToDataMessage.builder().status("0").message("删除失败").build();
+                }
             }else{
-                return ToDataMessage.builder().status("0").message("删除失败").build();
+                return ToDataMessage.builder().status("0").message("任务不存在").build();
             }
-        }else{
-            return ToDataMessage.builder().status("0").message("任务不存在").build();
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ToDataMessage.builder().status("0").message("发生错误").build();
         }
+
 
     }
 
@@ -170,31 +190,37 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
             return map;
         }
     }
-
+    @Transactional
     @Override
     public Object tableMonitoring(long job_id) {
-        List<SysMonitoring> sysMonitoringList=sysMonitoringRepository.findByJobId(job_id);
-        List<SysTablerule> sysTablerules=new ArrayList<SysTablerule>();
-        List<SysMonitoring> sysMonitoringList1=new ArrayList<SysMonitoring>();
+        try{
+            List<SysMonitoring> sysMonitoringList=sysMonitoringRepository.findByJobId(job_id);
+            List<SysTablerule> sysTablerules=new ArrayList<SysTablerule>();
+            List<SysMonitoring> sysMonitoringList1=new ArrayList<SysMonitoring>();
 
-        if(sysMonitoringList!=null&&sysMonitoringList.size()>0) {
-            for (SysMonitoring sysMonitoring:sysMonitoringList){
-                sysTablerules= sysTableruleRepository.findBySourceTableAndJobId(sysMonitoring.getSourceTable(),sysMonitoring.getJobId());
-                System.out.println(sysTablerules);
-                for (SysTablerule sysTablerule:sysTablerules){
-                     sysMonitoringList1=sysMonitoringRepository.findBySourceTableAndJobId(sysMonitoring.getSourceTable(),sysMonitoring.getJobId());
-                     System.out.println(sysMonitoringList1);
-                     sysMonitoringList1.get(0).setDestTable(sysTablerule.getDestTable());
-                     SysMonitoring S= sysMonitoringRepository.save(sysMonitoringList1.get(0));
-                     System.out.println(S);
+            if(sysMonitoringList!=null&&sysMonitoringList.size()>0) {
+                for (SysMonitoring sysMonitoring:sysMonitoringList){
+                    sysTablerules= sysTableruleRepository.findBySourceTableAndJobId(sysMonitoring.getSourceTable(),sysMonitoring.getJobId());
+                    System.out.println(sysTablerules);
+                    for (SysTablerule sysTablerule:sysTablerules){
+                        sysMonitoringList1=sysMonitoringRepository.findBySourceTableAndJobId(sysMonitoring.getSourceTable(),sysMonitoring.getJobId());
+                        System.out.println(sysMonitoringList1);
+                        sysMonitoringList1.get(0).setDestTable(sysTablerule.getDestTable());
+                        SysMonitoring S= sysMonitoringRepository.save(sysMonitoringList1.get(0));
+                        System.out.println(S);
+                    }
                 }
+                sysMonitoringList=sysMonitoringRepository.findByJobId(job_id);
+                return ToData.builder().status("1").data(sysMonitoringList).build();
+            }else{
+                return ToDataMessage.builder().status("0").message("没有查到数据").build();
             }
-            sysMonitoringList=sysMonitoringRepository.findByJobId(job_id);
-          return ToData.builder().status("1").data(sysMonitoringList).build();
-        }else{
-            return ToDataMessage.builder().status("0").message("没有查到数据").build();
+
+        }catch (Exception e){
+          TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+          return ToDataMessage.builder().status("0").message("发生错误").build();
+
         }
+
     }
-
-
 }

@@ -32,7 +32,7 @@ public class Userlog {
   private java.sql.Timestamp time;
   private String jobName;
   private String operate;
-  private long jobId;
+  private Long jobId;
 
 
 }

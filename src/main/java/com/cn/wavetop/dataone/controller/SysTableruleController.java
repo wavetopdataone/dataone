@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
+
 @RestController
 @RequestMapping("/sys_tablerule")
 public class SysTableruleController {
@@ -45,7 +47,7 @@ public class SysTableruleController {
     }
     @ApiOperation(value = "连接数据库查询", protocols = "HTTP", produces = "application/json", notes = "连接数据库查询")
     @RequestMapping("/link_data_table")
-    public Object linkDataTable(String type,String host,String user,String port,String password,String dbname,String schema){
+    public Object linkDataTable(String type,String host,String user,String port,String password,String dbname,String schema) throws SQLException {
 
         return sysTableruleService.linkDataTable( type, host, user, port, password, dbname, schema);
     }
