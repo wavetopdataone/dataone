@@ -1,14 +1,17 @@
 package com.cn.wavetop.dataone.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * @Author yongz
@@ -19,20 +22,22 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 
 public class SysLoginfo {
   @Id // 标识主键
 
   private long id;
   private String jobName;
-  private java.sql.Timestamp openratingTime;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+  private Date openratingTime;
   private String details;
   private String user;
-  private long userId;
-  private long limite;
+  private Long userId;
+  private Long limite;
   private String section;
-  private long jobId;
+  private Long jobId;
 
 
 }

@@ -1,14 +1,17 @@
 package com.cn.wavetop.dataone.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * @Author yongz
@@ -19,20 +22,24 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class TbUsers {
   @Id // 标识主键
 
   private long id;
-  private java.sql.Timestamp lastLogin;
-  private long isSuperuser;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+  private Date lastLogin;
+  private Long isSuperuser;
   private String username;
   private String firstName;
   private String lastName;
   private String email;
-  private long isStaff;
-  private long isActive;
-  private java.sql.Timestamp dateJoined;
+  private Long isStaff;
+  private Long isActive;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+  private Date dateJoined;
   private String ticket;
   private String password;
   private String name;

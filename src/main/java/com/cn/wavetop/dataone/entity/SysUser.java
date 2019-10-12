@@ -19,15 +19,14 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class SysUser {
   @Id // 标识主键
-
   private long id;
   private String username;
   private String mail;
-  private long groupId;
-  private long state;
+  private Long groupId;
+  private Long state;
   private String remark;
   private String password;
 

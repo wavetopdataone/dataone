@@ -19,13 +19,13 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class SysRela {
   @Id // 标识主键
 
   private long id;
-  private long dbinfoId;
-  private long type;
+  private Long dbinfoId;
+  private Long type;
 
 
 }

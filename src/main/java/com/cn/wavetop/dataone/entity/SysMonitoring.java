@@ -1,14 +1,17 @@
 package com.cn.wavetop.dataone.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * @Author yongz
@@ -19,30 +22,34 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 
 public class SysMonitoring {
   @Id // 标识主键
 
   private long id;
-  private long jobId;
+  private Long jobId;
   private String jobName;
-  private long syncRange;
+  private Long syncRange;
   private String sourceTable;
   private String destTable;
-  private long sqlCount;
-  private java.sql.Timestamp optTime;
-  private java.sql.Timestamp needTime;
-  private double fulldataRate;
-  private double incredataRate;
-  private double stocksdataRate;
-  private double tableRate;
-  private long readRate;
-  private long disposeRate;
-  private long jobStatus;
-  private long readData;
-  private long writeData;
-  private long errorData;
+  private Long sqlCount;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private Date optTime;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+  private Date needTime;
+  private Double fulldataRate;
+  private Double incredataRate;
+  private Double stocksdataRate;
+  private Double tableRate;
+  private Long readRate;
+  private Long disposeRate;
+  private Long jobStatus;
+  private Long readData;
+  private Long writeData;
+  private Long errorData;
 
 
 }

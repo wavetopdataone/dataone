@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @Author yongz
@@ -24,14 +21,17 @@ public class SysTablerule {
   @Id // 标识主键
 
   private long id;
-  private long jobId;
+  private Long jobId;
   private String sourceTable;
   private String sourceName;
   private String viewName;
+  @Column(name = "`schema`")
   private String schema;
-  private long hasPrimaryKey;
-  private long check;
-  private long sourOrDest;
+  private Long hasPrimaryKey;
+  @Column(name = "`check`")
+  private Long check;
+  @Column(name = "`sour_or_dest`")
+  private Long sourOrDest;
   private String destTable;
 
 

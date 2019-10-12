@@ -23,10 +23,10 @@ import javax.persistence.Id;
 public class UserTest {
 
     @Id // 标识主键
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
     private long id;
     private String username;
     private String password;
-    private double balance;
+    private Double balance;
 
 }
