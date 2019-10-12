@@ -4,11 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * @Author yongz
@@ -19,25 +22,30 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class SysJobinfo {
   @Id // 标识主键
-  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
-  private long id;
+  private Long id;
   private String players;
-  private long syncRange;
-  private long syncWay;
+  private Long syncRange;
+  private Long syncWay;
   private String readFrequency;
-  private long readBegin;
+
+  private Long readBegin;
   private String readWay;
-  private long dataEnc;
+  private Long dataEnc;
   private String maxSourceRead;
-  private long destWriteConcurrentNum;
+  private Long destWriteConcurrentNum;
+
   private String maxDestWrite;
-  private long destCaseSensitive;
-  private java.sql.Timestamp beginTime;
-  private java.sql.Timestamp endTime;
-  private long jobId;
+  private Long destCaseSensitive;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @CreatedDate
+  private Date beginTime;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @CreatedDate
+  private Date endTime;
+  private Long jobId;
 
 
 }

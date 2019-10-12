@@ -58,12 +58,12 @@ public class ErrorLogServiceImpl  implements ErrorLogService {
     @Override
     public Object editErrorlog(ErrorLog errorLog) {
         HashMap<Object, Object> map = new HashMap();
-        ErrorLog data;
+
         long id = errorLog.getId();
 
         // 查看该任务是否存在，存在修改更新任务，不存在新建任务
         if (repository.existsById(id )) {
-            data = repository.findById(id);
+            ErrorLog data = repository.findById(id);
             data.setJobId(errorLog.getJobId());
             data.setContent(errorLog.getContent());
             data.setDestName(errorLog.getDestName());
@@ -79,7 +79,7 @@ public class ErrorLogServiceImpl  implements ErrorLogService {
             map.put("message", "修改成功");
             map.put("data", data);
         } else {
-            data = repository.save(errorLog);
+            ErrorLog data = repository.save(errorLog);
             map.put("status", 2);
             map.put("message", "添加成功");
             map.put("data", data);

@@ -18,12 +18,12 @@ import javax.persistence.Id;
 @Entity // 标识实体
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor@Data
 
 public class DjangoAdminLog {
 
   @Id // 标识主键
-  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
+
   private long id;
   private java.sql.Timestamp actionTime;
   private String objectId;

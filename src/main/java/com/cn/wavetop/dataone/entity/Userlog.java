@@ -4,11 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @Author yongz
@@ -19,16 +18,17 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class Userlog {
   @Id // 标识主键
-  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
-  private long id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
   private String user;
-  private java.sql.Timestamp time;
+  @Column(name="time",columnDefinition="datetime")
+  private Date time;
   private String jobName;
   private String operate;
-  private long jobId;
+  private Long jobId;
 
 
 }

@@ -20,4 +20,5 @@ public interface ErrorLogRespository extends JpaRepository<ErrorLog,Long> {
 
     boolean existsByJobNameContaining(String job_name);
 
+    void deleteByJobId(Long job_id);
 }

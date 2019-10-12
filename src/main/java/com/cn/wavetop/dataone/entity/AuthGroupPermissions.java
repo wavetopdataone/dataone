@@ -22,7 +22,7 @@ import javax.persistence.Id;
 
 public class AuthGroupPermissions {
   @Id // 标识主键
-  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
+
   private long id;
   private long groupId;
   private long permissionId;

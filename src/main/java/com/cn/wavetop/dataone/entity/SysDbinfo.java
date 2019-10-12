@@ -19,7 +19,7 @@ import javax.persistence.*;
 @Data
 public class SysDbinfo {
   @Id // 标识主键
-  private long id;
+  private Long id;
   private String host;
   private String user;
   private String password;
@@ -29,9 +29,9 @@ public class SysDbinfo {
 
   @Column(name="\"schema\"")
   private String schema;
-  private long port;
+  private Long port;
   @Column(name="sour_or_dest")
-  private long sourDest;
-  private long type;
+  private Long sourDest;
+  private Long type;
 
 }

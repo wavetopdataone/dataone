@@ -22,7 +22,7 @@ import javax.persistence.Id;
 @Data
 public class MailnotifySettings {
 
-  //@GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
+  //
   @Id // 标识主键
   private long id;
   private String jobError;
