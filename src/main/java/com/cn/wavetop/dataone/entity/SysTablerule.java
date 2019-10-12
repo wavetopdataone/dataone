@@ -21,12 +21,14 @@ public class SysTablerule {
   @Id // 标识主键
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
-  private long jobId;
+  private Long jobId;
   private String sourceTable;
   private String sourceName;
   private String viewName;
+  @Column(name = "`schema`")
   private String schema;
   private Long hasPrimaryKey;
+  @Column(name = "`check`")
   private Long check;
   @Column(name = "`sour_or_dest`")
   private Long sourOrDest;
