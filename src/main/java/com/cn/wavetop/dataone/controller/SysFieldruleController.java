@@ -43,6 +43,12 @@ public class SysFieldruleController {
         return service.addFieldrule(sysFieldrule);
     }
 
+    @ApiImplicitParam
+    @PostMapping("/edit_fieldrule")
+    public Object edit_fieldrule(SysFieldrule sysFieldrule,String list_data) {
+        System.out.println(sysFieldrule);
+        return service.editFieldrule(sysFieldrule);
+    }
 
 
 }

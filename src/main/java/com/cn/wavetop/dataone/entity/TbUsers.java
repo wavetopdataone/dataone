@@ -22,7 +22,7 @@ import javax.persistence.Id;
 
 public class TbUsers {
   @Id // 标识主键
-  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
+
   private long id;
   private java.sql.Timestamp lastLogin;
   private long isSuperuser;

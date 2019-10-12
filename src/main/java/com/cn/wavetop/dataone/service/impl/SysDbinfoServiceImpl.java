@@ -61,11 +61,10 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
         if (repository.existsByIdOrName(sysDbinfo.getId(), sysDbinfo.getName())) {
             return ToData.builder().status("0").message("任务已存在").build();
         } else {
-            SysDbinfo save = repository.save(sysDbinfo);
+            SysDbinfo data = repository.save(sysDbinfo);
             HashMap<Object, Object> map = new HashMap();
             map.put("status", 1);
-            map.put("message", "添加成功");
-            map.put("data", save);
+            map.put("data", data);
             return map;
         }
     }

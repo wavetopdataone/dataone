@@ -14,4 +14,5 @@ public interface SysFieldruleService {
 
     Object addFieldrule(SysFieldrule sysFieldrule);
 
+    Object editFieldrule(SysFieldrule sysFieldrule);
 }

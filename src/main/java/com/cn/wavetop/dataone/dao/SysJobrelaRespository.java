@@ -11,18 +11,9 @@ import java.util.List;
  * @Date 2019/10/11、15:47
  */
 public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long> {
-    List<SysJobrela> findById(long id);
-
-    SysJobrela findByDestName(String name);
-
-    SysJobrela findBySourceName(String name);
 
     boolean existsByDestNameOrSourceName(String name, String name1);
 
     boolean existsByDestIdOrSourceId(long id, long id1);
 
-    boolean existsByJobId(long job_id);
-
-
-    SysJobrela findByJobId(Long jobId);
 }
