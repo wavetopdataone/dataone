@@ -1,8 +1,9 @@
 package com.cn.wavetop.dataone.dao;
 
 import com.cn.wavetop.dataone.entity.DataChangeSettings;
-import com.cn.wavetop.dataone.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +22,13 @@ public interface DataChangeSettingsRespository extends JpaRepository<DataChangeS
     List<DataChangeSettings> findAll();
 
     List<DataChangeSettings> findByJobId(long job_id);
+
+    boolean existsByJobId(long jobId);
+
+
+    @Modifying
+    @Query("update DataChangeSettings u set u.deleteSyncingSource = :deleteSyncingSource, u.deleteSync = :deleteSync,u.newSync = :newSync,u.newtableSource = :newtableSource where u.jobId = :jobId")
+    void updateByJobId(long jobId, long deleteSyncingSource, long deleteSync, long newSync, long newtableSource);
+
+    int deleteByJobId(long job_id);
 }

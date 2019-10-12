@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @Author yongz
@@ -19,19 +16,22 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class SysDbinfo {
   @Id // 标识主键
-  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
   private String host;
   private String user;
   private String password;
   private String name;
+
   private String dbname;
+
+  @Column(name="\"schema\"")
   private String schema;
   private long port;
-  private long sourOrDest;
+  @Column(name="sour_or_dest")
+  private long sourDest;
   private long type;
 
 }

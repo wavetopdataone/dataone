@@ -1,53 +1,55 @@
 package com.cn.wavetop.dataone.service.impl;
 
 import com.cn.wavetop.dataone.dao.DataChangeSettingsRespository;
+import com.cn.wavetop.dataone.dao.ErrorQueueSettingsRespository;
 import com.cn.wavetop.dataone.entity.DataChangeSettings;
+import com.cn.wavetop.dataone.entity.ErrorQueueSettings;
 import com.cn.wavetop.dataone.entity.vo.ToData;
-import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
-import com.cn.wavetop.dataone.service.DataChangeSettingsService;
-import org.aspectj.weaver.ast.Var;
+import com.cn.wavetop.dataone.service.ErrorQueueSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author yongz
- * @Date 2019/10/10、11:45
+ * @Date 2019/10/11、10:30
  */
 @Service
-public class DataChangeSettingsServiceImpl implements DataChangeSettingsService {
+public class  ErrorQueueSettingsServiceImpl implements ErrorQueueSettingsService {
     @Autowired
-    private DataChangeSettingsRespository repository;
+    private ErrorQueueSettingsRespository repository;
 
     @Override
-    public Object getDataChangeSettingsAll() {
+    public Object getErrorQueueAll() {
         return ToData.builder().status("1").data(repository.findAll()).build();
     }
 
     @Override
-    public Object getCheckDataChangeByjobid(long job_id) {
-        List<DataChangeSettings> dataChangeSettings = repository.findByJobId(job_id);
-        if (dataChangeSettings.size() <= 0) {
-            return ToData.builder().status("0").message("任务不存在").build();
+    public Object getCheckErrorQueueByjobid(long job_id) {
+
+        if (repository.existsByJobId(job_id)) {
+            ErrorQueueSettings errorQueueSettings = repository.findByJobId(job_id);
+            Map<Object, Object> map = new HashMap();
+            map.put("status", 1);
+            map.put("data", errorQueueSettings);
+            return map;
         } else {
-            return ToData.builder().status("1").data(dataChangeSettings).build();
+            return ToData.builder().status("0").message("任务不存在").build();
+
         }
-
-
     }
     @Transactional
     @Override
-    public Object addDataChange(DataChangeSettings dataChangeSettings) {
+    public Object addErrorQueue(ErrorQueueSettings errorQueueSettings) {
 
-        if (repository.existsByJobId(dataChangeSettings.getJobId())) {
+        if (repository.existsByJobId(errorQueueSettings.getJobId())) {
             return ToData.builder().status("0").message("任务已存在").build();
         } else {
-            DataChangeSettings saveData = repository.save(dataChangeSettings);
+            ErrorQueueSettings saveData = repository.save(errorQueueSettings);
             HashMap<Object, Object> map = new HashMap();
             map.put("status", 1);
             map.put("message", "添加成功");
@@ -57,29 +59,35 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
     }
     @Transactional
     @Override
-    public Object editDataChange(DataChangeSettings dataChangeSettings) {
+    public Object editErrorQueue(ErrorQueueSettings errorQueueSettings) {
         HashMap<Object, Object> map = new HashMap();
-        DataChangeSettings data;
-
+        long jobId = errorQueueSettings.getJobId();
 
         // 查看该任务是否存在，存在修改更新任务，不存在新建任务
-        if (repository.existsByJobId(dataChangeSettings.getJobId())) {
-            repository.updateByJobId(dataChangeSettings.getJobId(), dataChangeSettings.getDeleteSyncingSource(), dataChangeSettings.getDeleteSync(), dataChangeSettings.getNewSync(), dataChangeSettings.getNewtableSource());
-            data = repository.findByJobId(dataChangeSettings.getJobId()).get(0);
+        if (repository.existsByJobId(jobId)) {
+
+
+            ErrorQueueSettings data = repository.findByJobId(jobId);
+            data.setPauseSetup(errorQueueSettings.getPauseSetup());
+            data.setPreSteup(errorQueueSettings.getPreSteup());
+            data.setWarnSetup(errorQueueSettings.getWarnSetup());
+           // data.setId(errorQueueSettings.getId());
+            data = repository.save(data);
+
             map.put("status", 1);
             map.put("message", "修改成功");
             map.put("data", data);
         } else {
-            data = repository.save(dataChangeSettings);
+            errorQueueSettings = repository.save(errorQueueSettings);
             map.put("status", 2);
             map.put("message", "添加成功");
-            map.put("data", data);
+            map.put("data", errorQueueSettings);
         }
         return map;
     }
     @Transactional
     @Override
-    public Object deleteDataChange(long job_id) {
+    public Object deleteErrorQueue(long job_id) {
         HashMap<Object, Object> map = new HashMap();
 
         // 查看该任务是否存在，存在删除任务，返回数据给前端

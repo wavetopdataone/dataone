@@ -36,10 +36,24 @@ public class DataChangeSettingsController {
         return service.getCheckDataChangeByjobid(job_id);
     }
 
+    @ApiImplicitParam
     @PostMapping("/add_data_change")
     public Object add_data_change(DataChangeSettings dataChangeSettings) {
         System.out.println(dataChangeSettings);
         return service.addDataChange(dataChangeSettings);
+    }
+    @ApiImplicitParam
+    @PostMapping("/edit_data_change")
+    public Object edit_data_change(DataChangeSettings dataChangeSettings) {
+        System.out.println(dataChangeSettings);
+        return service.editDataChange(dataChangeSettings);
+    }
+
+    @ApiImplicitParam(name = "job_id", value = "job_id", dataType = "long")
+    @PostMapping("/delete_data_change")
+    public Object delete_data_change(long job_id) {
+        System.out.println(job_id);
+        return service.deleteDataChange(job_id);
     }
 
 }
