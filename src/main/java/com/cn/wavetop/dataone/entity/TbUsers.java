@@ -25,13 +25,13 @@ public class TbUsers {
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
   private java.sql.Timestamp lastLogin;
-  private long isSuperuser;
+  private Long isSuperuser;
   private String username;
   private String firstName;
   private String lastName;
   private String email;
-  private long isStaff;
-  private long isActive;
+  private Long isStaff;
+  private Long isActive;
   private java.sql.Timestamp dateJoined;
   private String ticket;
   private String password;

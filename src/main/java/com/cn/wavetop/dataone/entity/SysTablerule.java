@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @Author yongz
@@ -29,9 +26,10 @@ public class SysTablerule {
   private String sourceName;
   private String viewName;
   private String schema;
-  private long hasPrimaryKey;
-  private long check;
-  private long sourOrDest;
+  private Long hasPrimaryKey;
+  private Long check;
+  @Column(name = "`sour_or_dest`")
+  private Long sourOrDest;
   private String destTable;
 
 

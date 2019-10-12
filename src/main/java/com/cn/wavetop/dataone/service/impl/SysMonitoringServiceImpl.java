@@ -6,6 +6,7 @@ import com.cn.wavetop.dataone.dao.SysTableruleRepository;
 import com.cn.wavetop.dataone.entity.SysMonitoring;
 import com.cn.wavetop.dataone.entity.SysRela;
 import com.cn.wavetop.dataone.entity.SysTablerule;
+import com.cn.wavetop.dataone.entity.vo.CountAndTime;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysMonitoringService;
@@ -122,10 +123,15 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
     public Object dataRate(long job_id) {
         List<SysMonitoring> sysMonitoringList=sysMonitoringRepository.findByJobId(job_id);
         List<Object> stringList=new ArrayList<Object>();
+        CountAndTime countAndTime=new CountAndTime();
         if(sysMonitoringList!=null&&sysMonitoringList.size()>0) {
             for (SysMonitoring s : sysMonitoringList) {
-                stringList.add(s.getSqlCount());
-                stringList.add(s.getOptTime());
+                countAndTime.setSqlCount(s.getSqlCount());
+                countAndTime.setOpTime(s.getOptTime());
+                stringList.add(countAndTime);
+//                stringList.add(s.getSqlCount());
+//                stringList.add(s.getOptTime());
+                System.out.println(s.getOptTime());
             }
             return ToData.builder().status("1").data(stringList).build();
         }else{
@@ -142,6 +148,13 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
         HashMap<Object, Object> map = new HashMap();
         if(sysMonitoringList!=null&&sysMonitoringList.size()>0) {
             for (SysMonitoring sysMonitoring:sysMonitoringList){
+                if(sysMonitoring.getSqlCount()==null){
+                    sysMonitoring.setSqlCount((long) 0);
+                }
+
+                if(sysMonitoring.getErrorData()==null){
+                    sysMonitoring.setErrorData((long) 0);
+                }
                 sum+=sysMonitoring.getSqlCount();
                 errorDatas+=sysMonitoring.getErrorData();
             }

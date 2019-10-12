@@ -95,7 +95,8 @@ public class SysLoginfoServiceImpl implements SysLoginfoService {
 
     @Override
     public Object queryLoginfo(String job_name) {
-        List<SysLoginfo> sysUserList= sysLoginfoRepository.findByJobNameContaining(job_name);
+        List<SysLoginfo> sysUserList= sysLoginfoRepository.findAllByJobNameContaining(job_name);
+        System.out.println(sysUserList);
         if(sysUserList!=null&&sysUserList.size()>0){
             return ToData.builder().status("1").data(sysUserList).build();
         }else{

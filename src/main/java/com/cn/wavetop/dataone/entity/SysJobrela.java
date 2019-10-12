@@ -19,23 +19,23 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 
 public class SysJobrela {
   @Id // 标识主键
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
   private String jobName;
-  private long userId;
+  private Long userId;
   private String sourceName;
   private String destName;
-  private long sourceId;
-  private long destId;
-  private long sourceType;
-  private long destType;
-  private long syncRange;
-  private double jobRate;
-  private long jobStatus;
+  private Long sourceId;
+  private Long destId;
+  private Long sourceType;
+  private Long destType;
+  private Long syncRange;
+  private Double jobRate;
+  private Long jobStatus;
 
 
 }

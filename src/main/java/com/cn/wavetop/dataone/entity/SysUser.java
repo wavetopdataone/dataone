@@ -25,8 +25,8 @@ public class SysUser {
   private long id;
   private String username;
   private String mail;
-  private long groupId;
-  private long state;
+  private Long groupId;
+  private Long state;
   private String remark;
   private String password;
 

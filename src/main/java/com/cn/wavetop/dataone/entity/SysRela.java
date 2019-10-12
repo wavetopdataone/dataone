@@ -24,8 +24,8 @@ public class SysRela {
   @Id // 标识主键
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
-  private long dbinfoId;
-  private long type;
+  private Long dbinfoId;
+  private Long type;
 
 
 }

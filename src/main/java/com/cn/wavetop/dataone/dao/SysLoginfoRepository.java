@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface SysLoginfoRepository extends JpaRepository<SysLoginfo,Long> {
     List<SysLoginfo> findById(long id);
-    List<SysLoginfo> findByJobNameContaining(String job_name);
+    List<SysLoginfo> findAllByJobNameContaining(String job_name);
     @Transactional
     @Modifying
     @Query("delete from SysLoginfo where id = :id")
