@@ -21,6 +21,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class AuthGroup {
   @Id // 标识主键
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   private String name;
 

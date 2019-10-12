@@ -1,0 +1,217 @@
+{
+  "status": 1,
+  "data": {
+    "data": [
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 3,
+        "fields": {
+          "host": "192.168.111.111",
+          "user": "admin",
+          "password": "888888",
+          "name": "orc",
+          "dbname": "ORCL",
+          "schema": "orrrrr",
+          "port": 1521,
+          "sour_or_dest": 0,
+          "type": 1
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 4,
+        "fields": {
+          "host": "192.168.111.111",
+          "user": "admin",
+          "password": "888888",
+          "name": "my111",
+          "dbname": "myssss111",
+          "schema": "",
+          "port": 3306,
+          "sour_or_dest": 0,
+          "type": 2
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 5,
+        "fields": {
+          "host": "47.103.108.82",
+          "user": "admin",
+          "password": "888888",
+          "name": "orcl",
+          "dbname": "ORCL",
+          "schema": "ZHENGYONG",
+          "port": 1521,
+          "sour_or_dest": 0,
+          "type": 1
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 6,
+        "fields": {
+          "host": "192.168.1.226",
+          "user": "admin",
+          "password": "888888",
+          "name": "mys",
+          "dbname": "dataone",
+          "schema": "",
+          "port": 3306,
+          "sour_or_dest": 0,
+          "type": 2
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 7,
+        "fields": {
+          "host": "192.168.1.226",
+          "user": "admin",
+          "password": "",
+          "name": "myslll",
+          "dbname": "dataone",
+          "schema": "",
+          "port": 3306,
+          "sour_or_dest": 0,
+          "type": 2
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 9,
+        "fields": {
+          "host": "192.168.103.238",
+          "user": "test",
+          "password": "test",
+          "name": "\u53ef\u4ee5\u4f7f\u7528oracle",
+          "dbname": "ORCL",
+          "schema": "test",
+          "port": 1521,
+          "sour_or_dest": 0,
+          "type": 1
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 10,
+        "fields": {
+          "host": "192.168.103.103",
+          "user": "root",
+          "password": "888888",
+          "name": "\u53ef\u4ee5\u4f7f\u7528mysql",
+          "dbname": "test",
+          "schema": "",
+          "port": 3306,
+          "sour_or_dest": 0,
+          "type": 2
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 12,
+        "fields": {
+          "host": "192.168.1.1",
+          "user": "2332",
+          "password": "2313",
+          "name": "1",
+          "dbname": "ewq",
+          "schema": "",
+          "port": 8080,
+          "sour_or_dest": 0,
+          "type": 2
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 16,
+        "fields": {
+          "host": "192.168.111.111",
+          "user": "test",
+          "password": "test",
+          "name": "mysql123321",
+          "dbname": "test11",
+          "schema": "",
+          "port": 3306,
+          "sour_or_dest": 0,
+          "type": 2
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 20,
+        "fields": {
+          "host": "192.168.1.1",
+          "user": "qw",
+          "password": "wq",
+          "name": "as",
+          "dbname": "use",
+          "schema": "",
+          "port": 8080,
+          "sour_or_dest": 0,
+          "type": 2
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 21,
+        "fields": {
+          "host": "192.168.103.238",
+          "user": "test",
+          "password": "test",
+          "name": "wavetop",
+          "dbname": "TEST1",
+          "schema": "orcl",
+          "port": 1521,
+          "sour_or_dest": 0,
+          "type": 1
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 23,
+        "fields": {
+          "host": "192.168.103.104",
+          "user": "root",
+          "password": "123456",
+          "name": "wavetop3",
+          "dbname": "db_test_out",
+          "schema": "",
+          "port": 3306,
+          "sour_or_dest": 0,
+          "type": 2
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 26,
+        "fields": {
+          "host": "192.168.11.148",
+          "user": "root",
+          "password": "123456",
+          "name": "my_ceshi1",
+          "dbname": "test1",
+          "schema": "",
+          "port": 3306,
+          "sour_or_dest": 0,
+          "type": 2
+        }
+      },
+      {
+        "model": "sys_dbinfo.sys_dbinfo",
+        "pk": 27,
+        "fields": {
+          "host": "192.168.11.148",
+          "user": "test",
+          "password": "123456",
+          "name": "orcl_ceshi1",
+          "dbname": "orcl",
+          "schema": "test",
+          "port": 1521,
+          "sour_or_dest": 0,
+          "type": 1
+        }
+      }
+    ]
+  }
+}

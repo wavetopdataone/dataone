@@ -1,10 +1,11 @@
 package com.cn.wavetop.dataone.dao;
 
-import com.cn.wavetop.dataone.entity.SysFieldrule;
+import com.cn.wavetop.dataone.entity.ErrorLog;
 import com.cn.wavetop.dataone.entity.SysJobrela;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+
 
 /**
  * @Author yongz
@@ -16,4 +17,17 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long> 
 
     boolean existsByDestIdOrSourceId(long id, long id1);
 
+    SysJobrela  findById(long id);
+
+    SysJobrela findByJobName(String jobName);
+
+    boolean existsByIdOrJobName(long id, String jobName);
+
+    SysJobrela findByIdOrJobName(long id, String jobName);
+
+    int countByJobStatus(long i);
+
+    List<SysJobrela> findByJobNameContaining(String job_name);
+
+    List<SysJobrela> findByJobStatus(Long job_status);
 }

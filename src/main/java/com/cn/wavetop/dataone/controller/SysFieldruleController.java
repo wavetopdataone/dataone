@@ -32,22 +32,32 @@ public class SysFieldruleController {
     @ApiImplicitParam
     @PostMapping("/check_fieldrule")
     public Object check_fieldrule(long job_id) {
-
         return service.checkFieldruleByJobId(job_id);
     }
 
     @ApiImplicitParam
     @PostMapping("/add_fieldrule")
-    public Object add_fieldrule(SysFieldrule sysFieldrule,String list_data) {
-       System.out.println(sysFieldrule+list_data);
+    public Object add_fieldrule(SysFieldrule sysFieldrule, String list_data) {
+        System.out.println(sysFieldrule + list_data);
         return service.addFieldrule(sysFieldrule);
     }
 
     @ApiImplicitParam
     @PostMapping("/edit_fieldrule")
-    public Object edit_fieldrule(SysFieldrule sysFieldrule,String list_data) {
-        System.out.println(sysFieldrule);
-        return service.editFieldrule(sysFieldrule);
+    public Object edit_fieldrule(String list_data, String source_name, String dest_name, Long job_id) {
+        return service.editFieldrule(list_data, source_name, dest_name, job_id);
+    }
+
+    @ApiImplicitParam
+    @PostMapping("/delete_fieldrule")
+    public Object delete_fieldrule(String source_name) {
+        return service.deleteFieldrule(source_name);
+    }
+
+    @ApiImplicitParam
+    @PostMapping("/link_table_details")
+    public Object link_table_details(SysDbinfo sysDbinfo ) {
+        return service.linkTableDetails(sysDbinfo);
     }
 
 

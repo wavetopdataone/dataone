@@ -14,4 +14,9 @@ public interface SysFieldruleRespository extends JpaRepository<SysFieldrule,Long
     boolean existsByJobId(long job_id);
 
     List<SysFieldrule> findByJobId(long job_id);
+
+    void deleteByJobIdAndSourceName(Long job_id, String source_name);
+
+    boolean deleteBySourceName(String source_name);
+
 }

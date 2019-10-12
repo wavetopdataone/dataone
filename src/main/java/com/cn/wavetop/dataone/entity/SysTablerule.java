@@ -19,7 +19,7 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class SysTablerule {
   @Id // 标识主键
 

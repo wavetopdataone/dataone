@@ -19,6 +19,9 @@ public interface SysDbinfoRespository  extends JpaRepository<SysDbinfo,Long> {
 
     SysDbinfo findByIdOrName(long id, String name);
 
+    SysDbinfo findByNameAndSourDest(String name, long SourDest);
+
+
 //    @Modifying
 //    @Query("update SysDbinfo u set " +
 //            " u.host = :host," +

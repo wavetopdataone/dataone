@@ -18,7 +18,7 @@ import javax.persistence.Id;
 @Entity // 标识实体
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor@Data
 
 public class DjangoAdminLog {
 

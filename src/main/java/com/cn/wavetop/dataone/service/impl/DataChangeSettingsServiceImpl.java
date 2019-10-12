@@ -40,6 +40,7 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
 
 
     }
+
     @Transactional
     @Override
     public Object addDataChange(DataChangeSettings dataChangeSettings) {
@@ -55,6 +56,7 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
             return map;
         }
     }
+
     @Transactional
     @Override
     public Object editDataChange(DataChangeSettings dataChangeSettings) {
@@ -77,6 +79,7 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
         }
         return map;
     }
+
     @Transactional
     @Override
     public Object deleteDataChange(long job_id) {
@@ -85,13 +88,9 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
         // 查看该任务是否存在，存在删除任务，返回数据给前端
         if (repository.existsByJobId(job_id)) {
             int i = repository.deleteByJobId(job_id);
-            if (i==1){
-                map.put("status", 1);
-                map.put("message", "删除成功");
-            }else {
-                map.put("status", 2);
-                map.put("message", "删除失败");
-            }
+            map.put("status", 1);
+            map.put("message", "删除成功");
+
 
         } else {
             map.put("status", 0);

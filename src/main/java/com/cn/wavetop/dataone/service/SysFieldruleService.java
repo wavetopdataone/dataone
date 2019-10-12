@@ -14,5 +14,10 @@ public interface SysFieldruleService {
 
     Object addFieldrule(SysFieldrule sysFieldrule);
 
-    Object editFieldrule(SysFieldrule sysFieldrule);
+    Object editFieldrule(String list_data, String source_name,String dest_name,Long job_id);
+
+    Object deleteFieldrule(String source_name);
+
+    Object linkTableDetails(SysDbinfo sysDbinfo);
+
 }

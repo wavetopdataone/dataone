@@ -1,0 +1,98 @@
+package com.cn.wavetop.dataone.controller;
+
+import com.cn.wavetop.dataone.entity.SysJobinfo;
+import com.cn.wavetop.dataone.entity.SysJobrela;
+import com.cn.wavetop.dataone.service.SysJobinfoService;
+import com.cn.wavetop.dataone.service.SysJobrelaService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @Author yongz
+ * @Date 2019/10/10、11:45
+ */
+@RestController
+@RequestMapping("/sys_jobrela")
+public class SysJobrelaController {
+
+    @Autowired
+    private SysJobrelaService service;
+
+    @ApiOperation(value = "查看全部", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
+    @GetMapping("/jobrela_all")
+    public Object jobrela_all() {
+        return service.getJobrelaAll();
+    }
+
+    @ApiImplicitParam
+    @PostMapping("/check_jobinfo")
+    public Object check_jobinfo(long id) {
+        return service.checkJobinfoById(id);
+    }
+
+    @ApiImplicitParam
+    @PostMapping("/add_jobrela")
+    public Object add_jobrela( SysJobrela sysJobrela) {
+        return service.addJobrela(sysJobrela);
+    }
+
+    @ApiImplicitParam
+    @PostMapping("/edit_jobrela")
+    public Object edit_jobrela(SysJobrela sysJobrela) {
+        System.out.println(sysJobrela);
+        return service.editJobrela(sysJobrela);
+    }
+    @ApiImplicitParam
+    @PostMapping("/delete_jobrela")
+    public Object delete_jobrela(Long id) {
+        System.out.println(id);
+        return service.deleteJobrela(id);
+    }
+
+    // 查询个任务状态接口
+    @ApiImplicitParam
+    @PostMapping("/jobrela_count")
+    public Object jobrela_count() {
+
+        return service.jobrelaCount();
+    }
+
+    //模糊查询
+    @ApiImplicitParam
+    @PostMapping("/query_jobrela")
+    public Object query_jobrela(String job_name) {
+
+        return service.queryJobrela(job_name);
+    }
+
+    //
+    @ApiImplicitParam
+    @PostMapping("/some_jobrela")
+    public Object some_jobrela(Long job_status) {
+        return service.someJobrela(job_status);
+    }
+
+    @ApiImplicitParam
+    @PostMapping("/start")
+    public Object start(Long id) {
+        return service.start(id);
+    }
+
+
+    @ApiImplicitParam
+    @PostMapping("/pause")
+    public Object pause(Long id) {
+        return service.pause(id);
+    }
+
+    @ApiImplicitParam
+    @PostMapping("/end")
+    public Object end(Long id) {
+        return service.end(id);
+    }
+}
