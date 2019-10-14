@@ -3,6 +3,8 @@ package com.cn.wavetop.dataone.service;
 import com.cn.wavetop.dataone.entity.SysDbinfo;
 import com.cn.wavetop.dataone.entity.SysFieldrule;
 
+import java.sql.SQLException;
+
 /**
  * @Author yongz
  * @Date 2019/10/11、15:27
@@ -18,6 +20,6 @@ public interface SysFieldruleService {
 
     Object deleteFieldrule(String source_name);
 
-    Object linkTableDetails(SysDbinfo sysDbinfo);
+    Object linkTableDetails(SysDbinfo sysDbinfo,String tablename) ;
 
 }

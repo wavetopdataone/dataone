@@ -14,7 +14,9 @@ public class DBHelper {
     public DBHelper(String sql,String host,String user,String password,String port,String dbname) {
         try {
             Class.forName(name);//指定连接类型
+            //url="jdbc:mysql://"+host+":"+port+"/"+dbname+"?characterEncoding=utf8&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai";
             url="jdbc:mysql://"+host+"/"+dbname+"?characterEncoding=utf8&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai";
+            System.out.println(url+"\n"+user+"\n"+password);
             conn = DriverManager.getConnection(url,user,password);//获取连接
             pst = conn.prepareStatement(sql);//准备执行语句
         } catch (Exception e) {

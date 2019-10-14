@@ -56,8 +56,8 @@ public class SysFieldruleController {
 
     @ApiImplicitParam
     @PostMapping("/link_table_details")
-    public Object link_table_details(SysDbinfo sysDbinfo ) {
-        return service.linkTableDetails(sysDbinfo);
+    public Object link_table_details(SysDbinfo sysDbinfo,String tablename) {
+        return service.linkTableDetails(sysDbinfo,tablename);
     }
 
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2019/10/10、11:45
  */
 @RestController
-@RequestMapping("/mailnotify_settings")
+@RequestMapping("/sys_dbinfo")
 public class SysDbinfoController {
 
     @Autowired
