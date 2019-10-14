@@ -6,6 +6,7 @@ import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.TbUsersService;
 import com.cn.wavetop.dataone.util.MD5Util;
+import com.cn.wavetop.dataone.util.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,13 +28,13 @@ public class TbUsersServiceImpl implements TbUsersService {
                 return ToDataMessage.builder().status("0").message("用户已存在").build();
 
             }else{
-                String password= MD5Util.convertMD5(tbUsers.getPassword());
+                String password= Md5Utils.md5password(tbUsers.getPassword());
                 tbUsers.setPassword(password);
                 tbUsersList= tbUsersRespository.save(tbUsers);
                 HashMap<Object, Object> map = new HashMap();
                 map.put("status", "1");
                 map.put("name", tbUsersList.getName());
-                map.put("password", MD5Util.convertMD5(tbUsersList.getPassword()));
+                map.put("password", tbUsersList.getPassword());
                 return map;
             }
         }catch (Exception e){
@@ -45,10 +46,10 @@ public class TbUsersServiceImpl implements TbUsersService {
 
     @Override
     public Object login(String name,String password){
-       List<TbUsers> tbUsersList= tbUsersRespository.findByNameAndPassword(name,MD5Util.convertMD5(password));
+       List<TbUsers> tbUsersList= tbUsersRespository.findByNameAndPassword(name,Md5Utils.md5password(password));
         HashMap<Object, Object> map = new HashMap();
         if(tbUsersList!=null&&tbUsersList.size()>0){
-           if(password.equals(MD5Util.convertMD5(tbUsersList.get(0).getPassword()))){
+           if(Md5Utils.md5password(password).equals(tbUsersList.get(0).getPassword())){
             map.put("status","1");
             map.put("name",name);
                return map;
@@ -63,9 +64,9 @@ public class TbUsersServiceImpl implements TbUsersService {
     public Object findAll(){
 
         List<TbUsers> tbUsersList=tbUsersRespository.findAll();
-        for(int i=0;i<tbUsersList.size();i++){
-            tbUsersList.get(i).setPassword(MD5Util.convertMD5(tbUsersList.get(i).getPassword()));
-        }
+//        for(int i=0;i<tbUsersList.size();i++){
+//            tbUsersList.get(i).setPassword(MD5Util.convertMD5(tbUsersList.get(i).getPassword()));
+//        }
         return ToData.builder().status("1").data(tbUsersList).build();
 
     }

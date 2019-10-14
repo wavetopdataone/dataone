@@ -36,7 +36,33 @@ public class Md5Utils {
         }
 
     }
+    public static String md5passwords(String password) {
 
+        try {
+            //得到一个信息摘要器
+            MessageDigest digest = MessageDigest.getInstance("SHA");
+            byte[] result = digest.digest(password.getBytes());
+
+            StringBuffer buffer = new StringBuffer();
+            //把每一个byte做一个与运算0xff;
+            for(byte b:result) {
+                //与运算
+                int number = b & 0xff;//加盐 十六进制
+                String str = Integer.toHexString(number);
+                if(str.length() == 1) {
+                    buffer.append("0");
+                }
+                buffer.append(str);
+            }
+            //标准的md5加密后的结果
+            return buffer.toString();
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "";
+        }
+
+    }
     /**
      * 第二种
      * 普通方法
@@ -89,8 +115,9 @@ public class Md5Utils {
 
     public static void main(String[] args) {
         System.out.println(Md5Utils.md5password("123"));
-        System.out.println(Md5Utils.MD5("123"));
-        System.out.println(Md5Utils.md5password(Md5Utils.md5password("123")));
-        System.out.println(Md5Utils.JM("123"));
+        System.out.println(Md5Utils.md5passwords("123"));
+//        System.out.println(Md5Utils.MD5("123"));
+//        System.out.println(Md5Utils.md5password(Md5Utils.md5password("123")));
+//        System.out.println(Md5Utils.JM("123"));
     }
 }
