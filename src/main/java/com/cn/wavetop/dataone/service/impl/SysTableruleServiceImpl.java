@@ -176,13 +176,14 @@ public class SysTableruleServiceImpl implements SysTableruleService {
         List<Object> list=new ArrayList<Object>();
         if("2".equals(type)) {
             String sql = "show tables";
-            db1 = new DBHelper(sql, host, user, password, port, dbname);//创建DBHelper对象
-
             try {
-                ret = db1.pst.executeQuery();//执行语句，得到结果集
+                ret=DBHelper.getConnection(sql, host, user, password, port, dbname);//创建DBHelper对象
+                System.out.println(ret);
                 String tableName = null;
                 while (ret.next()) {
+
                     tableName = ret.getString(1);
+                    System.out.println(tableName);
                     list.add(tableName);
                 }//显示数据
 
@@ -191,14 +192,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 e.printStackTrace();
                 return  ToDataMessage.builder().status("0").message("数据库连接错误").build();
             }finally {
-                try {
-                    ret.close();
-                    db1.pst.close();
-                    db1.close();//关闭连接
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
+                DBHelper.close(ret);//关闭连接
             }
         }
         else if("1".equals(type)){
