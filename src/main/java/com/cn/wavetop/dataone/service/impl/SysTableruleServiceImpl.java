@@ -41,8 +41,10 @@ public class SysTableruleServiceImpl implements SysTableruleService {
         System.out.println(sysUserList);
         if(sysUserList!=null&&sysUserList.size()>0){
             List<SysJobrela> sysJobrelaList=sysJobrelaRepository.findById(job_id);
-             sysJobrelaList.get(0).setJobStatus((long) 0);
-             SysJobrela sysJobrela=sysJobrelaRepository.save(sysJobrelaList.get(0));
+            if(sysJobrelaList!=null&&sysJobrelaList.size()>0) {
+                sysJobrelaList.get(0).setJobStatus((long) 0);
+                SysJobrela sysJobrela = sysJobrelaRepository.save(sysJobrelaList.get(0));
+            }
             return ToData.builder().status("1").data(sysUserList).build();
         }else{
             return ToDataMessage.builder().status("0").message("没有该任务").build();
@@ -191,6 +193,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             }finally {
                 try {
                     ret.close();
+                    db1.pst.close();
                     db1.close();//关闭连接
                 } catch (SQLException e) {
                     e.printStackTrace();

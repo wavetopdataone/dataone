@@ -5679,3 +5679,1195 @@ Field error in object 'sysJobinfo' on field 'endTime': rejected value [1]; codes
 2019-10-12 18:37:52.280  INFO 18668 --- [http-nio-8000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2019-10-12 18:37:52.281  INFO 18668 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2019-10-12 18:37:52.294  INFO 18668 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 13 ms
+2019-10-14 09:03:31.291  INFO 13832 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Starting DataoneApplication on DESKTOP-5620HIF with PID 13832 (E:\ideaWorkSpace\dataone\target\classes started by Wavetop in E:\ideaWorkSpace\dataone)
+2019-10-14 09:03:31.311  INFO 13832 --- [main] c.cn.wavetop.dataone.DataoneApplication  : No active profile set, falling back to default profiles: default
+2019-10-14 09:03:33.529  INFO 13832 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-10-14 09:03:33.783  INFO 13832 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 245ms. Found 22 repository interfaces.
+2019-10-14 09:03:34.146  INFO 13832 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$8e90a21e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-14 09:03:34.672  INFO 13832 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2019-10-14 09:03:34.697  INFO 13832 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-10-14 09:03:34.697  INFO 13832 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.26]
+2019-10-14 09:03:34.959  INFO 13832 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-10-14 09:03:34.959  INFO 13832 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 3521 ms
+2019-10-14 09:03:35.153  INFO 13832 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-10-14 09:03:35.397  INFO 13832 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-10-14 09:03:35.757  INFO 13832 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-14 09:03:35.814  INFO 13832 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.12.Final}
+2019-10-14 09:03:35.815  INFO 13832 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-10-14 09:03:35.927  INFO 13832 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-10-14 09:03:36.171  INFO 13832 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2019-10-14 09:03:37.216  INFO 13832 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-10-14 09:03:37.669  INFO 13832 --- [main] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-10-14 09:03:39.128  WARN 13832 --- [main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-10-14 09:03:39.549  INFO 13832 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2019-10-14 09:03:39.826  INFO 13832 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-10-14 09:03:40.078  INFO 13832 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2019-10-14 09:03:40.097  INFO 13832 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2019-10-14 09:03:40.127  INFO 13832 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2019-10-14 09:03:40.282  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delete_errorlogUsingPOST_1
+2019-10-14 09:03:40.343  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: check_jobinfoUsingPOST_1
+2019-10-14 09:03:40.410  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_1
+2019-10-14 09:03:40.413  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_1
+2019-10-14 09:03:40.415  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_1
+2019-10-14 09:03:40.417  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_1
+2019-10-14 09:03:40.418  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_1
+2019-10-14 09:03:40.420  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_1
+2019-10-14 09:03:40.421  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_1
+2019-10-14 09:03:40.423  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_1
+2019-10-14 09:03:40.425  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_1
+2019-10-14 09:03:40.426  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_1
+2019-10-14 09:03:40.429  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_1
+2019-10-14 09:03:40.430  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_1
+2019-10-14 09:03:40.431  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_1
+2019-10-14 09:03:40.431  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_1
+2019-10-14 09:03:40.432  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_1
+2019-10-14 09:03:40.433  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_1
+2019-10-14 09:03:40.440  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_1
+2019-10-14 09:03:40.441  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_1
+2019-10-14 09:03:40.442  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_1
+2019-10-14 09:03:40.443  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_1
+2019-10-14 09:03:40.444  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_1
+2019-10-14 09:03:40.445  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_1
+2019-10-14 09:03:40.446  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_1
+2019-10-14 09:03:40.447  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_1
+2019-10-14 09:03:40.449  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_1
+2019-10-14 09:03:40.451  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_1
+2019-10-14 09:03:40.452  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_1
+2019-10-14 09:03:40.454  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_1
+2019-10-14 09:03:40.456  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_1
+2019-10-14 09:03:40.460  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_1
+2019-10-14 09:03:40.462  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_1
+2019-10-14 09:03:40.463  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_1
+2019-10-14 09:03:40.487  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_1
+2019-10-14 09:03:40.488  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_1
+2019-10-14 09:03:40.490  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_1
+2019-10-14 09:03:40.492  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_1
+2019-10-14 09:03:40.493  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_1
+2019-10-14 09:03:40.494  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_1
+2019-10-14 09:03:40.496  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_1
+2019-10-14 09:03:40.497  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_1
+2019-10-14 09:03:40.501  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_2
+2019-10-14 09:03:40.502  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_2
+2019-10-14 09:03:40.509  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_2
+2019-10-14 09:03:40.510  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_2
+2019-10-14 09:03:40.512  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_2
+2019-10-14 09:03:40.514  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_2
+2019-10-14 09:03:40.517  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_2
+2019-10-14 09:03:40.523  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_2
+2019-10-14 09:03:40.532  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_2
+2019-10-14 09:03:40.533  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_2
+2019-10-14 09:03:40.534  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_2
+2019-10-14 09:03:40.538  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_2
+2019-10-14 09:03:40.540  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_2
+2019-10-14 09:03:40.544  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_2
+2019-10-14 09:03:40.546  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_2
+2019-10-14 09:03:40.547  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_2
+2019-10-14 09:03:40.549  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_2
+2019-10-14 09:03:40.551  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_2
+2019-10-14 09:03:40.556  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_2
+2019-10-14 09:03:40.560  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_2
+2019-10-14 09:03:40.561  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_2
+2019-10-14 09:03:40.563  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_2
+2019-10-14 09:03:40.565  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_2
+2019-10-14 09:03:40.567  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_2
+2019-10-14 09:03:40.569  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_2
+2019-10-14 09:03:40.571  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_2
+2019-10-14 09:03:40.574  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_2
+2019-10-14 09:03:40.576  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_2
+2019-10-14 09:03:40.577  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_2
+2019-10-14 09:03:40.579  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_2
+2019-10-14 09:03:40.580  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_2
+2019-10-14 09:03:40.580  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_2
+2019-10-14 09:03:40.582  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_2
+2019-10-14 09:03:40.582  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_2
+2019-10-14 09:03:40.583  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_2
+2019-10-14 09:03:40.586  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_2
+2019-10-14 09:03:40.587  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_2
+2019-10-14 09:03:40.588  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_2
+2019-10-14 09:03:40.589  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_2
+2019-10-14 09:03:40.590  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_2
+2019-10-14 09:03:40.633  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_3
+2019-10-14 09:03:40.635  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_3
+2019-10-14 09:03:40.636  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_3
+2019-10-14 09:03:40.637  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_3
+2019-10-14 09:03:40.638  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_3
+2019-10-14 09:03:40.639  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_3
+2019-10-14 09:03:40.640  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_3
+2019-10-14 09:03:40.640  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_3
+2019-10-14 09:03:40.642  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_3
+2019-10-14 09:03:40.642  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_3
+2019-10-14 09:03:40.643  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_3
+2019-10-14 09:03:40.643  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_3
+2019-10-14 09:03:40.644  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_3
+2019-10-14 09:03:40.644  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_3
+2019-10-14 09:03:40.645  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_3
+2019-10-14 09:03:40.645  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_3
+2019-10-14 09:03:40.646  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_3
+2019-10-14 09:03:40.648  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_3
+2019-10-14 09:03:40.648  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_3
+2019-10-14 09:03:40.649  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_3
+2019-10-14 09:03:40.650  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_3
+2019-10-14 09:03:40.651  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_3
+2019-10-14 09:03:40.652  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_3
+2019-10-14 09:03:40.652  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_3
+2019-10-14 09:03:40.653  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_3
+2019-10-14 09:03:40.654  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_3
+2019-10-14 09:03:40.655  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_3
+2019-10-14 09:03:40.656  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_3
+2019-10-14 09:03:40.657  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_3
+2019-10-14 09:03:40.657  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_3
+2019-10-14 09:03:40.658  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_3
+2019-10-14 09:03:40.659  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_3
+2019-10-14 09:03:40.660  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_3
+2019-10-14 09:03:40.661  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_3
+2019-10-14 09:03:40.662  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_3
+2019-10-14 09:03:40.664  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_3
+2019-10-14 09:03:40.665  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_3
+2019-10-14 09:03:40.665  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_3
+2019-10-14 09:03:40.666  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_3
+2019-10-14 09:03:40.666  INFO 13832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_3
+2019-10-14 09:03:40.741  INFO 13832 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8000 (http) with context path ''
+2019-10-14 09:03:40.747  INFO 13832 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Started DataoneApplication in 10.176 seconds (JVM running for 12.495)
+2019-10-14 09:03:47.501  INFO 13832 --- [http-nio-8000-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-10-14 09:03:47.502  INFO 13832 --- [http-nio-8000-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-10-14 09:03:47.522  INFO 13832 --- [http-nio-8000-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 20 ms
+2019-10-14 09:11:52.245  INFO 21576 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Starting DataoneApplication on DESKTOP-5620HIF with PID 21576 (E:\ideaWorkSpace\dataone\target\classes started by Wavetop in E:\ideaWorkSpace\dataone)
+2019-10-14 09:11:52.250  INFO 21576 --- [main] c.cn.wavetop.dataone.DataoneApplication  : No active profile set, falling back to default profiles: default
+2019-10-14 09:11:55.822  INFO 21576 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-10-14 09:11:56.014  INFO 21576 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 186ms. Found 22 repository interfaces.
+2019-10-14 09:11:56.378  INFO 21576 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$4a24e77e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-14 09:11:56.845  INFO 21576 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2019-10-14 09:11:56.872  INFO 21576 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-10-14 09:11:56.872  INFO 21576 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.26]
+2019-10-14 09:11:57.150  INFO 21576 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-10-14 09:11:57.150  INFO 21576 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 4820 ms
+2019-10-14 09:11:57.451  INFO 21576 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-10-14 09:11:58.056  INFO 21576 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-10-14 09:11:58.475  INFO 21576 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-14 09:11:58.560  INFO 21576 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.12.Final}
+2019-10-14 09:11:58.561  INFO 21576 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-10-14 09:11:58.689  INFO 21576 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-10-14 09:11:58.889  INFO 21576 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2019-10-14 09:12:00.286  INFO 21576 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-10-14 09:12:00.909  INFO 21576 --- [main] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-10-14 09:12:03.111  WARN 21576 --- [main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-10-14 09:12:03.603  INFO 21576 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2019-10-14 09:12:03.850  INFO 21576 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-10-14 09:12:04.135  INFO 21576 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2019-10-14 09:12:04.155  INFO 21576 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2019-10-14 09:12:04.185  INFO 21576 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2019-10-14 09:12:04.446  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delete_errorlogUsingPOST_1
+2019-10-14 09:12:04.542  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: check_jobinfoUsingPOST_1
+2019-10-14 09:12:04.669  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_1
+2019-10-14 09:12:04.671  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_1
+2019-10-14 09:12:04.674  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_1
+2019-10-14 09:12:04.677  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_1
+2019-10-14 09:12:04.682  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_1
+2019-10-14 09:12:04.686  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_1
+2019-10-14 09:12:04.689  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_1
+2019-10-14 09:12:04.691  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_1
+2019-10-14 09:12:04.697  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_1
+2019-10-14 09:12:04.699  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_1
+2019-10-14 09:12:04.701  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_1
+2019-10-14 09:12:04.702  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_1
+2019-10-14 09:12:04.704  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_1
+2019-10-14 09:12:04.705  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_1
+2019-10-14 09:12:04.707  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_1
+2019-10-14 09:12:04.708  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_1
+2019-10-14 09:12:04.719  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_1
+2019-10-14 09:12:04.720  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_1
+2019-10-14 09:12:04.721  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_1
+2019-10-14 09:12:04.722  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_1
+2019-10-14 09:12:04.723  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_1
+2019-10-14 09:12:04.727  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_1
+2019-10-14 09:12:04.729  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_1
+2019-10-14 09:12:04.730  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_1
+2019-10-14 09:12:04.733  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_1
+2019-10-14 09:12:04.736  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_1
+2019-10-14 09:12:04.738  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_1
+2019-10-14 09:12:04.741  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_1
+2019-10-14 09:12:04.745  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_1
+2019-10-14 09:12:04.747  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_1
+2019-10-14 09:12:04.750  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_1
+2019-10-14 09:12:04.752  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_1
+2019-10-14 09:12:04.787  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_1
+2019-10-14 09:12:04.788  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_1
+2019-10-14 09:12:04.789  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_1
+2019-10-14 09:12:04.791  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_1
+2019-10-14 09:12:04.792  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_1
+2019-10-14 09:12:04.793  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_1
+2019-10-14 09:12:04.797  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_1
+2019-10-14 09:12:04.801  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_1
+2019-10-14 09:12:04.808  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_2
+2019-10-14 09:12:04.810  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_2
+2019-10-14 09:12:04.812  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_2
+2019-10-14 09:12:04.813  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_2
+2019-10-14 09:12:04.815  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_2
+2019-10-14 09:12:04.816  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_2
+2019-10-14 09:12:04.817  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_2
+2019-10-14 09:12:04.819  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_2
+2019-10-14 09:12:04.820  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_2
+2019-10-14 09:12:04.824  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_2
+2019-10-14 09:12:04.825  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_2
+2019-10-14 09:12:04.826  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_2
+2019-10-14 09:12:04.827  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_2
+2019-10-14 09:12:04.828  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_2
+2019-10-14 09:12:04.829  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_2
+2019-10-14 09:12:04.830  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_2
+2019-10-14 09:12:04.831  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_2
+2019-10-14 09:12:04.832  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_2
+2019-10-14 09:12:04.835  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_2
+2019-10-14 09:12:04.836  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_2
+2019-10-14 09:12:04.837  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_2
+2019-10-14 09:12:04.838  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_2
+2019-10-14 09:12:04.839  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_2
+2019-10-14 09:12:04.840  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_2
+2019-10-14 09:12:04.841  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_2
+2019-10-14 09:12:04.842  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_2
+2019-10-14 09:12:04.843  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_2
+2019-10-14 09:12:04.844  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_2
+2019-10-14 09:12:04.846  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_2
+2019-10-14 09:12:04.847  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_2
+2019-10-14 09:12:04.847  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_2
+2019-10-14 09:12:04.849  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_2
+2019-10-14 09:12:04.850  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_2
+2019-10-14 09:12:04.851  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_2
+2019-10-14 09:12:04.852  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_2
+2019-10-14 09:12:04.853  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_2
+2019-10-14 09:12:04.853  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_2
+2019-10-14 09:12:04.854  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_2
+2019-10-14 09:12:04.854  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_2
+2019-10-14 09:12:04.855  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_2
+2019-10-14 09:12:04.917  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_3
+2019-10-14 09:12:04.918  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_3
+2019-10-14 09:12:04.920  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_3
+2019-10-14 09:12:04.921  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_3
+2019-10-14 09:12:04.922  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_3
+2019-10-14 09:12:04.923  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_3
+2019-10-14 09:12:04.924  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_3
+2019-10-14 09:12:04.924  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_3
+2019-10-14 09:12:04.928  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_3
+2019-10-14 09:12:04.929  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_3
+2019-10-14 09:12:04.929  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_3
+2019-10-14 09:12:04.930  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_3
+2019-10-14 09:12:04.931  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_3
+2019-10-14 09:12:04.932  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_3
+2019-10-14 09:12:04.933  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_3
+2019-10-14 09:12:04.933  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_3
+2019-10-14 09:12:04.934  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_3
+2019-10-14 09:12:04.935  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_3
+2019-10-14 09:12:04.936  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_3
+2019-10-14 09:12:04.936  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_3
+2019-10-14 09:12:04.937  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_3
+2019-10-14 09:12:04.938  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_3
+2019-10-14 09:12:04.938  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_3
+2019-10-14 09:12:04.939  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_3
+2019-10-14 09:12:04.940  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_3
+2019-10-14 09:12:04.941  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_3
+2019-10-14 09:12:04.943  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_3
+2019-10-14 09:12:04.945  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_3
+2019-10-14 09:12:04.946  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_3
+2019-10-14 09:12:04.947  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_3
+2019-10-14 09:12:04.948  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_3
+2019-10-14 09:12:04.949  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_3
+2019-10-14 09:12:04.950  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_3
+2019-10-14 09:12:04.950  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_3
+2019-10-14 09:12:04.950  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_3
+2019-10-14 09:12:04.951  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_3
+2019-10-14 09:12:04.951  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_3
+2019-10-14 09:12:04.952  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_3
+2019-10-14 09:12:04.952  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_3
+2019-10-14 09:12:04.953  INFO 21576 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_3
+2019-10-14 09:12:05.028  INFO 21576 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8000 (http) with context path ''
+2019-10-14 09:12:05.030  INFO 21576 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Started DataoneApplication in 13.836 seconds (JVM running for 17.214)
+2019-10-14 09:14:16.001  INFO 21576 --- [http-nio-8000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-10-14 09:14:16.001  INFO 21576 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-10-14 09:14:16.016  INFO 21576 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 14 ms
+2019-10-14 09:14:32.902  WARN 21576 --- [http-nio-8000-exec-9] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1048, SQLState: 23000
+2019-10-14 09:14:32.903 ERROR 21576 --- [http-nio-8000-exec-9] o.h.engine.jdbc.spi.SqlExceptionHelper   : Column 'date_joined' cannot be null
+2019-10-14 09:14:32.908 ERROR 21576 --- [http-nio-8000-exec-9] o.h.i.ExceptionMapperStandardImpl        : HHH000346: Error during managed flush [org.hibernate.exception.ConstraintViolationException: could not execute statement]
+2019-10-14 09:14:32.926 ERROR 21576 --- [http-nio-8000-exec-9] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.dao.DataIntegrityViolationException: could not execute statement; SQL [n/a]; constraint [null]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement] with root cause
+
+com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'date_joined' cannot be null
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_161]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_161]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_161]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_161]
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.Util.getInstance(Util.java:408) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:936) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3978) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3914) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2124) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2058) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5158) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:2043) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeUpdate(FilterChainImpl.java:3201) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.filter.FilterAdapter.preparedStatement_executeUpdate(FilterAdapter.java:1091) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeUpdate(FilterEventAdapter.java:491) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeUpdate(FilterChainImpl.java:3199) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeUpdate(PreparedStatementProxyImpl.java:194) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeUpdate(DruidPooledPreparedStatement.java:256) ~[druid-1.1.10.jar:1.1.10]
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.executeUpdate(ResultSetReturnImpl.java:175) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:3192) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:3706) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.action.internal.EntityInsertAction.execute(EntityInsertAction.java:90) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.spi.ActionQueue.executeActions(ActionQueue.java:604) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.spi.ActionQueue.executeActions(ActionQueue.java:478) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.event.internal.AbstractFlushingEventListener.performExecutions(AbstractFlushingEventListener.java:356) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.event.internal.DefaultFlushEventListener.onFlush(DefaultFlushEventListener.java:39) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.doFlush(SessionImpl.java:1483) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.managedFlush(SessionImpl.java:512) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.flushBeforeTransactionCompletion(SessionImpl.java:3321) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.beforeTransactionCompletion(SessionImpl.java:2517) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl.beforeTransactionCompletion(JdbcCoordinatorImpl.java:447) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl.beforeCompletionCallback(JdbcResourceLocalTransactionCoordinatorImpl.java:178) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl.access$300(JdbcResourceLocalTransactionCoordinatorImpl.java:39) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.commit(JdbcResourceLocalTransactionCoordinatorImpl.java:271) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.transaction.internal.TransactionImpl.commit(TransactionImpl.java:104) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.springframework.orm.jpa.JpaTransactionManager.doCommit(JpaTransactionManager.java:533) ~[spring-orm-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.processCommit(AbstractPlatformTransactionManager.java:746) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.commit(AbstractPlatformTransactionManager.java:714) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.commitTransactionAfterReturning(TransactionAspectSupport.java:534) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:305) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:98) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:689) ~[spring-aop-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at com.cn.wavetop.dataone.service.impl.TbUsersServiceImpl$$EnhancerBySpringCGLIB$$6b2b6fa8.addTbUsers(<generated>) ~[classes/:na]
+	at com.cn.wavetop.dataone.controller.TbUsersController.regist(TbUsersController.java:23) ~[classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_161]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_161]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_161]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_161]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:105) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:893) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:798) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123) ~[druid-1.1.10.jar:1.1.10]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:94) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:97) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:860) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1589) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_161]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_161]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_161]
+
+2019-10-14 09:14:48.975  INFO 13460 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Starting DataoneApplication on DESKTOP-5620HIF with PID 13460 (E:\ideaWorkSpace\dataone\target\classes started by Wavetop in E:\ideaWorkSpace\dataone)
+2019-10-14 09:14:48.980  INFO 13460 --- [main] c.cn.wavetop.dataone.DataoneApplication  : No active profile set, falling back to default profiles: default
+2019-10-14 09:14:51.830  INFO 13460 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-10-14 09:14:52.031  INFO 13460 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 191ms. Found 22 repository interfaces.
+2019-10-14 09:14:52.494  INFO 13460 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$98861630] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-14 09:14:53.064  INFO 13460 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2019-10-14 09:14:53.129  INFO 13460 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-10-14 09:14:53.130  INFO 13460 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.26]
+2019-10-14 09:14:53.425  INFO 13460 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-10-14 09:14:53.425  INFO 13460 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 4382 ms
+2019-10-14 09:14:53.666  INFO 13460 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-10-14 09:14:53.901  INFO 13460 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-10-14 09:14:54.242  INFO 13460 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-14 09:14:54.324  INFO 13460 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.12.Final}
+2019-10-14 09:14:54.326  INFO 13460 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-10-14 09:14:54.490  INFO 13460 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-10-14 09:14:54.686  INFO 13460 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2019-10-14 09:14:55.924  INFO 13460 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-10-14 09:14:56.357  INFO 13460 --- [main] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-10-14 09:14:58.095  WARN 13460 --- [main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-10-14 09:14:58.548  INFO 13460 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2019-10-14 09:14:58.810  INFO 13460 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-10-14 09:14:59.061  INFO 13460 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2019-10-14 09:14:59.082  INFO 13460 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2019-10-14 09:14:59.117  INFO 13460 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2019-10-14 09:14:59.315  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delete_errorlogUsingPOST_1
+2019-10-14 09:14:59.368  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: check_jobinfoUsingPOST_1
+2019-10-14 09:14:59.436  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_1
+2019-10-14 09:14:59.438  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_1
+2019-10-14 09:14:59.440  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_1
+2019-10-14 09:14:59.443  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_1
+2019-10-14 09:14:59.445  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_1
+2019-10-14 09:14:59.446  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_1
+2019-10-14 09:14:59.447  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_1
+2019-10-14 09:14:59.448  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_1
+2019-10-14 09:14:59.449  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_1
+2019-10-14 09:14:59.450  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_1
+2019-10-14 09:14:59.451  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_1
+2019-10-14 09:14:59.452  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_1
+2019-10-14 09:14:59.454  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_1
+2019-10-14 09:14:59.455  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_1
+2019-10-14 09:14:59.457  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_1
+2019-10-14 09:14:59.457  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_1
+2019-10-14 09:14:59.463  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_1
+2019-10-14 09:14:59.464  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_1
+2019-10-14 09:14:59.465  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_1
+2019-10-14 09:14:59.466  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_1
+2019-10-14 09:14:59.466  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_1
+2019-10-14 09:14:59.467  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_1
+2019-10-14 09:14:59.468  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_1
+2019-10-14 09:14:59.468  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_1
+2019-10-14 09:14:59.470  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_1
+2019-10-14 09:14:59.472  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_1
+2019-10-14 09:14:59.475  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_1
+2019-10-14 09:14:59.477  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_1
+2019-10-14 09:14:59.479  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_1
+2019-10-14 09:14:59.481  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_1
+2019-10-14 09:14:59.483  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_1
+2019-10-14 09:14:59.484  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_1
+2019-10-14 09:14:59.501  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_1
+2019-10-14 09:14:59.502  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_1
+2019-10-14 09:14:59.502  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_1
+2019-10-14 09:14:59.503  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_1
+2019-10-14 09:14:59.503  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_1
+2019-10-14 09:14:59.508  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_1
+2019-10-14 09:14:59.509  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_1
+2019-10-14 09:14:59.510  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_1
+2019-10-14 09:14:59.513  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_2
+2019-10-14 09:14:59.514  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_2
+2019-10-14 09:14:59.515  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_2
+2019-10-14 09:14:59.517  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_2
+2019-10-14 09:14:59.518  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_2
+2019-10-14 09:14:59.519  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_2
+2019-10-14 09:14:59.521  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_2
+2019-10-14 09:14:59.523  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_2
+2019-10-14 09:14:59.527  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_2
+2019-10-14 09:14:59.529  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_2
+2019-10-14 09:14:59.530  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_2
+2019-10-14 09:14:59.532  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_2
+2019-10-14 09:14:59.532  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_2
+2019-10-14 09:14:59.533  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_2
+2019-10-14 09:14:59.534  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_2
+2019-10-14 09:14:59.534  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_2
+2019-10-14 09:14:59.538  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_2
+2019-10-14 09:14:59.540  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_2
+2019-10-14 09:14:59.541  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_2
+2019-10-14 09:14:59.542  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_2
+2019-10-14 09:14:59.543  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_2
+2019-10-14 09:14:59.544  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_2
+2019-10-14 09:14:59.545  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_2
+2019-10-14 09:14:59.546  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_2
+2019-10-14 09:14:59.547  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_2
+2019-10-14 09:14:59.548  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_2
+2019-10-14 09:14:59.549  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_2
+2019-10-14 09:14:59.550  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_2
+2019-10-14 09:14:59.557  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_2
+2019-10-14 09:14:59.561  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_2
+2019-10-14 09:14:59.563  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_2
+2019-10-14 09:14:59.564  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_2
+2019-10-14 09:14:59.568  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_2
+2019-10-14 09:14:59.569  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_2
+2019-10-14 09:14:59.569  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_2
+2019-10-14 09:14:59.573  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_2
+2019-10-14 09:14:59.574  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_2
+2019-10-14 09:14:59.575  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_2
+2019-10-14 09:14:59.577  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_2
+2019-10-14 09:14:59.578  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_2
+2019-10-14 09:14:59.674  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_3
+2019-10-14 09:14:59.743  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_3
+2019-10-14 09:14:59.745  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_3
+2019-10-14 09:14:59.747  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_3
+2019-10-14 09:14:59.748  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_3
+2019-10-14 09:14:59.750  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_3
+2019-10-14 09:14:59.752  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_3
+2019-10-14 09:14:59.756  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_3
+2019-10-14 09:14:59.760  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_3
+2019-10-14 09:14:59.761  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_3
+2019-10-14 09:14:59.762  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_3
+2019-10-14 09:14:59.763  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_3
+2019-10-14 09:14:59.764  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_3
+2019-10-14 09:14:59.766  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_3
+2019-10-14 09:14:59.767  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_3
+2019-10-14 09:14:59.767  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_3
+2019-10-14 09:14:59.768  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_3
+2019-10-14 09:14:59.769  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_3
+2019-10-14 09:14:59.770  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_3
+2019-10-14 09:14:59.771  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_3
+2019-10-14 09:14:59.777  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_3
+2019-10-14 09:14:59.780  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_3
+2019-10-14 09:14:59.782  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_3
+2019-10-14 09:14:59.784  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_3
+2019-10-14 09:14:59.789  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_3
+2019-10-14 09:14:59.792  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_3
+2019-10-14 09:14:59.793  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_3
+2019-10-14 09:14:59.795  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_3
+2019-10-14 09:14:59.796  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_3
+2019-10-14 09:14:59.797  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_3
+2019-10-14 09:14:59.798  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_3
+2019-10-14 09:14:59.800  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_3
+2019-10-14 09:14:59.802  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_3
+2019-10-14 09:14:59.803  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_3
+2019-10-14 09:14:59.803  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_3
+2019-10-14 09:14:59.804  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_3
+2019-10-14 09:14:59.806  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_3
+2019-10-14 09:14:59.807  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_3
+2019-10-14 09:14:59.808  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_3
+2019-10-14 09:14:59.809  INFO 13460 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_3
+2019-10-14 09:14:59.910  INFO 13460 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8000 (http) with context path ''
+2019-10-14 09:14:59.913  INFO 13460 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Started DataoneApplication in 11.859 seconds (JVM running for 14.994)
+2019-10-14 09:15:33.651  INFO 13460 --- [http-nio-8000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-10-14 09:15:33.652  INFO 13460 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-10-14 09:15:33.670  INFO 13460 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 18 ms
+2019-10-14 09:15:50.888  WARN 13460 --- [http-nio-8000-exec-9] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1048, SQLState: 23000
+2019-10-14 09:15:50.888 ERROR 13460 --- [http-nio-8000-exec-9] o.h.engine.jdbc.spi.SqlExceptionHelper   : Column 'date_joined' cannot be null
+2019-10-14 09:15:50.893 ERROR 13460 --- [http-nio-8000-exec-9] o.h.i.ExceptionMapperStandardImpl        : HHH000346: Error during managed flush [org.hibernate.exception.ConstraintViolationException: could not execute statement]
+2019-10-14 09:15:50.908 ERROR 13460 --- [http-nio-8000-exec-9] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.dao.DataIntegrityViolationException: could not execute statement; SQL [n/a]; constraint [null]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement] with root cause
+
+com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'date_joined' cannot be null
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_161]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_161]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_161]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_161]
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.Util.getInstance(Util.java:408) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:936) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3978) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3914) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2124) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2058) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5158) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:2043) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeUpdate(FilterChainImpl.java:3201) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.filter.FilterAdapter.preparedStatement_executeUpdate(FilterAdapter.java:1091) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeUpdate(FilterEventAdapter.java:491) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeUpdate(FilterChainImpl.java:3199) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeUpdate(PreparedStatementProxyImpl.java:194) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeUpdate(DruidPooledPreparedStatement.java:256) ~[druid-1.1.10.jar:1.1.10]
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.executeUpdate(ResultSetReturnImpl.java:175) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:3192) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:3706) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.action.internal.EntityInsertAction.execute(EntityInsertAction.java:90) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.spi.ActionQueue.executeActions(ActionQueue.java:604) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.spi.ActionQueue.executeActions(ActionQueue.java:478) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.event.internal.AbstractFlushingEventListener.performExecutions(AbstractFlushingEventListener.java:356) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.event.internal.DefaultFlushEventListener.onFlush(DefaultFlushEventListener.java:39) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.doFlush(SessionImpl.java:1483) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.managedFlush(SessionImpl.java:512) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.flushBeforeTransactionCompletion(SessionImpl.java:3321) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.beforeTransactionCompletion(SessionImpl.java:2517) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl.beforeTransactionCompletion(JdbcCoordinatorImpl.java:447) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl.beforeCompletionCallback(JdbcResourceLocalTransactionCoordinatorImpl.java:178) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl.access$300(JdbcResourceLocalTransactionCoordinatorImpl.java:39) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.commit(JdbcResourceLocalTransactionCoordinatorImpl.java:271) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.transaction.internal.TransactionImpl.commit(TransactionImpl.java:104) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.springframework.orm.jpa.JpaTransactionManager.doCommit(JpaTransactionManager.java:533) ~[spring-orm-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.processCommit(AbstractPlatformTransactionManager.java:746) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.commit(AbstractPlatformTransactionManager.java:714) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.commitTransactionAfterReturning(TransactionAspectSupport.java:534) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:305) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:98) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:689) ~[spring-aop-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at com.cn.wavetop.dataone.service.impl.TbUsersServiceImpl$$EnhancerBySpringCGLIB$$1c158099.addTbUsers(<generated>) ~[classes/:na]
+	at com.cn.wavetop.dataone.controller.TbUsersController.regist(TbUsersController.java:23) ~[classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_161]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_161]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_161]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_161]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:105) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:893) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:798) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123) ~[druid-1.1.10.jar:1.1.10]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:94) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:97) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:860) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1589) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_161]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_161]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_161]
+
+2019-10-14 09:16:35.607  INFO 11836 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Starting DataoneApplication on DESKTOP-5620HIF with PID 11836 (E:\ideaWorkSpace\dataone\target\classes started by Wavetop in E:\ideaWorkSpace\dataone)
+2019-10-14 09:16:35.612  INFO 11836 --- [main] c.cn.wavetop.dataone.DataoneApplication  : No active profile set, falling back to default profiles: default
+2019-10-14 09:16:38.421  INFO 11836 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-10-14 09:16:38.661  INFO 11836 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 230ms. Found 22 repository interfaces.
+2019-10-14 09:16:39.117  INFO 11836 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$15a9e122] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-14 09:16:39.600  INFO 11836 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2019-10-14 09:16:39.641  INFO 11836 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-10-14 09:16:39.642  INFO 11836 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.26]
+2019-10-14 09:16:39.915  INFO 11836 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-10-14 09:16:39.915  INFO 11836 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 4206 ms
+2019-10-14 09:16:40.150  INFO 11836 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-10-14 09:16:40.447  INFO 11836 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-10-14 09:16:40.769  INFO 11836 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-14 09:16:40.827  INFO 11836 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.12.Final}
+2019-10-14 09:16:40.828  INFO 11836 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-10-14 09:16:40.953  INFO 11836 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-10-14 09:16:41.186  INFO 11836 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2019-10-14 09:16:42.249  INFO 11836 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-10-14 09:16:42.688  INFO 11836 --- [main] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-10-14 09:16:45.403  WARN 11836 --- [main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-10-14 09:16:46.199  INFO 11836 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2019-10-14 09:16:46.649  INFO 11836 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-10-14 09:16:47.229  INFO 11836 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2019-10-14 09:16:47.273  INFO 11836 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2019-10-14 09:16:47.338  INFO 11836 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2019-10-14 09:16:47.677  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delete_errorlogUsingPOST_1
+2019-10-14 09:16:47.777  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: check_jobinfoUsingPOST_1
+2019-10-14 09:16:47.904  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_1
+2019-10-14 09:16:47.907  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_1
+2019-10-14 09:16:47.910  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_1
+2019-10-14 09:16:47.914  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_1
+2019-10-14 09:16:47.919  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_1
+2019-10-14 09:16:47.922  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_1
+2019-10-14 09:16:47.928  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_1
+2019-10-14 09:16:47.934  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_1
+2019-10-14 09:16:47.941  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_1
+2019-10-14 09:16:47.945  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_1
+2019-10-14 09:16:47.946  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_1
+2019-10-14 09:16:47.951  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_1
+2019-10-14 09:16:47.954  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_1
+2019-10-14 09:16:47.956  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_1
+2019-10-14 09:16:47.959  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_1
+2019-10-14 09:16:47.964  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_1
+2019-10-14 09:16:47.978  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_1
+2019-10-14 09:16:47.979  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_1
+2019-10-14 09:16:47.983  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_1
+2019-10-14 09:16:47.985  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_1
+2019-10-14 09:16:47.987  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_1
+2019-10-14 09:16:47.991  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_1
+2019-10-14 09:16:47.994  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_1
+2019-10-14 09:16:47.996  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_1
+2019-10-14 09:16:48.001  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_1
+2019-10-14 09:16:48.007  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_1
+2019-10-14 09:16:48.011  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_1
+2019-10-14 09:16:48.014  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_1
+2019-10-14 09:16:48.018  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_1
+2019-10-14 09:16:48.020  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_1
+2019-10-14 09:16:48.022  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_1
+2019-10-14 09:16:48.027  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_1
+2019-10-14 09:16:48.081  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_1
+2019-10-14 09:16:48.084  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_1
+2019-10-14 09:16:48.086  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_1
+2019-10-14 09:16:48.088  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_1
+2019-10-14 09:16:48.089  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_1
+2019-10-14 09:16:48.091  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_1
+2019-10-14 09:16:48.094  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_1
+2019-10-14 09:16:48.095  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_1
+2019-10-14 09:16:48.100  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_2
+2019-10-14 09:16:48.103  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_2
+2019-10-14 09:16:48.123  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_2
+2019-10-14 09:16:48.125  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_2
+2019-10-14 09:16:48.127  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_2
+2019-10-14 09:16:48.129  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_2
+2019-10-14 09:16:48.134  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_2
+2019-10-14 09:16:48.138  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_2
+2019-10-14 09:16:48.151  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_2
+2019-10-14 09:16:48.155  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_2
+2019-10-14 09:16:48.158  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_2
+2019-10-14 09:16:48.163  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_2
+2019-10-14 09:16:48.168  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_2
+2019-10-14 09:16:48.171  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_2
+2019-10-14 09:16:48.172  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_2
+2019-10-14 09:16:48.173  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_2
+2019-10-14 09:16:48.176  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_2
+2019-10-14 09:16:48.182  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_2
+2019-10-14 09:16:48.186  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_2
+2019-10-14 09:16:48.188  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_2
+2019-10-14 09:16:48.190  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_2
+2019-10-14 09:16:48.192  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_2
+2019-10-14 09:16:48.195  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_2
+2019-10-14 09:16:48.197  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_2
+2019-10-14 09:16:48.202  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_2
+2019-10-14 09:16:48.203  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_2
+2019-10-14 09:16:48.205  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_2
+2019-10-14 09:16:48.207  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_2
+2019-10-14 09:16:48.209  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_2
+2019-10-14 09:16:48.214  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_2
+2019-10-14 09:16:48.219  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_2
+2019-10-14 09:16:48.220  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_2
+2019-10-14 09:16:48.222  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_2
+2019-10-14 09:16:48.224  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_2
+2019-10-14 09:16:48.227  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_2
+2019-10-14 09:16:48.228  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_2
+2019-10-14 09:16:48.229  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_2
+2019-10-14 09:16:48.230  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_2
+2019-10-14 09:16:48.232  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_2
+2019-10-14 09:16:48.234  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_2
+2019-10-14 09:16:48.313  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_3
+2019-10-14 09:16:48.314  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_3
+2019-10-14 09:16:48.316  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_3
+2019-10-14 09:16:48.317  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_3
+2019-10-14 09:16:48.319  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_3
+2019-10-14 09:16:48.321  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_3
+2019-10-14 09:16:48.323  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_3
+2019-10-14 09:16:48.325  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_3
+2019-10-14 09:16:48.327  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_3
+2019-10-14 09:16:48.330  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_3
+2019-10-14 09:16:48.334  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_3
+2019-10-14 09:16:48.336  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_3
+2019-10-14 09:16:48.338  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_3
+2019-10-14 09:16:48.339  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_3
+2019-10-14 09:16:48.340  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_3
+2019-10-14 09:16:48.341  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_3
+2019-10-14 09:16:48.345  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_3
+2019-10-14 09:16:48.347  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_3
+2019-10-14 09:16:48.349  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_3
+2019-10-14 09:16:48.351  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_3
+2019-10-14 09:16:48.357  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_3
+2019-10-14 09:16:48.358  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_3
+2019-10-14 09:16:48.360  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_3
+2019-10-14 09:16:48.361  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_3
+2019-10-14 09:16:48.369  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_3
+2019-10-14 09:16:48.377  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_3
+2019-10-14 09:16:48.379  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_3
+2019-10-14 09:16:48.381  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_3
+2019-10-14 09:16:48.382  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_3
+2019-10-14 09:16:48.388  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_3
+2019-10-14 09:16:48.390  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_3
+2019-10-14 09:16:48.392  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_3
+2019-10-14 09:16:48.394  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_3
+2019-10-14 09:16:48.396  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_3
+2019-10-14 09:16:48.397  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_3
+2019-10-14 09:16:48.398  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_3
+2019-10-14 09:16:48.399  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_3
+2019-10-14 09:16:48.400  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_3
+2019-10-14 09:16:48.402  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_3
+2019-10-14 09:16:48.404  INFO 11836 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_3
+2019-10-14 09:16:48.530  INFO 11836 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8000 (http) with context path ''
+2019-10-14 09:16:48.534  INFO 11836 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Started DataoneApplication in 13.815 seconds (JVM running for 16.346)
+2019-10-14 09:23:19.236  INFO 20840 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Starting DataoneApplication on DESKTOP-5620HIF with PID 20840 (E:\ideaWorkSpace\dataone\target\classes started by Wavetop in E:\ideaWorkSpace\dataone)
+2019-10-14 09:23:19.245  INFO 20840 --- [main] c.cn.wavetop.dataone.DataoneApplication  : No active profile set, falling back to default profiles: default
+2019-10-14 09:23:23.692  INFO 20840 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-10-14 09:23:24.274  INFO 20840 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 551ms. Found 22 repository interfaces.
+2019-10-14 09:23:24.923  INFO 20840 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c21db9fe] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-14 09:23:25.669  INFO 20840 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2019-10-14 09:23:25.705  INFO 20840 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-10-14 09:23:25.706  INFO 20840 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.26]
+2019-10-14 09:23:26.123  INFO 20840 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-10-14 09:23:26.124  INFO 20840 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 6807 ms
+2019-10-14 09:23:26.443  INFO 20840 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-10-14 09:23:26.773  INFO 20840 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-10-14 09:23:27.138  INFO 20840 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-14 09:23:27.191  INFO 20840 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.12.Final}
+2019-10-14 09:23:27.193  INFO 20840 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-10-14 09:23:27.306  INFO 20840 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-10-14 09:23:27.576  INFO 20840 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2019-10-14 09:23:29.040  INFO 20840 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-10-14 09:23:29.802  INFO 20840 --- [main] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-10-14 09:23:32.604  WARN 20840 --- [main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-10-14 09:23:33.403  INFO 20840 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2019-10-14 09:23:33.767  INFO 20840 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-10-14 09:23:34.564  INFO 20840 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2019-10-14 09:23:34.609  INFO 20840 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2019-10-14 09:23:34.688  INFO 20840 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2019-10-14 09:23:35.010  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delete_errorlogUsingPOST_1
+2019-10-14 09:23:35.108  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: check_jobinfoUsingPOST_1
+2019-10-14 09:23:35.277  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_1
+2019-10-14 09:23:35.281  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_1
+2019-10-14 09:23:35.289  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_1
+2019-10-14 09:23:35.292  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_1
+2019-10-14 09:23:35.295  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_1
+2019-10-14 09:23:35.304  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_1
+2019-10-14 09:23:35.309  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_1
+2019-10-14 09:23:35.313  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_1
+2019-10-14 09:23:35.321  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_1
+2019-10-14 09:23:35.327  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_1
+2019-10-14 09:23:35.336  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_1
+2019-10-14 09:23:35.342  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_1
+2019-10-14 09:23:35.345  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_1
+2019-10-14 09:23:35.352  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_1
+2019-10-14 09:23:35.358  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_1
+2019-10-14 09:23:35.361  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_1
+2019-10-14 09:23:35.382  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_1
+2019-10-14 09:23:35.384  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_1
+2019-10-14 09:23:35.386  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_1
+2019-10-14 09:23:35.387  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_1
+2019-10-14 09:23:35.388  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_1
+2019-10-14 09:23:35.390  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_1
+2019-10-14 09:23:35.399  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_1
+2019-10-14 09:23:35.402  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_1
+2019-10-14 09:23:35.405  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_1
+2019-10-14 09:23:35.408  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_1
+2019-10-14 09:23:35.410  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_1
+2019-10-14 09:23:35.413  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_1
+2019-10-14 09:23:35.416  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_1
+2019-10-14 09:23:35.418  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_1
+2019-10-14 09:23:35.420  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_1
+2019-10-14 09:23:35.422  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_1
+2019-10-14 09:23:35.464  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_1
+2019-10-14 09:23:35.465  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_1
+2019-10-14 09:23:35.467  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_1
+2019-10-14 09:23:35.469  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_1
+2019-10-14 09:23:35.470  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_1
+2019-10-14 09:23:35.471  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_1
+2019-10-14 09:23:35.472  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_1
+2019-10-14 09:23:35.474  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_1
+2019-10-14 09:23:35.479  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_2
+2019-10-14 09:23:35.487  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_2
+2019-10-14 09:23:35.492  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_2
+2019-10-14 09:23:35.495  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_2
+2019-10-14 09:23:35.499  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_2
+2019-10-14 09:23:35.503  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_2
+2019-10-14 09:23:35.509  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_2
+2019-10-14 09:23:35.518  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_2
+2019-10-14 09:23:35.520  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_2
+2019-10-14 09:23:35.521  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_2
+2019-10-14 09:23:35.523  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_2
+2019-10-14 09:23:35.528  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_2
+2019-10-14 09:23:35.529  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_2
+2019-10-14 09:23:35.530  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_2
+2019-10-14 09:23:35.531  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_2
+2019-10-14 09:23:35.532  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_2
+2019-10-14 09:23:35.537  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_2
+2019-10-14 09:23:35.540  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_2
+2019-10-14 09:23:35.541  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_2
+2019-10-14 09:23:35.543  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_2
+2019-10-14 09:23:35.544  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_2
+2019-10-14 09:23:35.545  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_2
+2019-10-14 09:23:35.548  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_2
+2019-10-14 09:23:35.554  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_2
+2019-10-14 09:23:35.557  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_2
+2019-10-14 09:23:35.558  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_2
+2019-10-14 09:23:35.560  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_2
+2019-10-14 09:23:35.562  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_2
+2019-10-14 09:23:35.563  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_2
+2019-10-14 09:23:35.566  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_2
+2019-10-14 09:23:35.567  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_2
+2019-10-14 09:23:35.581  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_2
+2019-10-14 09:23:35.587  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_2
+2019-10-14 09:23:35.590  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_2
+2019-10-14 09:23:35.593  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_2
+2019-10-14 09:23:35.596  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_2
+2019-10-14 09:23:35.599  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_2
+2019-10-14 09:23:35.603  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_2
+2019-10-14 09:23:35.607  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_2
+2019-10-14 09:23:35.612  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_2
+2019-10-14 09:23:35.706  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingGET_3
+2019-10-14 09:23:35.709  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingHEAD_3
+2019-10-14 09:23:35.712  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_3
+2019-10-14 09:23:35.713  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPUT_3
+2019-10-14 09:23:35.715  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPATCH_3
+2019-10-14 09:23:35.716  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingDELETE_3
+2019-10-14 09:23:35.721  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingOPTIONS_3
+2019-10-14 09:23:35.723  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingTRACE_3
+2019-10-14 09:23:35.727  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_3
+2019-10-14 09:23:35.728  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_3
+2019-10-14 09:23:35.729  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_3
+2019-10-14 09:23:35.731  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_3
+2019-10-14 09:23:35.732  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_3
+2019-10-14 09:23:35.733  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_3
+2019-10-14 09:23:35.735  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_3
+2019-10-14 09:23:35.736  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_3
+2019-10-14 09:23:35.738  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_3
+2019-10-14 09:23:35.739  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_3
+2019-10-14 09:23:35.740  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_3
+2019-10-14 09:23:35.743  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_3
+2019-10-14 09:23:35.746  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_3
+2019-10-14 09:23:35.747  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_3
+2019-10-14 09:23:35.749  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_3
+2019-10-14 09:23:35.750  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_3
+2019-10-14 09:23:35.754  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingGET_3
+2019-10-14 09:23:35.757  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingHEAD_3
+2019-10-14 09:23:35.759  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_3
+2019-10-14 09:23:35.761  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPUT_3
+2019-10-14 09:23:35.762  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPATCH_3
+2019-10-14 09:23:35.764  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingDELETE_3
+2019-10-14 09:23:35.766  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingOPTIONS_3
+2019-10-14 09:23:35.767  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingTRACE_3
+2019-10-14 09:23:35.768  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_3
+2019-10-14 09:23:35.769  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_3
+2019-10-14 09:23:35.772  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_3
+2019-10-14 09:23:35.774  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_3
+2019-10-14 09:23:35.775  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_3
+2019-10-14 09:23:35.776  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_3
+2019-10-14 09:23:35.778  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_3
+2019-10-14 09:23:35.779  INFO 20840 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_3
+2019-10-14 09:23:35.941  INFO 20840 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8000 (http) with context path ''
+2019-10-14 09:23:35.945  INFO 20840 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Started DataoneApplication in 17.714 seconds (JVM running for 21.082)
+2019-10-14 09:23:37.576  INFO 20840 --- [http-nio-8000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-10-14 09:23:37.576  INFO 20840 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-10-14 09:23:37.597  INFO 20840 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 21 ms
+2019-10-14 09:27:49.121  WARN 20840 --- [http-nio-8000-exec-8] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1048, SQLState: 23000
+2019-10-14 09:27:49.121 ERROR 20840 --- [http-nio-8000-exec-8] o.h.engine.jdbc.spi.SqlExceptionHelper   : Column 'date_joined' cannot be null
+2019-10-14 09:27:49.127 ERROR 20840 --- [http-nio-8000-exec-8] o.h.i.ExceptionMapperStandardImpl        : HHH000346: Error during managed flush [org.hibernate.exception.ConstraintViolationException: could not execute statement]
+2019-10-14 09:27:49.147 ERROR 20840 --- [http-nio-8000-exec-8] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.dao.DataIntegrityViolationException: could not execute statement; SQL [n/a]; constraint [null]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement] with root cause
+
+com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'date_joined' cannot be null
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:1.8.0_161]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[na:1.8.0_161]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:1.8.0_161]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[na:1.8.0_161]
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.Util.getInstance(Util.java:408) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:936) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3978) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3914) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2124) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2058) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5158) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:2043) ~[mysql-connector-java-5.1.47.jar:5.1.47]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeUpdate(FilterChainImpl.java:3201) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.filter.FilterAdapter.preparedStatement_executeUpdate(FilterAdapter.java:1091) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeUpdate(FilterEventAdapter.java:491) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeUpdate(FilterChainImpl.java:3199) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeUpdate(PreparedStatementProxyImpl.java:194) ~[druid-1.1.10.jar:1.1.10]
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeUpdate(DruidPooledPreparedStatement.java:256) ~[druid-1.1.10.jar:1.1.10]
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.executeUpdate(ResultSetReturnImpl.java:175) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:3192) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:3706) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.action.internal.EntityInsertAction.execute(EntityInsertAction.java:90) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.spi.ActionQueue.executeActions(ActionQueue.java:604) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.spi.ActionQueue.executeActions(ActionQueue.java:478) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.event.internal.AbstractFlushingEventListener.performExecutions(AbstractFlushingEventListener.java:356) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.event.internal.DefaultFlushEventListener.onFlush(DefaultFlushEventListener.java:39) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.doFlush(SessionImpl.java:1483) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.managedFlush(SessionImpl.java:512) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.flushBeforeTransactionCompletion(SessionImpl.java:3321) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.internal.SessionImpl.beforeTransactionCompletion(SessionImpl.java:2517) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl.beforeTransactionCompletion(JdbcCoordinatorImpl.java:447) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl.beforeCompletionCallback(JdbcResourceLocalTransactionCoordinatorImpl.java:178) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl.access$300(JdbcResourceLocalTransactionCoordinatorImpl.java:39) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.commit(JdbcResourceLocalTransactionCoordinatorImpl.java:271) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.hibernate.engine.transaction.internal.TransactionImpl.commit(TransactionImpl.java:104) ~[hibernate-core-5.3.12.Final.jar:5.3.12.Final]
+	at org.springframework.orm.jpa.JpaTransactionManager.doCommit(JpaTransactionManager.java:533) ~[spring-orm-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.processCommit(AbstractPlatformTransactionManager.java:746) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.commit(AbstractPlatformTransactionManager.java:714) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.commitTransactionAfterReturning(TransactionAspectSupport.java:534) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:305) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:98) ~[spring-tx-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:689) ~[spring-aop-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at com.cn.wavetop.dataone.service.impl.TbUsersServiceImpl$$EnhancerBySpringCGLIB$$3880abda.addTbUsers(<generated>) ~[classes/:na]
+	at com.cn.wavetop.dataone.controller.TbUsersController.regist(TbUsersController.java:23) ~[classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_161]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_161]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_161]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_161]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:105) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:893) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:798) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123) ~[druid-1.1.10.jar:1.1.10]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:94) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:97) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:860) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1589) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_161]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_161]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_161]
+
+2019-10-14 09:48:21.359 ERROR 20840 --- [http-nio-8000-exec-3] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
+
+java.lang.NullPointerException: null
+	at com.cn.wavetop.dataone.service.impl.SysTableruleServiceImpl.checkTablerule(SysTableruleServiceImpl.java:44) ~[classes/:na]
+	at com.cn.wavetop.dataone.service.impl.SysTableruleServiceImpl$$FastClassBySpringCGLIB$$45f316bd.invoke(<generated>) ~[classes/:na]
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685) ~[spring-aop-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at com.cn.wavetop.dataone.service.impl.SysTableruleServiceImpl$$EnhancerBySpringCGLIB$$3865304f.checkTablerule(<generated>) ~[classes/:na]
+	at com.cn.wavetop.dataone.controller.SysTableruleController.checkTablerule(SysTableruleController.java:28) ~[classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_161]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_161]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_161]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_161]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:105) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:893) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:798) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) ~[spring-webmvc-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123) ~[druid-1.1.10.jar:1.1.10]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:94) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:97) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) ~[spring-web-5.1.10.RELEASE.jar:5.1.10.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) ~[tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:860) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1589) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_161]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_161]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.26.jar:9.0.26]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_161]
+
