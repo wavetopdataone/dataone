@@ -84,8 +84,8 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
                 map.put("status", 0);
                 map.put("message", "修改失败");
             } else {
-                SysDbinfo old = repository.findByIdOrName(sysDbinfo.getId(), sysDbinfo.getName());
-                old.setId(sysDbinfo.getId());
+                SysDbinfo old = repository.findByName(sysDbinfo.getName());
+               // old.setId(sysDbinfo.getId());
                 old.setName(sysDbinfo.getName());
                 old.setDbname(sysDbinfo.getDbname());
                 old.setHost(sysDbinfo.getHost());

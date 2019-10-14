@@ -23,6 +23,8 @@ public interface SysDbinfoRespository  extends JpaRepository<SysDbinfo,Long> {
 
     boolean existsByName(String name);
 
+    SysDbinfo findByName(String name);
+
 
 //    @Modifying
 //    @Query("update SysDbinfo u set " +
