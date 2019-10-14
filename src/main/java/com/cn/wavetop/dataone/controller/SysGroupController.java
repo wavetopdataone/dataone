@@ -7,10 +7,7 @@ import com.cn.wavetop.dataone.service.SysGroupService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author yongz
@@ -38,14 +35,14 @@ public class SysGroupController {
 
     @ApiImplicitParam
     @PostMapping("/add_group")
-    public Object add_group(SysGroup sysGroup) {
+    public Object add_group(@RequestBody SysGroup sysGroup) {
        System.out.println(sysGroup);
         return service.addGroup(sysGroup);
     }
 
     @ApiImplicitParam
     @PostMapping("/edit_group")
-    public Object edit_group(SysGroup sysGroup) {
+    public Object edit_group(@RequestBody SysGroup sysGroup) {
         System.out.println(sysGroup);
         return service.editGroup(sysGroup);
     }

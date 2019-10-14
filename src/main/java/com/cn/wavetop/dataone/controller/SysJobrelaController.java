@@ -7,10 +7,7 @@ import com.cn.wavetop.dataone.service.SysJobrelaService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author yongz
@@ -37,13 +34,13 @@ public class SysJobrelaController {
 
     @ApiImplicitParam
     @PostMapping("/add_jobrela")
-    public Object add_jobrela( SysJobrela sysJobrela) {
+    public Object add_jobrela(@RequestBody  SysJobrela sysJobrela) {
         return service.addJobrela(sysJobrela);
     }
 
     @ApiImplicitParam
     @PostMapping("/edit_jobrela")
-    public Object edit_jobrela(SysJobrela sysJobrela) {
+    public Object edit_jobrela(@RequestBody SysJobrela sysJobrela) {
         System.out.println(sysJobrela);
         return service.editJobrela(sysJobrela);
     }

@@ -7,10 +7,7 @@ import com.cn.wavetop.dataone.service.ErrorQueueSettingsService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author yongz
@@ -37,14 +34,14 @@ public class ErrorLogController {
 
     @ApiImplicitParam
     @PostMapping("/add_errorlog")
-    public Object add_errorlog(ErrorLog errorLog) {
+    public Object add_errorlog( @RequestBody ErrorLog errorLog) {
         System.out.println(errorLog);
         return service.addErrorlog(errorLog);
     }
 
     @ApiImplicitParam
     @PostMapping("/edit_errorlog")
-    public Object edit_errorlog(ErrorLog ErrorLog) {
+    public Object edit_errorlog(@RequestBody ErrorLog ErrorLog) {
         System.out.println(ErrorLog);
         return service.editErrorlog(ErrorLog);
     }

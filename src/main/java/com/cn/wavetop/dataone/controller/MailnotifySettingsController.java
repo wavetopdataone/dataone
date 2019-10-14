@@ -7,10 +7,7 @@ import com.cn.wavetop.dataone.service.MailnotifySettingsService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author yongz
@@ -37,14 +34,14 @@ public class MailnotifySettingsController {
 
     @ApiImplicitParam
     @PostMapping("/add_mailnotify")
-    public Object add_mailnotify(MailnotifySettings mailnotifySettings) {
+    public Object add_mailnotify( @RequestBody MailnotifySettings mailnotifySettings) {
         System.out.println(mailnotifySettings);
         return service.addMailnotify(mailnotifySettings);
     }
 
     @ApiImplicitParam
     @PostMapping("/edit_mailnotify")
-    public Object edit_mailnotify(MailnotifySettings mailnotifySettings) {
+    public Object edit_mailnotify( @RequestBody MailnotifySettings mailnotifySettings) {
         System.out.println(mailnotifySettings);
         return service.editMailnotify(mailnotifySettings);
     }

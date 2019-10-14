@@ -57,8 +57,10 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
     @Transactional
     @Override
     public Object addbinfo(SysDbinfo sysDbinfo) {
-
-        if (repository.existsByIdOrName(sysDbinfo.getId(), sysDbinfo.getName())) {
+        //System.out.println(sysDbinfo);
+        //sysDbinfo.getId();
+       // if (repository.existsByIdOrName(sysDbinfo.getId(), sysDbinfo.getName())) {
+        if (repository.existsByName(sysDbinfo.getName())) {
             return ToData.builder().status("0").message("任务已存在").build();
         } else {
             SysDbinfo data = repository.save(sysDbinfo);
@@ -76,7 +78,7 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
         boolean flag = sysJobrelarepository.existsByDestNameOrSourceName(sysDbinfo.getName(), sysDbinfo.getName());
         System.out.println(flag);
         if (!flag) {
-            boolean flag2 = repository.existsByIdOrName(sysDbinfo.getId(), sysDbinfo.getName());
+            boolean flag2 = repository.existsByName(sysDbinfo.getName());
             System.out.println(flag2);
             if (!flag2) {
                 map.put("status", 0);

@@ -6,6 +6,7 @@ import com.cn.wavetop.dataone.service.SysRelaService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,12 +28,12 @@ public class SysRelaController {
     }
     @ApiOperation(value = "添加", protocols = "HTTP", produces = "application/json", notes = "添加")
     @RequestMapping("/add_rela")
-    public Object addUser(SysRela sysRela){
+    public Object addUser(@RequestBody SysRela sysRela){
         return sysRelaService.addSysUser(sysRela);
     }
     @ApiOperation(value = "修改", protocols = "HTTP", produces = "application/json", notes = "修改")
     @RequestMapping("/edit_rela")
-    public Object editUser(SysRela sysRela){
+    public Object editUser(@RequestBody SysRela sysRela){
         return sysRelaService.update(sysRela);
     }
     @ApiOperation(value = "删除", protocols = "HTTP", produces = "application/json", notes = "删除")

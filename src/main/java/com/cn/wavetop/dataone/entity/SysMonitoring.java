@@ -26,7 +26,7 @@ import java.util.Date;
 
 public class SysMonitoring {
   @Id // 标识主键
-
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
   private Long jobId;
   private String jobName;

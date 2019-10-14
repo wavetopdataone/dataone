@@ -7,10 +7,7 @@ import com.cn.wavetop.dataone.service.SysDbinfoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author yongz
@@ -49,14 +46,14 @@ public class SysDbinfoController {
 
     @ApiImplicitParam
     @PostMapping("/add_dbinfo")
-    public Object add_dbinfo(SysDbinfo sysDbinfo) {
+    public Object add_dbinfo(@RequestBody SysDbinfo sysDbinfo) {
         System.out.println(sysDbinfo);
         return service.addbinfo(sysDbinfo);
     }
 
     @ApiImplicitParam
     @PostMapping("/edit_dbinfo")
-    public Object edit_dbinfo(SysDbinfo sysDbinfo) {
+    public Object edit_dbinfo( @RequestBody SysDbinfo sysDbinfo) {
         System.out.println(sysDbinfo);
         return service.editDbinfo(sysDbinfo);
     }

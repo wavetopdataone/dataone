@@ -7,10 +7,7 @@ import com.cn.wavetop.dataone.service.SysFieldruleService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author yongz
@@ -37,7 +34,7 @@ public class SysFieldruleController {
 
     @ApiImplicitParam
     @PostMapping("/add_fieldrule")
-    public Object add_fieldrule(SysFieldrule sysFieldrule, String list_data) {
+    public Object add_fieldrule(@RequestBody  SysFieldrule sysFieldrule, String list_data) {
         System.out.println(sysFieldrule + list_data);
         return service.addFieldrule(sysFieldrule);
     }
@@ -56,7 +53,7 @@ public class SysFieldruleController {
 
     @ApiImplicitParam
     @PostMapping("/link_table_details")
-    public Object link_table_details(SysDbinfo sysDbinfo,String tablename) {
+    public Object link_table_details(@RequestBody SysDbinfo sysDbinfo,String tablename) {
         return service.linkTableDetails(sysDbinfo,tablename);
     }
 

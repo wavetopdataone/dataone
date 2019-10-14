@@ -6,6 +6,7 @@ import com.cn.wavetop.dataone.service.SysTableruleService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,13 +30,13 @@ public class SysTableruleController {
     }
     @ApiOperation(value = "添加", protocols = "HTTP", produces = "application/json", notes = "添加")
     @RequestMapping("/add_tablerule")
-    public Object addTablerule(SysTablerule sysTablerule)
+    public Object addTablerule(@RequestBody SysTablerule sysTablerule)
     {
         return sysTableruleService.addTablerule(sysTablerule);
     }
     @ApiOperation(value = "修改", protocols = "HTTP", produces = "application/json", notes = "修改")
     @RequestMapping("/edit_tablerule")
-    public Object editTablerule(SysTablerule sysTablerule){
+    public Object editTablerule(@RequestBody SysTablerule sysTablerule){
 
         return sysTableruleService.editTablerule(sysTablerule);
     }

@@ -25,6 +25,7 @@ import java.util.Date;
 @Data
 public class SysJobinfo {
   @Id // 标识主键
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private Long id;
   private String players;
   private Long syncRange;

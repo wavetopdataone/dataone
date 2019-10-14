@@ -6,6 +6,7 @@ import com.cn.wavetop.dataone.service.SysLoginfoService;
 import com.cn.wavetop.dataone.service.SysMonitoringService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,12 +28,12 @@ public class SysLoginfoController {
     }
     @ApiOperation(value = "添加", protocols = "HTTP", produces = "application/json", notes = "添加")
     @RequestMapping("/add_loginfo")
-    public Object addUser(SysLoginfo sysLoginfo){
+    public Object addUser(@RequestBody SysLoginfo sysLoginfo){
         return sysLoginfoService.addSysUser(sysLoginfo);
     }
     @ApiOperation(value = "修改", protocols = "HTTP", produces = "application/json", notes = "修改")
     @RequestMapping("/edit_loginfo")
-    public Object editUser(SysLoginfo sysLoginfo){
+    public Object editUser(@RequestBody SysLoginfo sysLoginfo){
         return sysLoginfoService.update(sysLoginfo);
     }
     @ApiOperation(value = "删除", protocols = "HTTP", produces = "application/json", notes = "删除")

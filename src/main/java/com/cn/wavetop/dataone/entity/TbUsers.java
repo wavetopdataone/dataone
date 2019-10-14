@@ -25,7 +25,7 @@ import java.util.Date;
 @Data
 public class TbUsers {
   @Id // 标识主键
-
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")

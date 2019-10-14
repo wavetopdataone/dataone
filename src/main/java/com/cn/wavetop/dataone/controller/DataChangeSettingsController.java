@@ -7,10 +7,7 @@ import com.cn.wavetop.dataone.service.DataChangeSettingsService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author yongz
@@ -38,13 +35,13 @@ public class DataChangeSettingsController {
 
     @ApiImplicitParam
     @PostMapping("/add_data_change")
-    public Object add_data_change(DataChangeSettings dataChangeSettings) {
+    public Object add_data_change( @RequestBody DataChangeSettings dataChangeSettings) {
         System.out.println(dataChangeSettings);
         return service.addDataChange(dataChangeSettings);
     }
     @ApiImplicitParam
     @PostMapping("/edit_data_change")
-    public Object edit_data_change(DataChangeSettings dataChangeSettings) {
+    public Object edit_data_change( @RequestBody DataChangeSettings dataChangeSettings) {
         System.out.println(dataChangeSettings);
         return service.editDataChange(dataChangeSettings);
     }

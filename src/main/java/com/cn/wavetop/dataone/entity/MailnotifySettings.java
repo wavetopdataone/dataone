@@ -24,6 +24,7 @@ public class MailnotifySettings {
 
   //
   @Id // 标识主键
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
   private String jobError;
   private long errorQueueAlert;

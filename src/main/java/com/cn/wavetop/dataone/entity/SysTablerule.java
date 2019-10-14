@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ import javax.persistence.*;
 @Data
 public class SysTablerule {
   @Id // 标识主键
-
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
   private Long jobId;
   private String sourceTable;
@@ -31,6 +32,7 @@ public class SysTablerule {
   @Column(name = "`check`")
   private Long check;
   @Column(name = "`sour_or_dest`")
+  @JsonProperty(value = "sour_or_dest")
   private Long sourOrDest;
   private String destTable;
 
