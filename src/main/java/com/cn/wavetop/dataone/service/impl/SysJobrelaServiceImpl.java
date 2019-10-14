@@ -174,7 +174,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 
     @Override
     public Object someJobrela(Long job_status) {
-        return repository.findByJobStatus(job_status);
+        return ToData.builder().status("1").data( repository.findByJobStatus(job_status)).build();
     }
     @Transactional
     @Override

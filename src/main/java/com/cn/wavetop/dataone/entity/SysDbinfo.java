@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,18 +20,19 @@ import javax.persistence.*;
 @Data
 public class SysDbinfo {
   @Id // 标识主键
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private Long id;
   private String host;
   private String user;
   private String password;
   private String name;
-
   private String dbname;
 
   @Column(name="\"schema\"")
   private String schema;
   private Long port;
   @Column(name="sour_or_dest")
+  @JsonProperty(value = "sour_or_dest")
   private Long sourDest;
   private Long type;
 

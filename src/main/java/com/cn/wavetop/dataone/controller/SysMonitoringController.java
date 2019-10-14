@@ -7,6 +7,7 @@ import com.cn.wavetop.dataone.service.SysRelaService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,12 +29,12 @@ public class SysMonitoringController {
     }
     @ApiOperation(value = "添加", protocols = "HTTP", produces = "application/json", notes = "添加")
     @RequestMapping("/add_monitoring")
-    public Object addUser(SysMonitoring sysMonitoring){
+    public Object addUser(@RequestBody SysMonitoring sysMonitoring){
         return sysMonitoringService.addSysMonitoring(sysMonitoring);
     }
     @ApiOperation(value = "修改", protocols = "HTTP", produces = "application/json", notes = "修改")
     @RequestMapping("/edit_monitoring")
-    public Object editUser(SysMonitoring sysMonitoring){
+    public Object editUser(@RequestBody SysMonitoring sysMonitoring){
         return sysMonitoringService.update(sysMonitoring);
     }
     @ApiOperation(value = "删除", protocols = "HTTP", produces = "application/json", notes = "删除")

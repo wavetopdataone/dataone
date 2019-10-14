@@ -22,7 +22,7 @@ import javax.persistence.Id;
 @Data
 public class DataChangeSettings {
   @Id // 标识主键
-
+  //@GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
   private long jobId;
   private long deleteSyncingSource;

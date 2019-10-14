@@ -12,6 +12,7 @@ public class DBConn {
        String USER = user; //用户名
        String PWD = password; //密码
        try {
+           System.out.println(SERVandDB+"\n"+user+"\n"+password);
            Class.forName(ClassforName).newInstance();
            con = DriverManager.getConnection(SERVandDB, USER, PWD);
            System.out.println("打开数据库连接");

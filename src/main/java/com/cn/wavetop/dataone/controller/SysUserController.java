@@ -5,6 +5,7 @@ import com.cn.wavetop.dataone.service.SysUserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,12 +27,12 @@ public class SysUserController {
     }
     @ApiOperation(value = "添加", protocols = "HTTP", produces = "application/json", notes = "添加")
     @RequestMapping("/add_user")
-    public Object addUser(SysUser sysUser){
+    public Object addUser(@RequestBody SysUser sysUser){
         return sysUserService.addSysUser(sysUser);
     }
     @ApiOperation(value = "修改", protocols = "HTTP", produces = "application/json", notes = "修改")
     @RequestMapping("/edit_user")
-    public Object editUser(SysUser sysUser){
+    public Object editUser(@RequestBody SysUser sysUser){
         return sysUserService.update(sysUser);
     }
     @ApiOperation(value = "删除", protocols = "HTTP", produces = "application/json", notes = "删除")

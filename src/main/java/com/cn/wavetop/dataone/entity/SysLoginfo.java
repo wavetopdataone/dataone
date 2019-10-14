@@ -26,7 +26,7 @@ import java.util.Date;
 
 public class SysLoginfo {
   @Id // 标识主键
-
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
   private String jobName;
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

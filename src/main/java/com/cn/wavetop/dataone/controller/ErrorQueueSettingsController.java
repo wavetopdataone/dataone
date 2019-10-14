@@ -10,10 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,14 +42,14 @@ public class ErrorQueueSettingsController {
 
   @ApiImplicitParam
   @RequestMapping("/add_error_queue")
-  public Object add_error_queue(ErrorQueueSettings errorQueueSettings) {
+  public Object add_error_queue( @RequestBody ErrorQueueSettings errorQueueSettings) {
     System.out.println(errorQueueSettings);
     return service.addErrorQueue(errorQueueSettings);
   }
 
   @ApiImplicitParam
   @PostMapping("/edit_error_queue")
-  public Object edit_error_queue(ErrorQueueSettings errorQueueSettings) {
+  public Object edit_error_queue( @RequestBody ErrorQueueSettings errorQueueSettings) {
     System.out.println(errorQueueSettings);
     return service.editErrorQueue(errorQueueSettings);
   }

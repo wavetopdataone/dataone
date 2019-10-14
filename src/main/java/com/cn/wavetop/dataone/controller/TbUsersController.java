@@ -4,10 +4,7 @@ import com.cn.wavetop.dataone.entity.TbUsers;
 import com.cn.wavetop.dataone.service.TbUsersService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -18,7 +15,7 @@ public class TbUsersController {
 
     @ApiOperation(value = "注册", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "注册用户")
     @PostMapping("/regist")
-    public Object regist(TbUsers tbUsers) {
+    public Object regist(@RequestBody TbUsers tbUsers) {
         System.out.println(tbUsers);
         return tbUsersService.addTbUsers(tbUsers);
     }

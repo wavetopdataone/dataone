@@ -22,6 +22,7 @@ import javax.persistence.Id;
 @Data
 public class SysJobrela {
   @Id // 标识主键
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private Long id;
   private String jobName;
   private Long userId;
