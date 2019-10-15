@@ -131,6 +131,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 }
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
+                return "连接异常@！";
             }
         }
         if (type == 1) {
@@ -154,6 +155,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 }
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
+                return "连接异常@！";
             } finally {
                 try {
                     DBConns.close(stmt, conn, rs);
@@ -161,8 +163,6 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                     e.printStackTrace();
                 }
             }
-
-
         }
         System.out.println(data);
         return data;
