@@ -17,11 +17,12 @@ public class DBConn {
            con = DriverManager.getConnection(SERVandDB, USER, PWD);
            System.out.println("打开数据库连接");
            con.setAutoCommit(false);
-
+           return con;
        } catch (Exception e) {
            e.printStackTrace();
+           return null;
        }
-       return con;
+
    }
     public static void close(Connection con) {
         try {

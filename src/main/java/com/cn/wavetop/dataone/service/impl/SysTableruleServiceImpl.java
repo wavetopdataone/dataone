@@ -178,16 +178,19 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             String sql = "show tables";
             try {
                 ret=DBHelper.getConnection(sql, host, user, password, port, dbname);//创建DBHelper对象
-                System.out.println(ret);
-                String tableName = null;
-                while (ret.next()) {
+               if(ret!=null) {
+                   System.out.println(ret);
+                   String tableName = null;
+                   while (ret.next()) {
 
-                    tableName = ret.getString(1);
-                    System.out.println(tableName);
-                    list.add(tableName);
-                }//显示数据
-
-                return ToData.builder().data(list).build();
+                       tableName = ret.getString(1);
+                       System.out.println(tableName);
+                       list.add(tableName);
+                   }//显示数据
+                   return ToData.builder().data(list).build();
+               }else{
+                   return ToData.builder().data(list).message("数据库连接超时").build();
+               }
             } catch (SQLException e) {
                 e.printStackTrace();
                 return  ToDataMessage.builder().status("0").message("数据库连接错误").build();
@@ -198,27 +201,38 @@ public class SysTableruleServiceImpl implements SysTableruleService {
         else if("1".equals(type)){
             Connection con=DBConn.getConnection( host, user, password, port, dbname);
             String sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + schema + "'AND TEMPORARY='N' AND NESTED='NO'";
+
             try {
-                pst=con.prepareStatement(sql);
-                ret=pst.executeQuery();
-                String tableName = null;
-                System.out.println("---------");
-
-                while (ret.next()) {
-                    System.out.println("---------"+ret.getString(1));
-                    tableName = ret.getString(1);
-                    list.add(tableName);
-                    System.out.println(tableName);
-                }//显示数据
-
-                return ToData.builder().data(list).build();
+                if(con!=null) {
+                    pst = con.prepareStatement(sql);
+                    ret = pst.executeQuery();
+                    String tableName = null;
+                    System.out.println("---------");
+                    if (ret != null) {
+                        while (ret.next()) {
+                            System.out.println("---------" + ret.getString(1));
+                            tableName = ret.getString(1);
+                            list.add(tableName);
+                            System.out.println(tableName);
+                        }//显示数据
+                        return ToData.builder().data(list).build();
+                    } else {
+                        return ToData.builder().status("0").data(list).message("该数据库没有表").build();
+                    }
+                }else{
+                    return ToDataMessage.builder().status("0").message("数据库连接超时").build();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
                 return  ToDataMessage.builder().status("0").message("数据库连接错误").build();
             }finally {
                 try {
-                    ret.close();
-                    pst.close();
+                    if (ret != null) {
+                        ret.close();
+                    }
+                    if (pst != null) {
+                        pst.close();
+                    }
                     DBConn.close(con);
                 } catch (SQLException e) {
                     e.printStackTrace();
