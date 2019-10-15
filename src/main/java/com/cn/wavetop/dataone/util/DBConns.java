@@ -61,6 +61,9 @@ public class DBConns {
     public static void close(Statement stmt, Connection connection) throws SQLException {
         close(stmt, connection, null);
     }
+    public static void close( Connection connection) throws SQLException {
+        close(null, connection, null);
+    }
 
 
 
