@@ -30,6 +30,7 @@ public class DBConns {
         return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
 
     }
+
     /**
      * 释放资源
      *
