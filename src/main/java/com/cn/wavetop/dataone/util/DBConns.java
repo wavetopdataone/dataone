@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-public class DBUtils {
+public class DBConns {
 
     private static DataSource ds;
     /**
