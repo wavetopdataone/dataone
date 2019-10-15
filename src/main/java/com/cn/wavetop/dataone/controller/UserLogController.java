@@ -20,6 +20,5 @@ public class UserLogController {
     public Object selByJobId(long job_id){
         System.out.println(job_id);
         return userLogService.selByJobId(job_id);
-
     }
 }

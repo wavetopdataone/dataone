@@ -6,64 +6,29 @@ import com.cn.wavetop.dataone.entity.SysDbinfo;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Properties;
 
 public class DBConns {
 
-    private static DataSource ds;
     /**
      * 获取连接对象
      * @return
      */
-    public static Connection getMySQLConn(SysDbinfo sysDbinfo) throws SQLException {
-        // 加载配置文件
-        Properties pro = new Properties();
-        String url = url="jdbc:mysql://"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+"/"+sysDbinfo.getDbname()+"?characterEncoding=utf8&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai";
-        pro.setProperty("driverClassName", "com.mysql.jdbc.Driver");
-        pro.setProperty("url",url);
-        pro.setProperty("username", sysDbinfo.getUser());
-        pro.setProperty("password", sysDbinfo.getPassword());
-        try {
-            // 获取连接池对象
-            ds = DruidDataSourceFactory.createDataSource(pro);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ds.getConnection();
+    public static Connection getMySQLConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        String url="jdbc:mysql://"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+"/"+sysDbinfo.getDbname()+"?characterEncoding=utf8&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai";
+        Class.forName("com.mysql.jdbc.Driver");
+        return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
     }
-
     /**
      * 获取连接对象
      * @return
      */
-    public static Connection getOracleConn(SysDbinfo sysDbinfo) throws SQLException {
-        // 加载配置文件
-        Properties pro = new Properties();
+    public static Connection getOracleConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         String url = "jdbc:oracle:thin:@"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+":"+sysDbinfo.getDbname();
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
 
-        pro.setProperty("driverClassName", "oracle.jdbc.driver.OracleDriver");
-        pro.setProperty("url",url);
-        pro.setProperty("user", sysDbinfo.getUser());
-        pro.setProperty("password", sysDbinfo.getPassword());
-        try {
-            // 获取连接池对象
-            ds = DruidDataSourceFactory.createDataSource(pro);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ds.getConnection();
-    }
-
-
-    public static void main(String[] args) throws SQLException {
-        SysDbinfo mysql = SysDbinfo.builder().host("192.168.1.226").port(Long.valueOf(3306)).dbname("dataone").user("root").password("888888").build();
-        Connection mySQLConn = getMySQLConn(mysql);
-        SysDbinfo oracle = SysDbinfo.builder().host("47.103.108.82").port(Long.valueOf(1521)).dbname("ORCL").user("zhengyong").password("zhengyong").build();
-        Connection oracleConn = getMySQLConn(oracle);
     }
     /**
      * 释放资源
@@ -96,12 +61,14 @@ public class DBConns {
         close(stmt, connection, null);
     }
 
-    /**
-     * 获取连接池的方法
-     *
-     * @return
-     */
-    public  static DataSource getDataSources(){
-        return ds;
+
+
+    public static void main(String[] args) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException {
+        SysDbinfo mysql = SysDbinfo.builder().host("192.168.1.226").port(Long.valueOf(3306)).dbname("dataone").user("root").password("888888").build();
+        Connection mySQLConn = getMySQLConn(mysql);
+        System.out.println(mySQLConn);
+        SysDbinfo oracle = SysDbinfo.builder().host("47.103.108.82").port(Long.valueOf(1521)).dbname("ORCL").user("zhengyong").password("zhengyong").build();
+        Connection oracleConn = getOracleConn(oracle);
+        System.out.println(oracleConn);
     }
 }

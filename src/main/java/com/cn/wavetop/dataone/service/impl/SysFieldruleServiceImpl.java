@@ -125,11 +125,11 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 while (rs.next()) {
                     list.clear();
                     list.add(rs.getString("column_name"));
-                    list.add(rs.getString("column_name"));
-                    list.add(rs.getString("column_name"));
+                    list.add(rs.getString("data_type"));
+                    list.add(rs.getString("CHARACTER_MAXIMUM_LENGTH"));
                     data.add(list);
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
             }
         }
@@ -152,7 +152,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                     list.add(rs.getString("DATA_TYPE_OWNER"));
                     data.add(list);
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
             } finally {
                 try {

@@ -18,6 +18,6 @@ public class UserLogServiceImpl implements UserLogService {
     @Override
     public Object selByJobId(long job_id) {
        List<Userlog> userlogList= userLogRepository.findByJobIdOrderByTimeDesc(job_id);
-        return ToData.builder().status("1").data(userlogList).build();
+       return ToData.builder().status("1").data(userlogList).build();
     }
 }
