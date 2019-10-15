@@ -51,7 +51,6 @@ public class SysTableruleController {
     @ApiOperation(value = "连接数据库查询", protocols = "HTTP", produces = "application/json", notes = "连接数据库查询")
     @RequestMapping("/link_data_table")
     public Object linkDataTable(String type,String host,String user,String port,String password,String dbname,String schema) throws SQLException {
-
         return sysTableruleService.linkDataTable( type, host, user, port, password, dbname, schema);
     }
 
