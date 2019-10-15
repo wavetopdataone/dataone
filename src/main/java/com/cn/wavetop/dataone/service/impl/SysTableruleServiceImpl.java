@@ -167,17 +167,17 @@ public class SysTableruleServiceImpl implements SysTableruleService {
     }
 
     @Override
-    public Object linkDataTable(String type, String host, String user, String port, String password, String dbname, String schema) {
+    public Object linkDataTable(SysDbinfo sysDbinfo) {
 
          DBHelper db1 = null;
          ResultSet ret = null;
          PreparedStatement pst = null;
 
         List<Object> list=new ArrayList<Object>();
-        if("2".equals(type)) {
+        if("2".equals(sysDbinfo.getType())) {
             String sql = "show tables";
             try {
-                ret=DBHelper.getConnection(sql, host, user, password, port, dbname);//创建DBHelper对象
+                ret=DBHelper.getConnection(sql, sysDbinfo.getHost(), sysDbinfo.getUser(), sysDbinfo.getPassword(), sysDbinfo.getPort().toString(), sysDbinfo.getDbname());//创建DBHelper对象
                if(ret!=null) {
                    System.out.println(ret);
                    String tableName = null;
@@ -198,9 +198,9 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 DBHelper.close(ret);//关闭连接
             }
         }
-        else if("1".equals(type)){
-            Connection con=DBConn.getConnection( host, user, password, port, dbname);
-            String sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + schema + "'AND TEMPORARY='N' AND NESTED='NO'";
+        else if("1".equals(sysDbinfo.getType())){
+            Connection con=DBConn.getConnection(sysDbinfo.getHost(), sysDbinfo.getUser(), sysDbinfo.getPassword(), sysDbinfo.getPort().toString(), sysDbinfo.getDbname());
+            String sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
 
             try {
                 if(con!=null) {

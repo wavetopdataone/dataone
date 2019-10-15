@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.controller;
 
+import com.cn.wavetop.dataone.entity.SysDbinfo;
 import com.cn.wavetop.dataone.entity.SysTablerule;
 import com.cn.wavetop.dataone.entity.SysUser;
 import com.cn.wavetop.dataone.service.SysTableruleService;
@@ -50,9 +51,9 @@ public class SysTableruleController {
     }
     @ApiOperation(value = "连接数据库查询", protocols = "HTTP", produces = "application/json", notes = "连接数据库查询")
     @RequestMapping("/link_data_table")
-    public Object linkDataTable(String type,String host,String user,String port,String password,String dbname,String schema) throws SQLException {
+    public Object linkDataTable(@RequestBody SysDbinfo sysDbinfo) throws SQLException {
 
-        return sysTableruleService.linkDataTable( type, host, user, port, password, dbname, schema);
+        return sysTableruleService.linkDataTable(sysDbinfo);
     }
 
 }
