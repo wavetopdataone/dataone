@@ -71,7 +71,7 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
         if (repository.existsByJobId(jobinfo.getJobId())) {
             SysJobinfo data = repository.findByJobId(Long.valueOf(jobinfo.getJobId()));
             data.setSyncRange(jobinfo.getSyncRange());
-            data.setId(jobinfo.getId());
+            //data.setId(jobinfo.getId());
             data.setJobId(jobinfo.getJobId());
             data.setBeginTime(jobinfo.getBeginTime());
             data.setDataEnc(jobinfo.getDataEnc());
