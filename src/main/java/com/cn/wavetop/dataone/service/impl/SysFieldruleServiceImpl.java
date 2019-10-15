@@ -11,16 +11,15 @@ import com.cn.wavetop.dataone.entity.SysTablerule;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.SysFieldruleService;
 import com.cn.wavetop.dataone.util.DBConn;
+import com.cn.wavetop.dataone.util.DBConns;
 import com.cn.wavetop.dataone.util.DBHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.Data;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
+
 
 /**
  * @Author yongz
@@ -109,56 +108,38 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     }
 
     @Override
-    public Object linkTableDetails(SysDbinfo sysDbinfo,String tablename)  {
+    public Object linkTableDetails(SysDbinfo sysDbinfo, String tablename) {
         Long type = sysDbinfo.getType();
         String sql = "";
         ArrayList<Object> data = new ArrayList<>();
         ArrayList<Object> list = new ArrayList<>();
-        if ( type == 2 ){
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        if (type == 2) {
             sql = "select column_name,data_type,CHARACTER_MAXIMUM_LENGTH from information_schema.columns where table_name='" + tablename + "'";
-            DBHelper dbHelper = new DBHelper(sql, sysDbinfo.getHost(), sysDbinfo.getUser(), sysDbinfo.getPassword(), sysDbinfo.getPort().toString(), sysDbinfo.getDbname());
-            ResultSet resultSet = null;
             try {
-                resultSet = dbHelper.pst.executeQuery();
-                while (resultSet.next()) {
+                conn = DBConns.getMySQLConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
+                while (rs.next()) {
                     list.clear();
-                    list.add(resultSet.getString("column_name"));
-                    list.add(resultSet.getString("column_name"));
-                    list.add(resultSet.getString("column_name"));
+                    list.add(rs.getString("column_name"));
+                    list.add(rs.getString("column_name"));
+                    list.add(rs.getString("column_name"));
                     data.add(list);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            System.out.println(resultSet);
-
-            try {
-                resultSet.close();
-                dbHelper.pst.close();
-                dbHelper.conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-        if ( type == 1 ){
+        if (type == 1) {
             sql = "SELECT COLUMN_NAME, DATA_TYPE, NVL(DATA_LENGTH,0), NVL(DATA_PRECISION,0), NVL(DATA_SCALE,0), NULLABLE, COLUMN_ID ,DATA_TYPE_OWNER FROM DBA_TAB_COLUMNS WHERE TABLE_NAME='" + tablename + "' AND OWNER='" + sysDbinfo.getSchema() + "'";
-            //DBHelper dbHelper = new DBHelper(sql, sysDbinfo.getHost(), sysDbinfo.getUser(), sysDbinfo.getPassword(), sysDbinfo.getPort().toString(), sysDbinfo.getDbname());
             System.out.println(sql);
-            Connection conn = DBConn.getConnection(sysDbinfo.getHost(), sysDbinfo.getUser(), sysDbinfo.getPassword(), sysDbinfo.getPort().toString(), sysDbinfo.getDbname());
-
-            PreparedStatement pstemt = null;
             try {
-                pstemt = conn.prepareStatement(sql);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            ResultSet rs = null;
-            try {
-                rs = pstemt.executeQuery();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            try {
+                conn = DBConns.getOracleConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
                 while (rs.next()) {
                     list.clear();
                     list.add(rs.getString("COLUMN_NAME"));
@@ -173,14 +154,12 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
-
-            try {
-                rs.close();
-                pstemt.close();
-               conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } finally {
+                try {
+                    DBConns.close(stmt, conn, rs);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
 

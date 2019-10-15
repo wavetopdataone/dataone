@@ -13,8 +13,6 @@ public interface SysDbinfoService {
 
     Object getDestAll();
 
-
-
     Object checkDbinfoById(long id);
 
     Object addbinfo(SysDbinfo sysDbinfo);
