@@ -12,7 +12,7 @@ import java.util.Properties;
 public class DBConns {
 
     /**
-     * 获取连接对象
+     * 获取Mysql对象
      * @return
      */
     public static Connection getMySQLConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
@@ -21,7 +21,7 @@ public class DBConns {
         return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
     }
     /**
-     * 获取连接对象
+     * 获取Oracle对象
      * @return
      */
     public static Connection getOracleConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
