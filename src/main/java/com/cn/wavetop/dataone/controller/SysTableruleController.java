@@ -7,6 +7,7 @@ import com.cn.wavetop.dataone.service.SysTableruleService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,13 +33,13 @@ public class SysTableruleController {
         return sysTableruleService.checkTablerule(job_id);
     }
     @ApiOperation(value = "添加", protocols = "HTTP", produces = "application/json", notes = "添加")
-    @RequestMapping("/add_tablerule")
+    @PostMapping("/add_tablerule")
     public Object addTablerule(@RequestBody SysTablerule sysTablerule)
     {
         return sysTableruleService.addTablerule(sysTablerule);
     }
     @ApiOperation(value = "修改", protocols = "HTTP", produces = "application/json", notes = "修改")
-    @RequestMapping("/edit_tablerule")
+    @PostMapping("/edit_tablerule")
     public Object editTablerule(@RequestBody SysTablerule sysTablerule){
 
         return sysTableruleService.editTablerule(sysTablerule);
@@ -49,10 +50,10 @@ public class SysTableruleController {
 
         return sysTableruleService.deleteTablerule(job_id);
     }
-    @ApiOperation(value = "连接数据库查询", protocols = "HTTP", produces = "application/json", notes = "连接数据库查询")
-    @RequestMapping("/link_data_table")
-    public Object linkDataTable(@RequestBody SysDbinfo sysDbinfo) throws SQLException {
-
+    @ApiImplicitParam
+    @PostMapping("/link_data_table")
+    public Object linkDataTable(@RequestBody SysDbinfo sysDbinfo){
+        System.out.println("--------------------------");
         return sysTableruleService.linkDataTable(sysDbinfo);
     }
 

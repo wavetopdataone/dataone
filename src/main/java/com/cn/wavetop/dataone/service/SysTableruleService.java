@@ -11,5 +11,5 @@ public interface SysTableruleService {
     Object addTablerule(SysTablerule sysTablerule);
     Object editTablerule(SysTablerule sysTablerule);
     Object deleteTablerule(long job_id);
-    Object linkDataTable(SysDbinfo sysDbinfo) throws SQLException;
+    Object linkDataTable(SysDbinfo sysDbinfo);
 }

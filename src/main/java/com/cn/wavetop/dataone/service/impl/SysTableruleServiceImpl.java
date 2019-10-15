@@ -8,16 +8,14 @@ import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysTableruleService;
 import com.cn.wavetop.dataone.util.DBConn;
+import com.cn.wavetop.dataone.util.DBConns;
 import com.cn.wavetop.dataone.util.DBHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,83 +166,63 @@ public class SysTableruleServiceImpl implements SysTableruleService {
 
     @Override
     public Object linkDataTable(SysDbinfo sysDbinfo) {
-
-         DBHelper db1 = null;
-         ResultSet ret = null;
-         PreparedStatement pst = null;
-
-        List<Object> list=new ArrayList<Object>();
-        if("2".equals(sysDbinfo.getType())) {
-            String sql = "show tables";
-            try {
-                ret=DBHelper.getConnection(sql, sysDbinfo.getHost(), sysDbinfo.getUser(), sysDbinfo.getPassword(), sysDbinfo.getPort().toString(), sysDbinfo.getDbname());//创建DBHelper对象
-               if(ret!=null) {
-                   System.out.println(ret);
-                   String tableName = null;
-                   while (ret.next()) {
-
-                       tableName = ret.getString(1);
-                       System.out.println(tableName);
-                       list.add(tableName);
-                   }//显示数据
-                   return ToData.builder().data(list).build();
-               }else{
-                   return ToData.builder().data(list).message("数据库连接超时").build();
-               }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return  ToDataMessage.builder().status("0").message("数据库连接错误").build();
-            }finally {
-                DBHelper.close(ret);//关闭连接
-            }
+       System.out.println(sysDbinfo+"------------------------------------");
+        if (sysDbinfo.getType()==2) {
+            System.out.println(true);
+        }else{
+            System.out.println(false);
         }
-        else if("1".equals(sysDbinfo.getType())){
-            Connection con=DBConn.getConnection(sysDbinfo.getHost(), sysDbinfo.getUser(), sysDbinfo.getPassword(), sysDbinfo.getPort().toString(), sysDbinfo.getDbname());
-            String sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
-
+        String sql = "";
+        List<Object> list = new ArrayList<Object>();
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        //ArrayList<Object> data = new ArrayList<>();
+        if (sysDbinfo.getType()==2) {
+            sql = "show tables";
             try {
-                if(con!=null) {
-                    pst = con.prepareStatement(sql);
-                    ret = pst.executeQuery();
-                    String tableName = null;
-                    System.out.println("---------");
-                    if (ret != null) {
-                        while (ret.next()) {
-                            System.out.println("---------" + ret.getString(1));
-                            tableName = ret.getString(1);
-                            list.add(tableName);
-                            System.out.println(tableName);
-                        }//显示数据
-                        return ToData.builder().data(list).build();
-                    } else {
-                        return ToData.builder().status("0").data(list).message("该数据库没有表").build();
-                    }
-                }else{
-                    return ToDataMessage.builder().status("0").message("数据库连接超时").build();
-                }
-            } catch (SQLException e) {
+                conn = DBConns.getMySQLConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
+                String tableName = null;
+                while (rs.next()) {
+
+                    tableName = rs.getString(1);
+                    list.add(tableName);
+                    System.out.println(tableName);
+                }//显示数据
+                return ToData.builder().data(list).build();
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
-                return  ToDataMessage.builder().status("0").message("数据库连接错误").build();
-            }finally {
-                try {
-                    if (ret != null) {
-                        ret.close();
-                    }
-                    if (pst != null) {
-                        pst.close();
-                    }
-                    DBConn.close(con);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                return ToDataMessage.builder().message("数据库连接错误").build();
 
             }
-        }
-        else{
+        } else if (sysDbinfo.getType()==1) {
+            sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
+            String tableName = "";
+            try {
+                conn = DBConns.getOracleConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
+                while (rs.next()) {
+                    tableName = rs.getString(1);
+                    System.out.println(tableName);
+                    list.add(tableName);
+                }
+                return ToData.builder().data(list).build();
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+                return ToDataMessage.builder().message("数据库连接错误").build();
+            }
 
-            return ToDataMessage.builder().status("0").message("类型不正确").build();
+        } else {
+            return ToDataMessage.builder().message("类型不正确").build();
         }
 
 
     }
+
+
+
+
 }
