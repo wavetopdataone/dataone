@@ -191,11 +191,18 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     list.add(tableName);
                     System.out.println(tableName);
                 }//显示数据
+
                 return ToData.builder().data(list).build();
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
                 return ToDataMessage.builder().message("数据库连接错误").build();
 
+            }finally {
+                try {
+                    DBConns.close(stmt, conn, rs);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else if (sysDbinfo.getType()==1) {
             sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
@@ -213,6 +220,12 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
                 return ToDataMessage.builder().message("数据库连接错误").build();
+            }finally {
+                try {
+                    DBConns.close(stmt, conn, rs);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         } else {

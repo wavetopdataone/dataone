@@ -60,7 +60,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
 
     @Override
     public Object editFieldrule(String list_data, String source_name, String dest_name, Long job_id) {
-
+        System.out.println(list_data);
         String[] split = list_data.split(",$,");
         if (dest_name == null || dest_name.equals("")) {
             dest_name = source_name;
@@ -156,13 +156,12 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
                 return "连接异常@！";
-            } finally {
-                try {
-                    DBConns.close(stmt, conn, rs);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
+        }
+        try {
+            DBConns.close(stmt, conn, rs);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         System.out.println(data);
         return data;
