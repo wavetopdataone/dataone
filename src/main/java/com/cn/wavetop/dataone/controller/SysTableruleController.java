@@ -21,11 +21,13 @@ public class SysTableruleController {
     @ApiOperation(value = "查看全部", protocols = "HTTP", produces = "application/json", notes = "查看全部")
     @RequestMapping("/tablerule_all")
     public Object tableruleAll(){
+
         return sysTableruleService.tableruleAll();
     }
     @ApiOperation(value = "单一查询", protocols = "HTTP", produces = "application/json", notes = "单一查询")
     @RequestMapping("/check_tablerule")
     public Object checkTablerule(long job_id){
+
         return sysTableruleService.checkTablerule(job_id);
     }
     @ApiOperation(value = "添加", protocols = "HTTP", produces = "application/json", notes = "添加")

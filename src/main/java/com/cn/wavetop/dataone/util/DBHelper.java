@@ -44,9 +44,15 @@ public class DBHelper {
             if(ret!=null) {
                 ret.close();
             }
+            if(pst!=null) {
                 pst.close();
+            }
+            if(rets!=null) {
                 rets.close();
+            }
+            if(conn!=null) {
                 conn.close();
+            }
                 System.out.println("关闭数据库连接");
         } catch (SQLException e) {
             e.printStackTrace();
