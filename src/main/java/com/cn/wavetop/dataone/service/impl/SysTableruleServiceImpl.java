@@ -103,15 +103,12 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     c= sysTablerule.getDestTable().split(",");
                 }
                 SysTablerule sysTablerule1=null;
+                SysTablerule sysTablerule2=null;
                 for(int i=0;i<b.length;i++){
-                    if(c!=null&&c.length>0){
-                        sysTablerule.setDestTable(c[i]);
-                    }else{
-                        destTable=b[i];
-                        sysTablerule.setDestTable(destTable);
-                    }
-                    sysTablerule.setSourceTable(b[i]);
-                    sysTablerule1= sysTableruleRepository.save(sysTablerule);
+                    sysTablerule2=new SysTablerule();
+                    sysTablerule2.setJobId(sysTablerule.getJobId());
+                    sysTablerule2.setSourceTable(b[i]);
+                    sysTablerule1= sysTableruleRepository.save(sysTablerule2);
                     list.add(sysTablerule1);
                 }
                 return ToData.builder().status("1").message("修改成功").data(list).build();
@@ -192,10 +189,10 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     System.out.println(tableName);
                 }//显示数据
 
-                return ToData.builder().data(list).build();
+                return ToData.builder().status("1").data(list).build();
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
-                return ToDataMessage.builder().message("数据库连接错误").build();
+                return ToDataMessage.builder().status("0").message("数据库连接错误").build();
 
             }finally {
                 try {
@@ -216,10 +213,10 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     System.out.println(tableName);
                     list.add(tableName);
                 }
-                return ToData.builder().data(list).build();
+                return ToData.builder().status("1").data(list).build();
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
-                return ToDataMessage.builder().message("数据库连接错误").build();
+                return ToDataMessage.builder().status("0").message("数据库连接错误").build();
             }finally {
                 try {
                     DBConns.close(stmt, conn, rs);
@@ -229,7 +226,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             }
 
         } else {
-            return ToDataMessage.builder().message("类型不正确").build();
+            return ToDataMessage.builder().status("2").message("类型不正确").build();
         }
 
 
