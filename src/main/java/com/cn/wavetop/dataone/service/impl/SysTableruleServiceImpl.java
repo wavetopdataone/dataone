@@ -130,12 +130,9 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     sysTablerule1= sysTableruleRepository.save(sysTablerule);
                     list.add(sysTablerule1);
                 }
-                if(stringList!=null&&stringList.size()>0) {
-                    return ToData.builder().status("1").data(list).message("修改成功").build();
-                }else{
-                    return ToData.builder().status("0").message("数据库连接失败").build();
 
-                }
+                    return ToData.builder().status("1").data(list).message("修改成功").build();
+
             }else{
                 SysTablerule sysTablerule1=null;
                 for(int i=0;i<stringList.size();i++){
@@ -146,12 +143,9 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     sysTablerule1= sysTableruleRepository.save(sysTablerule2);
                     list.add(sysTablerule1);
                 }
-                if(stringList!=null&&stringList.size()>0) {
-                    return ToData.builder().status("2").message("新增成功").build();
-                }else{
-                    return ToData.builder().status("0").message("数据库连接失败").build();
 
-                }
+                    return ToData.builder().status("2").message("新增成功").build();
+
             }
         }catch (Exception e){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
