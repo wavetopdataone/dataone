@@ -131,7 +131,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     list.add(sysTablerule1);
                 }
                 if(stringList!=null&&stringList.size()>0) {
-                    return ToData.builder().status("1").message("修改成功").build();
+                    return ToData.builder().status("1").data(list).message("修改成功").build();
                 }else{
                     return ToData.builder().status("0").message("数据库连接失败").build();
 
@@ -143,7 +143,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     sysTablerule2.setJobId(sysTablerule.getJobId());
                     sysTablerule2.setSourceTable(stringList.get(i));
                     sysTablerule2.setVarFlag(Long.valueOf(1));
-                        list.add(sysTablerule1);
+                    sysTablerule1= sysTableruleRepository.save(sysTablerule2);
+                    list.add(sysTablerule1);
                 }
                 if(stringList!=null&&stringList.size()>0) {
                     return ToData.builder().status("2").message("新增成功").build();
