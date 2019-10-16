@@ -49,7 +49,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
         List<SysTablerule> list=new ArrayList<SysTablerule>();
         List<String> stringList=new ArrayList<String>();
         StringBuffer stringBuffer=new StringBuffer();
-        SysTablerule tablerule=null;
+        SysTablerule tablerule=new SysTablerule();
         if(sysDbinfo.getType()==2){
             //mysql
             sql = "show tables";
@@ -58,7 +58,6 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
         }
 
-        System.out.println(sysUserList);
         if(sysUserList!=null&&sysUserList.size()>0){
             for(SysTablerule sysTablerule:sysUserList){
                 stringBuffer.append(sysTablerule.getSourceTable());

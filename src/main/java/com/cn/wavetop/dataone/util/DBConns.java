@@ -90,7 +90,6 @@ public class DBConns {
                 while (rs.next()) {
                     tableName = rs.getString(1);
                     list.add(tableName);
-                    System.out.println(tableName);
                 }//显示数据
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
