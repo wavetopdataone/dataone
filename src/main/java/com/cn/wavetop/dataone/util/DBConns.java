@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class DBConns {
@@ -70,6 +71,26 @@ public class DBConns {
     public static void main(String[] args) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException {
         SysDbinfo mysql = SysDbinfo.builder().host("192.168.1.226").port(Long.valueOf(3306)).dbname("dataone").user("root").password("888888").build();
         Connection mySQLConn = getMySQLConn(mysql);
+
+        String sql = "";
+        ArrayList<Object> data = new ArrayList<>();
+        ArrayList<Object> list = new ArrayList<>();
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        sql = "select column_name,data_type,CHARACTER_MAXIMUM_LENGTH from information_schema.columns where 1=0 ";
+
+            conn = DBConns.getMySQLConn(mysql);
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                System.out.println("1");
+                list.clear();
+                list.add(rs.getString("column_name"));
+                list.add(rs.getString("data_type"));
+                list.add(rs.getString("CHARACTER_MAXIMUM_LENGTH"));
+                data.add(list);
+            }
         System.out.println(mySQLConn);
         SysDbinfo oracle = SysDbinfo.builder().host("47.103.108.82").port(Long.valueOf(1521)).dbname("ORCL").user("zhengyong").password("zhengyong").build();
         Connection oracleConn = getOracleConn(oracle);

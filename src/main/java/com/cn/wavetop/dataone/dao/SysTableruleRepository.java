@@ -20,4 +20,6 @@ public interface SysTableruleRepository extends JpaRepository<SysTablerule,Long>
     @Modifying
     @Query("delete from SysTablerule where jobId = :job_id")
     int deleteByJobId(long job_id);
+
+
 }

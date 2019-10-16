@@ -22,21 +22,25 @@ public class SysRelaController {
     public Object userAll(){
         return sysRelaService.findAll();
     }
+
     @ApiOperation(value = "单一查询", protocols = "HTTP", produces = "application/json", notes = "单一查询")
     @RequestMapping("/check_rela")
     public Object checkUser(long dbinfo_id){
         return sysRelaService.findByDbinfoId(dbinfo_id);
     }
+
     @ApiOperation(value = "添加", protocols = "HTTP", produces = "application/json", notes = "添加")
     @PostMapping("/add_rela")
     public Object addUser(@RequestBody SysRela sysRela){
         return sysRelaService.addSysUser(sysRela);
     }
+
     @ApiOperation(value = "修改", protocols = "HTTP", produces = "application/json", notes = "修改")
     @PostMapping("/edit_rela")
     public Object editUser(@RequestBody SysRela sysRela){
         return sysRelaService.update(sysRela);
     }
+
     @ApiOperation(value = "删除", protocols = "HTTP", produces = "application/json", notes = "删除")
     @ApiImplicitParam(name = "dbinfo_id", value = "dbinfo_id", dataType = "long")
     @RequestMapping("/delete_rela")
