@@ -43,7 +43,7 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
     @Override
     public Object checkDbinfoById(long id) {
         if (repository.existsById(id)) {
-            Optional<SysDbinfo> sysDbinfos = repository.findById(id);
+           SysDbinfo sysDbinfos = repository.findById(id);
             Map<Object, Object> map = new HashMap();
             map.put("status", 1);
             map.put("data", sysDbinfos);

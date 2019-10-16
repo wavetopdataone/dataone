@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.service.impl;
 
+import com.cn.wavetop.dataone.dao.SysDbinfoRespository;
 import com.cn.wavetop.dataone.dao.SysFieldruleRepository;
 import com.cn.wavetop.dataone.dao.SysJobrelaRepository;
 import com.cn.wavetop.dataone.dao.SysTableruleRepository;
@@ -18,6 +19,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SysTableruleServiceImpl implements SysTableruleService {
@@ -27,6 +29,9 @@ public class SysTableruleServiceImpl implements SysTableruleService {
     private SysJobrelaRepository sysJobrelaRepository;
     @Autowired
     private SysFieldruleRepository sysFieldruleRepository;
+    @Autowired
+    private SysDbinfoRespository sysDbinfoRespository;
+
     @Override
     public Object tableruleAll() {
         List<SysTablerule> sysUserList=sysTableruleRepository.findAll();
@@ -93,43 +98,59 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             List<SysTablerule> sysTableruleList =sysTableruleRepository.findByJobId(sysTablerule.getJobId());
             String[] b= sysTablerule.getSourceTable().split(",");
             List<SysTablerule> list=new ArrayList<SysTablerule>();
-            String[]c=null;
+            List<String> stringList=new ArrayList<String>();
+            String sql="";
+            //查詢关联的数据库连接表jobrela
+            List<SysJobrela> sysJobrelaList=sysJobrelaRepository.findById(sysTablerule.getJobId().longValue());
+            //查询到数据库连接
+            SysDbinfo sysDbinfo=sysDbinfoRespository.findById(sysJobrelaList.get(0).getSourceId().longValue());
+            SysTablerule sysTablerule2=null;
+            if(sysDbinfo.getType()==2){
+                //mysql
+                sql = "show tables";
+            }else if(sysDbinfo.getType()==1){
+                //oracle
+                sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
+            }
+            if(sysDbinfo.getSourDest()==0) {
+                //去过重复的数据
+                stringList = DBConns.getConn(sysDbinfo, sysTablerule, sql);
+            }else{
+                return ToData.builder().status("0").message("该连接是目标端").build();
+            }
             if(sysTableruleList!=null&&sysTableruleList.size()>0){
                 int a= sysTableruleRepository.deleteByJobId(sysTablerule.getJobId());
                 System.out.println(a);
-                String destTable=sysTablerule.getDestTable();
-
-                if(destTable!=null&&!"".equals(destTable)){
-                    c= sysTablerule.getDestTable().split(",");
-                }
                 SysTablerule sysTablerule1=null;
-                SysTablerule sysTablerule2=null;
-                for(int i=0;i<b.length;i++){
+                for(int i=0;i<stringList.size();i++){
                     sysTablerule2=new SysTablerule();
                     sysTablerule2.setJobId(sysTablerule.getJobId());
-                    sysTablerule2.setSourceTable(b[i]);
-                    sysTablerule1= sysTableruleRepository.save(sysTablerule2);
-                    list.add(sysTablerule1);
-                }
-                return ToData.builder().status("1").message("修改成功").data(list).build();
-            }else{
-                String destTable=sysTablerule.getDestTable();
-                if(destTable!=null&&!"".equals(destTable)){
-                    c= sysTablerule.getDestTable().split(",");
-                }
-                SysTablerule sysTablerule1=null;
-                for(int i=0;i<b.length;i++){
-                    if(c!=null&&c.length>0){
-                        sysTablerule.setDestTable(c[i]);
-                    }else{
-                        destTable=b[i];
-                        sysTablerule.setDestTable(destTable);
-                    }
-                    sysTablerule.setSourceTable(b[i]);
+                    sysTablerule2.setSourceTable(stringList.get(i));
+                    sysTablerule2.setVarFlag(Long.valueOf(1));
                     sysTablerule1= sysTableruleRepository.save(sysTablerule);
                     list.add(sysTablerule1);
                 }
-                return ToData.builder().status("2").message("新增成功").data(list).build();
+                if(stringList!=null&&stringList.size()>0) {
+                    return ToData.builder().status("1").message("修改成功").build();
+                }else{
+                    return ToData.builder().status("0").message("数据库连接失败").build();
+
+                }
+            }else{
+                SysTablerule sysTablerule1=null;
+                for(int i=0;i<stringList.size();i++){
+                    sysTablerule2=new SysTablerule();
+                    sysTablerule2.setJobId(sysTablerule.getJobId());
+                    sysTablerule2.setSourceTable(stringList.get(i));
+                    sysTablerule2.setVarFlag(Long.valueOf(1));
+                        list.add(sysTablerule1);
+                }
+                if(stringList!=null&&stringList.size()>0) {
+                    return ToData.builder().status("2").message("新增成功").build();
+                }else{
+                    return ToData.builder().status("0").message("数据库连接失败").build();
+
+                }
             }
         }catch (Exception e){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -188,18 +209,13 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     list.add(tableName);
                     System.out.println(tableName);
                 }//显示数据
-
                 return ToData.builder().status("1").data(list).build();
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
                 return ToDataMessage.builder().status("0").message("数据库连接错误").build();
 
             }finally {
-                try {
-                    DBConns.close(stmt, conn, rs);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                DBConns.close(stmt,conn,rs);
             }
         } else if (sysDbinfo.getType()==1) {
             sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
@@ -218,15 +234,11 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 e.printStackTrace();
                 return ToDataMessage.builder().status("0").message("数据库连接错误").build();
             }finally {
-                try {
-                    DBConns.close(stmt, conn, rs);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                DBConns.close(stmt,conn,rs);
             }
 
         } else {
-            return ToDataMessage.builder().status("2").message("类型不正确").build();
+            return ToDataMessage.builder().status("0").message("类型不正确").build();
         }
 
 

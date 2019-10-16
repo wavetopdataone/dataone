@@ -2,13 +2,15 @@ package com.cn.wavetop.dataone.util;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.cn.wavetop.dataone.entity.SysDbinfo;
+import com.cn.wavetop.dataone.entity.SysTablerule;
+import com.cn.wavetop.dataone.entity.vo.ToData;
+import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Properties;
+import java.util.*;
 
 public class DBConns {
 
@@ -67,30 +69,74 @@ public class DBConns {
     }
 
 
+    public static  List getConn(SysDbinfo sysDbinfo, SysTablerule sysTablerule, String sql) {
+        List<String> list = new ArrayList<String>();
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String[] b= sysTablerule.getSourceTable().split(",");
+        Set<String> set=new HashSet<>();
+        for(int i=0;i<b.length;i++){
+          set.add(b[i]);
+        }
+        //ArrayList<Object> data = new ArrayList<>();
+
+        if (sysDbinfo.getType() == 2) {
+            try {
+                conn = DBConns.getMySQLConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
+                String tableName = null;
+                while (rs.next()) {
+                    tableName = rs.getString(1);
+                    list.add(tableName);
+                    System.out.println(tableName);
+                }//显示数据
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+                System.out.println("連接錯誤");
+                return list;
+
+            }finally {
+                DBConns.close(stmt,conn,rs);
+            }
+        } else if (sysDbinfo.getType() == 1) {
+            String tableName = "";
+            try {
+                conn = DBConns.getOracleConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
+                while (rs.next()) {
+                    tableName = rs.getString(1);
+                    System.out.println(tableName);
+                    list.add(tableName);
+                }
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+                System.out.println("連接錯誤");
+                return list;
+            }finally {
+                DBConns.close(stmt,conn,rs);
+            }
+        } else {
+            System.out.println("類型錯誤");
+            return list;
+        }
+        Iterator<String>  iterator=list.iterator();
+        while (iterator.hasNext()) {
+            String num = iterator.next();
+            if (set.contains(num)) {
+                iterator.remove();
+            }
+        }
+        return list;
+    }
+
+
 
     public static void main(String[] args) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException {
         SysDbinfo mysql = SysDbinfo.builder().host("192.168.1.226").port(Long.valueOf(3306)).dbname("dataone").user("root").password("888888").build();
         Connection mySQLConn = getMySQLConn(mysql);
-
-        String sql = "";
-        ArrayList<Object> data = new ArrayList<>();
-        ArrayList<Object> list = new ArrayList<>();
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        sql = "select column_name,data_type,CHARACTER_MAXIMUM_LENGTH from information_schema.columns where 1=0 ";
-
-            conn = DBConns.getMySQLConn(mysql);
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                System.out.println("1");
-                list.clear();
-                list.add(rs.getString("column_name"));
-                list.add(rs.getString("data_type"));
-                list.add(rs.getString("CHARACTER_MAXIMUM_LENGTH"));
-                data.add(list);
-            }
         System.out.println(mySQLConn);
         SysDbinfo oracle = SysDbinfo.builder().host("47.103.108.82").port(Long.valueOf(1521)).dbname("ORCL").user("zhengyong").password("zhengyong").build();
         Connection oracleConn = getOracleConn(oracle);
