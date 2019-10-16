@@ -80,6 +80,7 @@ public class DBConns {
           set.add(b[i]);
         }
         //ArrayList<Object> data = new ArrayList<>();
+
         if (sysDbinfo.getType() == 2) {
             try {
                 conn = DBConns.getMySQLConn(sysDbinfo);

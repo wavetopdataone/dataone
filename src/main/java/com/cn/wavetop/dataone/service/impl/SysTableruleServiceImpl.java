@@ -112,8 +112,12 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 //oracle
                 sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
             }
-            //去过重复的数据
-            stringList=DBConns.getConn(sysDbinfo,sysTablerule,sql);
+            if(sysDbinfo.getSourDest()==0) {
+                //去过重复的数据
+                stringList = DBConns.getConn(sysDbinfo, sysTablerule, sql);
+            }else{
+                return ToData.builder().status("0").message("该连接是目标端").build();
+            }
             if(sysTableruleList!=null&&sysTableruleList.size()>0){
                 int a= sysTableruleRepository.deleteByJobId(sysTablerule.getJobId());
                 System.out.println(a);
