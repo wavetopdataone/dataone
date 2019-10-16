@@ -2,12 +2,15 @@ package com.cn.wavetop.dataone.util;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.cn.wavetop.dataone.entity.SysDbinfo;
+import com.cn.wavetop.dataone.entity.SysTablerule;
+import com.cn.wavetop.dataone.entity.vo.ToData;
+import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
-import java.util.Properties;
+import java.util.*;
 
 public class DBConns {
 
@@ -63,6 +66,69 @@ public class DBConns {
     }
     public static void close( Connection connection) throws SQLException {
         close(null, connection, null);
+    }
+
+
+    public static  List getConn(SysDbinfo sysDbinfo, SysTablerule sysTablerule, String sql) {
+        List<String> list = new ArrayList<String>();
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String[] b= sysTablerule.getSourceTable().split(",");
+        Set<String> set=new HashSet<>();
+        for(int i=0;i<b.length;i++){
+          set.add(b[i]);
+        }
+        //ArrayList<Object> data = new ArrayList<>();
+        if (sysDbinfo.getType() == 2) {
+            try {
+                conn = DBConns.getMySQLConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
+                String tableName = null;
+                while (rs.next()) {
+                    tableName = rs.getString(1);
+                    list.add(tableName);
+                    System.out.println(tableName);
+                }//显示数据
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+                System.out.println("連接錯誤");
+                return list;
+
+            }finally {
+                DBConns.close(stmt,conn,rs);
+            }
+        } else if (sysDbinfo.getType() == 1) {
+            String tableName = "";
+            try {
+                conn = DBConns.getOracleConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
+                while (rs.next()) {
+                    tableName = rs.getString(1);
+                    System.out.println(tableName);
+                    list.add(tableName);
+                }
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+                System.out.println("連接錯誤");
+                return list;
+            }finally {
+                DBConns.close(stmt,conn,rs);
+            }
+        } else {
+            System.out.println("類型錯誤");
+            return list;
+        }
+        Iterator<String>  iterator=list.iterator();
+        while (iterator.hasNext()) {
+            String num = iterator.next();
+            if (set.contains(num)) {
+                iterator.remove();
+            }
+        }
+        return list;
     }
 
 

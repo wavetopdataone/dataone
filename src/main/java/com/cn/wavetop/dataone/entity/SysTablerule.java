@@ -35,6 +35,7 @@ public class SysTablerule {
   @JsonProperty(value = "sour_or_dest")
   private Long sourOrDest;
   private String destTable;
+  private Long varFlag;
 
 
 }
