@@ -123,6 +123,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 System.out.println(a);
                 SysTablerule sysTablerule1=null;
                 for(int i=0;i<stringList.size();i++){
+                    sysTablerule2=new SysTablerule();
                     sysTablerule2.setJobId(sysTablerule.getJobId());
                     sysTablerule2.setSourceTable(stringList.get(i));
                     sysTablerule2.setVarFlag(Long.valueOf(1));
@@ -138,6 +139,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             }else{
                 SysTablerule sysTablerule1=null;
                 for(int i=0;i<stringList.size();i++){
+                    sysTablerule2=new SysTablerule();
                     sysTablerule2.setJobId(sysTablerule.getJobId());
                     sysTablerule2.setSourceTable(stringList.get(i));
                     sysTablerule2.setVarFlag(Long.valueOf(1));
