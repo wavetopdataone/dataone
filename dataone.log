@@ -299,3 +299,112 @@ java.lang.ArrayIndexOutOfBoundsException: 1
 2019-10-16 12:00:35.233  INFO 19156 --- [http-nio-8000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2019-10-16 12:00:35.233  INFO 19156 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2019-10-16 12:00:35.249  INFO 19156 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 16 ms
+2019-10-16 13:26:05.066  INFO 5472 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Starting DataoneApplication on DESKTOP-5620HIF with PID 5472 (E:\ideaWorkSpace\dataone\target\classes started by Wavetop in E:\ideaWorkSpace\dataone)
+2019-10-16 13:26:05.070  INFO 5472 --- [main] c.cn.wavetop.dataone.DataoneApplication  : No active profile set, falling back to default profiles: default
+2019-10-16 13:26:08.143  INFO 5472 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-10-16 13:26:08.421  INFO 5472 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 257ms. Found 22 repository interfaces.
+2019-10-16 13:26:08.899  INFO 5472 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c423f665] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-16 13:26:09.540  INFO 5472 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2019-10-16 13:26:09.581  INFO 5472 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-10-16 13:26:09.582  INFO 5472 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.26]
+2019-10-16 13:26:09.980  INFO 5472 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-10-16 13:26:09.980  INFO 5472 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 4818 ms
+2019-10-16 13:26:10.304  INFO 5472 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2019-10-16 13:26:10.664  INFO 5472 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2019-10-16 13:26:11.273  INFO 5472 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-16 13:26:11.390  INFO 5472 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.12.Final}
+2019-10-16 13:26:11.392  INFO 5472 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-10-16 13:26:11.553  INFO 5472 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-10-16 13:26:11.849  INFO 5472 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2019-10-16 13:26:13.408  INFO 5472 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-10-16 13:26:13.939  INFO 5472 --- [main] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-10-16 13:26:15.991  WARN 5472 --- [main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-10-16 13:26:16.511  INFO 5472 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2019-10-16 13:26:16.716  INFO 5472 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-10-16 13:26:16.955  INFO 5472 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2019-10-16 13:26:16.987  INFO 5472 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2019-10-16 13:26:17.039  INFO 5472 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2019-10-16 13:26:17.375  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delete_errorlogUsingPOST_1
+2019-10-16 13:26:17.464  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: check_jobinfoUsingPOST_1
+2019-10-16 13:26:17.515  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_1
+2019-10-16 13:26:17.517  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_1
+2019-10-16 13:26:17.518  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_1
+2019-10-16 13:26:17.519  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_1
+2019-10-16 13:26:17.520  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_1
+2019-10-16 13:26:17.521  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_1
+2019-10-16 13:26:17.522  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_1
+2019-10-16 13:26:17.523  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_1
+2019-10-16 13:26:17.523  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_1
+2019-10-16 13:26:17.531  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_1
+2019-10-16 13:26:17.532  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_1
+2019-10-16 13:26:17.533  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_1
+2019-10-16 13:26:17.534  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_1
+2019-10-16 13:26:17.535  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_1
+2019-10-16 13:26:17.536  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_1
+2019-10-16 13:26:17.539  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_1
+2019-10-16 13:26:17.539  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_1
+2019-10-16 13:26:17.541  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_1
+2019-10-16 13:26:17.558  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_1
+2019-10-16 13:26:17.558  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_1
+2019-10-16 13:26:17.559  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_1
+2019-10-16 13:26:17.559  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_1
+2019-10-16 13:26:17.560  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_1
+2019-10-16 13:26:17.560  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_1
+2019-10-16 13:26:17.561  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_1
+2019-10-16 13:26:17.562  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_1
+2019-10-16 13:26:17.565  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_2
+2019-10-16 13:26:17.566  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_2
+2019-10-16 13:26:17.567  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_2
+2019-10-16 13:26:17.568  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_2
+2019-10-16 13:26:17.568  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_2
+2019-10-16 13:26:17.569  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_2
+2019-10-16 13:26:17.570  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_2
+2019-10-16 13:26:17.570  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_2
+2019-10-16 13:26:17.572  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_2
+2019-10-16 13:26:17.573  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_2
+2019-10-16 13:26:17.574  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_2
+2019-10-16 13:26:17.575  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_2
+2019-10-16 13:26:17.577  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_2
+2019-10-16 13:26:17.578  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_2
+2019-10-16 13:26:17.580  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_2
+2019-10-16 13:26:17.581  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_2
+2019-10-16 13:26:17.582  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_2
+2019-10-16 13:26:17.586  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_2
+2019-10-16 13:26:17.588  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_2
+2019-10-16 13:26:17.589  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_2
+2019-10-16 13:26:17.591  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_2
+2019-10-16 13:26:17.592  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_2
+2019-10-16 13:26:17.593  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_2
+2019-10-16 13:26:17.594  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_2
+2019-10-16 13:26:17.595  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_2
+2019-10-16 13:26:17.596  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_2
+2019-10-16 13:26:17.643  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addUserUsingPOST_3
+2019-10-16 13:26:17.644  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingGET_3
+2019-10-16 13:26:17.645  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingHEAD_3
+2019-10-16 13:26:17.646  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPOST_3
+2019-10-16 13:26:17.646  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPUT_3
+2019-10-16 13:26:17.647  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingPATCH_3
+2019-10-16 13:26:17.648  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingDELETE_3
+2019-10-16 13:26:17.649  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingOPTIONS_3
+2019-10-16 13:26:17.650  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: checkUserUsingTRACE_3
+2019-10-16 13:26:17.652  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingGET_3
+2019-10-16 13:26:17.653  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingHEAD_3
+2019-10-16 13:26:17.656  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPOST_3
+2019-10-16 13:26:17.656  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPUT_3
+2019-10-16 13:26:17.657  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingPATCH_3
+2019-10-16 13:26:17.658  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingDELETE_3
+2019-10-16 13:26:17.659  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingOPTIONS_3
+2019-10-16 13:26:17.659  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: deleteUserUsingTRACE_3
+2019-10-16 13:26:17.660  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: editUserUsingPOST_3
+2019-10-16 13:26:17.661  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingGET_3
+2019-10-16 13:26:17.663  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingHEAD_3
+2019-10-16 13:26:17.664  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPOST_3
+2019-10-16 13:26:17.665  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPUT_3
+2019-10-16 13:26:17.666  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingPATCH_3
+2019-10-16 13:26:17.667  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingDELETE_3
+2019-10-16 13:26:17.668  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingOPTIONS_3
+2019-10-16 13:26:17.668  INFO 5472 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: userAllUsingTRACE_3
+2019-10-16 13:26:17.735  INFO 5472 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8000 (http) with context path ''
+2019-10-16 13:26:17.737  INFO 5472 --- [main] c.cn.wavetop.dataone.DataoneApplication  : Started DataoneApplication in 13.458 seconds (JVM running for 16.161)
