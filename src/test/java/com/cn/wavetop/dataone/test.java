@@ -9,9 +9,12 @@ public class test {
     @Test
     public void show() {
         List<Object> list = new ArrayList<>();
-        list.add("aa,bb,cc".split(","));
-        System.out.println(list.get(0));
-//        Long a = Long.valueOf(5);
+        String[] a="aa,bb,cc,".split(",");
+        for(int b=0;b<a.length;b++){
+            System.out.println(a[b]);
+        }
+
+        //        Long a = Long.valueOf(5);
 //        System.out.println(a.longValue() + a);
 //        List<String> list = new ArrayList<>();
 //        list.add("aa");

@@ -74,10 +74,12 @@ public class DBConns {
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
-        String[] b= sysTablerule.getSourceTable().split(",");
         Set<String> set=new HashSet<>();
-        for(int i=0;i<b.length;i++){
-          set.add(b[i]);
+        if(sysTablerule.getSourceTable()!=null) {
+            String[] b = sysTablerule.getSourceTable().split(",");
+            for (int i = 0; i < b.length; i++) {
+                set.add(b[i]);
+            }
         }
         //ArrayList<Object> data = new ArrayList<>();
 
@@ -90,7 +92,6 @@ public class DBConns {
                 while (rs.next()) {
                     tableName = rs.getString(1);
                     list.add(tableName);
-                    System.out.println(tableName);
                 }//显示数据
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();

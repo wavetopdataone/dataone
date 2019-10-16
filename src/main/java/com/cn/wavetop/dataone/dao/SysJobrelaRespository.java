@@ -30,4 +30,6 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long> 
     List<SysJobrela> findByJobNameContaining(String job_name);
 
     List<SysJobrela> findByJobStatus(Long job_status);
+
+    boolean existsByJobName(String jobName);
 }

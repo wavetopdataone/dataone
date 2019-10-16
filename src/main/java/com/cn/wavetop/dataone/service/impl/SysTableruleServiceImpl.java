@@ -41,17 +41,47 @@ public class SysTableruleServiceImpl implements SysTableruleService {
     @Override
     public Object checkTablerule(long job_id) {
         List<SysTablerule> sysUserList=sysTableruleRepository.findByJobId(job_id);
-        System.out.println(sysUserList);
+        String sql="";
+        SysDbinfo sysDbinfo=new SysDbinfo();
+        List<SysTablerule> list=new ArrayList<SysTablerule>();
+        List<String> stringList=new ArrayList<String>();
+        StringBuffer stringBuffer=new StringBuffer("");
+        SysTablerule tablerule=new SysTablerule();
+        //查詢关联的数据库连接表jobrela
+        List<SysJobrela> sysJobrelaList=sysJobrelaRepository.findById(job_id);
+        //查询到数据库连接
+        if(sysJobrelaList!=null&&sysJobrelaList.size()>0) {
+             sysDbinfo = sysDbinfoRespository.findById(sysJobrelaList.get(0).getSourceId().longValue());
+        }else{
+            return ToDataMessage.builder().status("0").message("该任务没有连接").build();
+        }
+        if(sysDbinfo.getType()==2){
+            //mysql
+            sql = "show tables";
+        }else if(sysDbinfo.getType()==1){
+            //oracle
+            sql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
+        }
+
         if(sysUserList!=null&&sysUserList.size()>0){
-            List<SysJobrela> sysJobrelaList=sysJobrelaRepository.findById(job_id);
+            for(SysTablerule sysTablerule:sysUserList){
+                stringBuffer.append(sysTablerule.getSourceTable());
+                stringBuffer.append(",");
+            }
+            tablerule.setSourceTable(stringBuffer.toString());
+            stringList = DBConns.getConn(sysDbinfo, tablerule, sql);
             if(sysJobrelaList!=null&&sysJobrelaList.size()>0) {
                 sysJobrelaList.get(0).setJobStatus((long) 0);
                 SysJobrela sysJobrela = sysJobrelaRepository.save(sysJobrelaList.get(0));
             }
-            return ToData.builder().status("1").data(sysUserList).build();
+            tablerule=new SysTablerule();
         }else{
-            return ToDataMessage.builder().status("0").message("没有该任务").build();
+            stringList = DBConns.getConn(sysDbinfo, tablerule, sql);
         }
+        for(String s:stringList){
+            list.add(SysTablerule.builder().sourceTable(s).build());
+        }
+        return ToData.builder().status("1").data(list).build();
 
     }
     @Transactional
@@ -127,7 +157,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     sysTablerule2.setJobId(sysTablerule.getJobId());
                     sysTablerule2.setSourceTable(stringList.get(i));
                     sysTablerule2.setVarFlag(Long.valueOf(1));
-                    sysTablerule1= sysTableruleRepository.save(sysTablerule);
+                    sysTablerule1= sysTableruleRepository.save(sysTablerule2);
                     list.add(sysTablerule1);
                 }
 
@@ -144,7 +174,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     list.add(sysTablerule1);
                 }
 
-                    return ToData.builder().status("2").message("新增成功").build();
+                    return ToData.builder().status("1").message("新增成功").build();
 
             }
         }catch (Exception e){

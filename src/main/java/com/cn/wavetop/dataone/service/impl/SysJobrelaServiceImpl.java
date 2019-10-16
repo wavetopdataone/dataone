@@ -60,7 +60,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         long id = sysJobrela.getId();
         //  SysJobrela sysJobrelabyId = repository.findById(id);
         //SysJobrela sysJobrelabyJobName = repository.findByJobName();
-        if (repository.existsByIdOrJobName(id, sysJobrela.getJobName())) {
+        if (repository.existsByJobName(sysJobrela.getJobName())) {
             return ToData.builder().status("0").message("任务已存在").build();
         } else {
             // 查看端
@@ -89,14 +89,14 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         HashMap<Object, Object> map = new HashMap();
         long id = sysJobrela.getId();
         // 查看该任务是否存在，存在修改更新任务，不存在新建任务
-        if (repository.existsByIdOrJobName(id, sysJobrela.getJobName())) {
+        if (repository.existsByJobName(sysJobrela.getJobName())) {
 
             // 查看端
             SysDbinfo source = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getSourceName(), 0);
             //目标端
             SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getDestName(), 1);
 
-            SysJobrela data = repository.findByIdOrJobName(id, sysJobrela.getJobName());
+            SysJobrela data = repository.findByJobName( sysJobrela.getJobName());
             data.setJobName(sysJobrela.getJobName());
             data.setSourceType(source.getType());
             data.setSourceId(source.getId());
