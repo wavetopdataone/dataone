@@ -57,7 +57,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 
     @Override
     public Object addJobrela(SysJobrela sysJobrela) {
-        long id = sysJobrela.getId();
+       // long id = sysJobrela.getId();
         //  SysJobrela sysJobrelabyId = repository.findById(id);
         //SysJobrela sysJobrelabyJobName = repository.findByJobName();
         if (repository.existsByJobName(sysJobrela.getJobName())) {

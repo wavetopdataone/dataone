@@ -16,6 +16,7 @@ import com.cn.wavetop.dataone.util.DBHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.*;
@@ -58,6 +59,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         return "该接口已弃用";
     }
 
+    @Transactional
     @Override
     public Object editFieldrule(String list_data, String source_name, String dest_name, Long job_id) {
         System.out.println(list_data);
@@ -93,7 +95,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         map.put("data", sysFieldrules);
         return map;
     }
-
+    @Transactional
     @Override
     public Object deleteFieldrule(String source_name) {
         Map<Object, Object> map = new HashMap();
