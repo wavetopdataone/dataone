@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @Author yongz
@@ -24,8 +21,11 @@ public class AuthPermission {
   @Id // 标识主键
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
+  @Column(nullable = false)
   private String name;
-  private long contentTypeId;
+  @Column(nullable = false)
+  private Long contentTypeId;
+  @Column(nullable = false)
   private String codename;
 
 }

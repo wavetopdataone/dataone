@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @Author yongz
@@ -25,13 +22,17 @@ public class DjangoAdminLog {
 
   @Id // 标识主键
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
-  private long id;
+  private Long id;
   private java.sql.Timestamp actionTime;
   private String objectId;
+  @Column(nullable = false)
   private String objectRepr;
-  private long actionFlag;
+  @Column(nullable = false)
+  private Long actionFlag;
+  @Column(nullable = false)
   private String changeMessage;
-  private long contentTypeId;
-  private long userId;
+  private Long contentTypeId;
+  @Column(nullable = false)
+  private Long userId;
 
 }

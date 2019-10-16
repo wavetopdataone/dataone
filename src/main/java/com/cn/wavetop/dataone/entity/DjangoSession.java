@@ -5,10 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @Author yongz
@@ -24,7 +22,8 @@ public class DjangoSession {
   @Id // 标识主键
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private String sessionKey;
+  @Column(nullable = false)
   private String sessionData;
-  private java.sql.Timestamp expireDate;
+  private Date expireDate;
 
 }

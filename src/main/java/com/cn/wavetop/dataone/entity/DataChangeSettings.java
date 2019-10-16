@@ -24,11 +24,11 @@ public class DataChangeSettings {
   @Id // 标识主键
   //@GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private long id;
-  private long jobId;
-  private long deleteSyncingSource;
-  private long deleteSync;
-  private long newSync;
-  private long newtableSource;
+  private Long jobId;
+  private Long deleteSyncingSource;
+  private Long deleteSync;
+  private Long newSync;
+  private Long newtableSource;
 
 
 }
