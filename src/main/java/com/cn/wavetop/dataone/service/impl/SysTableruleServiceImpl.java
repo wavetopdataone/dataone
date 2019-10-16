@@ -209,10 +209,10 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     list.add(tableName);
                     System.out.println(tableName);
                 }//显示数据
-                return ToData.builder().data(list).build();
+                return ToData.builder().status("1").data(list).build();
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
-                return ToDataMessage.builder().message("数据库连接错误").build();
+                return ToDataMessage.builder().status("0").message("数据库连接错误").build();
 
             }finally {
                 DBConns.close(stmt,conn,rs);
@@ -229,16 +229,16 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     System.out.println(tableName);
                     list.add(tableName);
                 }
-                return ToData.builder().data(list).build();
+                return ToData.builder().status("1").data(list).build();
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
-                return ToDataMessage.builder().message("数据库连接错误").build();
+                return ToDataMessage.builder().status("0").message("数据库连接错误").build();
             }finally {
                 DBConns.close(stmt,conn,rs);
             }
 
         } else {
-            return ToDataMessage.builder().message("类型不正确").build();
+            return ToDataMessage.builder().status("0").message("类型不正确").build();
         }
 
 
