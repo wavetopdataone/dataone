@@ -107,7 +107,7 @@ public class ErrorLogServiceImpl  implements ErrorLogService {
     @Override
     public Object queryErrorlog(String job_name) {
         HashMap<Object, Object> map = new HashMap();
-        ErrorLog data = repository.findByJobNameContaining(job_name);
+        List<ErrorLog> data = repository.findByJobNameContaining(job_name);
         if (data != null) {
             map.put("status", 1);
             map.put("data", data);

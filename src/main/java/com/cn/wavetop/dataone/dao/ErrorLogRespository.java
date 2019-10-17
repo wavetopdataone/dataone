@@ -16,7 +16,7 @@ public interface ErrorLogRespository extends JpaRepository<ErrorLog,Long> {
 
     List<ErrorLog> findAll();
     ErrorLog findById(long id);
-    ErrorLog findByJobNameContaining(String job_name);
+    List<ErrorLog> findByJobNameContaining(String job_name);
 
     boolean existsByJobNameContaining(String job_name);
 

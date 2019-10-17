@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * @Date 2019/10/10、11:45
  */
 @RestController
-@RequestMapping("/error_queue_settings")
+@RequestMapping("/errorlog")
 public class ErrorLogController {
 
     @Autowired

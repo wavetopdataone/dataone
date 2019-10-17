@@ -23,7 +23,7 @@ import javax.persistence.Id;
  */
 @RestController
 @RequestMapping("/error_queue_settings")
-public class ErrorQueueSettingsController {
+public class  ErrorQueueSettingsController {
 
   @Autowired
   private ErrorQueueSettingsService service;
