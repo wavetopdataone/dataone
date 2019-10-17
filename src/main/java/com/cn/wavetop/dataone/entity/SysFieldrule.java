@@ -35,6 +35,6 @@ public class SysFieldrule {
   private Long primaryKey;
   private String sourceName;
   private String destName;
-
+  private Long varFlag;
 
 }

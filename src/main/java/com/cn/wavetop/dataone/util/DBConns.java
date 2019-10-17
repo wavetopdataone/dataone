@@ -2,6 +2,7 @@ package com.cn.wavetop.dataone.util;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.cn.wavetop.dataone.entity.SysDbinfo;
+import com.cn.wavetop.dataone.entity.SysFieldrule;
 import com.cn.wavetop.dataone.entity.SysTablerule;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
@@ -133,7 +134,81 @@ public class DBConns {
         return list;
     }
 
-
+  public  static List<SysFieldrule> getResult(SysDbinfo sysDbinfo, String sql, String[] split){
+      List<SysFieldrule> sysFieldruleList = new ArrayList<SysFieldrule>();
+      List<SysFieldrule> stringList = new ArrayList<SysFieldrule>();
+      SysFieldrule sysFieldrule=new SysFieldrule();
+      Connection conn = null;
+      Statement stmt = null;
+      ResultSet rs = null;
+      Set<SysFieldrule> set=new HashSet<SysFieldrule>();
+      if(split!=null) {
+          for(String s:split) {
+              sysFieldrule=new SysFieldrule();
+              String[] b = s.split(",");
+              sysFieldrule.setFieldName(b[0]);
+              sysFieldrule.setType(b[2]);
+              sysFieldrule.setScale(b[3]);
+              set.add(sysFieldrule);
+          }
+      }
+      if (sysDbinfo.getType() == 2) {
+          try {
+              conn = DBConns.getMySQLConn(sysDbinfo);
+              stmt = conn.prepareStatement(sql);
+              rs = stmt.executeQuery(sql);
+              while (rs.next()) {
+                  sysFieldrule=new SysFieldrule();
+                  sysFieldrule.setFieldName(rs.getString("column_name"));
+                  sysFieldrule.setType(rs.getString("data_type"));
+                  sysFieldrule.setScale(rs.getString("CHARACTER_MAXIMUM_LENGTH"));
+                  stringList.add(sysFieldrule);
+              }
+          } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+              e.printStackTrace();
+              return stringList;
+          }finally {
+              DBConns.close(stmt,conn,rs);
+          }
+      }else if(sysDbinfo.getType() == 1){
+          try {
+              conn = DBConns.getOracleConn(sysDbinfo);
+              stmt = conn.prepareStatement(sql);
+              rs = stmt.executeQuery(sql);
+              while (rs.next()) {
+                  sysFieldrule=new SysFieldrule();
+                  sysFieldrule.setFieldName(rs.getString("COLUMN_NAME"));
+                  sysFieldrule.setType(rs.getString("DATA_TYPE"));
+                  sysFieldrule.setScale(rs.getString("NVL(DATA_LENGTH,0)"));
+                  stringList.add(sysFieldrule);
+                  //stringList.add(rs.getString("COLUMN_NAME"));
+//                  stringList.add(rs.getString("DATA_TYPE"));
+//                  stringList.add(rs.getString("NVL(DATA_LENGTH,0)"));
+//                  stringList.add(rs.getString("NVL(DATA_PRECISION,0)"));
+//                  stringList.add(rs.getString("NVL(DATA_SCALE,0)"));
+//                  stringList.add(rs.getString("NULLABLE"));
+//                  stringList.add(rs.getString("COLUMN_ID"));
+//                  stringList.add(rs.getString("DATA_TYPE_OWNER"));
+              }
+          } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+              e.printStackTrace();
+              return stringList;
+          }finally {
+              DBConns.close(stmt,conn,rs);
+          }
+      } else {
+          System.out.println("類型錯誤");
+          return stringList;
+      }
+      Iterator<SysFieldrule>  iterator=stringList.iterator();
+      while (iterator.hasNext()) {
+          SysFieldrule num = iterator.next();
+          if (set.contains(num)) {
+              iterator.remove();
+          }
+      }
+        return stringList;
+  }
 
     public static void main(String[] args) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException {
         SysDbinfo mysql = SysDbinfo.builder().host("192.168.1.226").port(Long.valueOf(3306)).dbname("dataone").user("root").password("888888").build();

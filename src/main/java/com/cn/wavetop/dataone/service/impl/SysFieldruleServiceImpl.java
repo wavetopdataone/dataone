@@ -1,14 +1,13 @@
 package com.cn.wavetop.dataone.service.impl;
 
 import com.alibaba.druid.sql.ast.expr.SQLCaseExpr;
-import com.cn.wavetop.dataone.dao.SysFieldruleRespository;
-import com.cn.wavetop.dataone.dao.SysJobrelaRespository;
-import com.cn.wavetop.dataone.dao.SysTableruleRespository;
+import com.cn.wavetop.dataone.dao.*;
 import com.cn.wavetop.dataone.entity.SysDbinfo;
 import com.cn.wavetop.dataone.entity.SysFieldrule;
 import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.entity.SysTablerule;
 import com.cn.wavetop.dataone.entity.vo.ToData;
+import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysFieldruleService;
 import com.cn.wavetop.dataone.util.DBConn;
 import com.cn.wavetop.dataone.util.DBConns;
@@ -34,7 +33,12 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     private SysJobrelaRespository sysJobrelaRespository;
     @Autowired
     private SysTableruleRespository sysTableruleRespository;
-
+    @Autowired
+    private SysJobrelaRepository sysJobrelaRepository;
+    @Autowired
+    private SysDbinfoRespository sysDbinfoRespository;
+    @Autowired
+    private  SysFieldruleRepository sysFieldruleRepository;
     @Override
     public Object getFieldruleAll() {
         return ToData.builder().status("1").data(repository.findAll()).build();
@@ -63,32 +67,69 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     @Override
     public Object editFieldrule(String list_data, String source_name, String dest_name, Long job_id) {
         System.out.println(list_data);
+        SysFieldrule sysFieldrule1=new SysFieldrule();
+        List<SysFieldrule> sysFieldrules = new ArrayList<>();
+        List<SysFieldrule> list = new ArrayList<>();
+        String sql="";
         String[] split = list_data.split(",$,");
-        if (dest_name == null || dest_name.equals("")) {
-            dest_name = source_name;
+        SysTablerule byJobIdAndSourceTable=new SysTablerule();
+        SysDbinfo sysDbinfo=new SysDbinfo();
+        //查詢关联的数据库连接表jobrela
+        List<SysJobrela> sysJobrelaList=sysJobrelaRepository.findById(job_id.longValue());
+        //查询到数据库连接
+        if(sysJobrelaList!=null&&sysJobrelaList.size()>0) {
+            sysDbinfo = sysDbinfoRespository.findById(sysJobrelaList.get(0).getSourceId().longValue());
+        }else{
+            return ToDataMessage.builder().status("0").message("该任务没有连接").build();
         }
-        repository.deleteByJobIdAndSourceName(job_id, source_name);
-        ArrayList<SysFieldrule> sysFieldrules = new ArrayList<>();
+        if(!source_name.equals(dest_name)){
+            int a=sysTableruleRespository.deleteByJobIdAndSourceName(job_id,source_name);
+            System.out.println(a+"----------------------");
+            byJobIdAndSourceTable.setDestTable(dest_name);
+            byJobIdAndSourceTable.setJobId(job_id);
+            byJobIdAndSourceTable.setSourceTable(source_name);
+            byJobIdAndSourceTable.setVarFlag(Long.valueOf(2));
+            sysTableruleRespository.save(byJobIdAndSourceTable);
+        }
 
         for (String s : split) {
             String[] ziduan = s.split(",");
-            SysFieldrule build = SysFieldrule.builder().fieldName(ziduan[0])
-                    .destFieldName(ziduan[1])
-                    .jobId(job_id)
-                    .type(ziduan[2])
-                    .scale(ziduan[3])
-                    .sourceName(source_name)
-                    .destName(dest_name).build();
+            if(!ziduan[0].equals(ziduan[1])){
+                sysFieldruleRepository.deleteByJobIdAndSourceName(job_id,source_name,2);
+                SysFieldrule build = SysFieldrule.builder().fieldName(ziduan[0])
+                        .destFieldName(ziduan[1])
+                        .jobId(job_id)
+                        .type(ziduan[2])
+                        .scale(ziduan[3])
+                        .sourceName(source_name)
+                        .destName(dest_name).varFlag(Long.valueOf(2)).build();
+                 sysFieldrules.add(repository.save(build));
+            }else{
+                sysFieldruleRepository.deleteByJobIdAndSourceName(job_id,source_name,1);
+              if(sysDbinfo.getType()==2){
+                  sql = "select column_name,data_type,CHARACTER_MAXIMUM_LENGTH from information_schema.columns where table_name='" + source_name + "'";
 
-            sysFieldrules.add(repository.save(build));
-            long job_id1 = job_id;
-            SysJobrela sysJobrelaById = sysJobrelaRespository.findById(job_id1);
-            sysJobrelaById.setJobStatus(Long.valueOf(0));
-            SysTablerule byJobIdAndSourceTable = sysTableruleRespository.findByJobIdAndSourceTable(job_id, source_name);
-            byJobIdAndSourceTable.setDestTable(dest_name);
-            sysTableruleRespository.save(byJobIdAndSourceTable);
+              }else if(sysDbinfo.getType()==1){
+                  sql = "SELECT COLUMN_NAME, DATA_TYPE, NVL(DATA_LENGTH,0), NVL(DATA_PRECISION,0), NVL(DATA_SCALE,0), NULLABLE, COLUMN_ID ,DATA_TYPE_OWNER FROM DBA_TAB_COLUMNS WHERE TABLE_NAME='" + source_name
+                          + "' AND OWNER='" + sysDbinfo.getSchema() + "'";
+              }
+                list=DBConns.getResult(sysDbinfo,sql,split);
+               for(SysFieldrule sysFieldrule:list){
+                   sysFieldrule1=new SysFieldrule();
+                   sysFieldrule1.setDestFieldName(sysFieldrule.getFieldName());
+                   sysFieldrule1.setJobId(job_id);
+                   sysFieldrule1.setSourceName(source_name);
+                   sysFieldrule1.setDestName(dest_name);
+                   sysFieldrule1.setVarFlag(Long.valueOf(1));
+                   SysFieldrule sysFieldrule2= sysFieldruleRepository.save(sysFieldrule1);
+               }
 
+            }
         }
+        long job_id1 = job_id;
+        SysJobrela sysJobrelaById = sysJobrelaRespository.findById(job_id1);
+        sysJobrelaById.setJobStatus(Long.valueOf(0));
+
         Map<Object, Object> map = new HashMap();
         map.put("status", 1);
         map.put("message", "修改成功");
