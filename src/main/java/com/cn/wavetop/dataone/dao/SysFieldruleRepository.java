@@ -18,6 +18,6 @@ public interface SysFieldruleRepository extends JpaRepository<SysFieldrule,Long>
     int deleteByJobId(long job_id);
 
     @Modifying
-    @Query("delete from SysFieldrule where jobId = :job_id and sourceName=:source_name and varFlag=:var_flag")
-    int deleteByJobIdAndSourceName(long job_id,String source_name,long var_flag);
+    @Query("delete from SysFieldrule where jobId = :job_id and sourceName=:source_name")
+    int deleteByJobIdAndSourceName(long job_id,String source_name);
 }
