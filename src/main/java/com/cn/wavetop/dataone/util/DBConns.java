@@ -110,7 +110,6 @@ public class DBConns {
                 rs = stmt.executeQuery(sql);
                 while (rs.next()) {
                     tableName = rs.getString(1);
-                    System.out.println(tableName);
                     list.add(tableName);
                 }
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -144,9 +143,7 @@ public class DBConns {
       Set<SysFieldrule> set=new HashSet<SysFieldrule>();
       if(list_data!=null) {
           String[] splits = list_data.replace("$","@").split(",@,");
-          System.out.println(splits);
           for(String s:splits) {
-              System.out.println(s);
               sysFieldrule=new SysFieldrule();
               String[] b = s.split(",");
               sysFieldrule.setFieldName(b[0]);
@@ -209,12 +206,6 @@ public class DBConns {
           if (set.contains(num)) {
               iterator.remove();
           }
-      }
-      for(SysFieldrule s:stringList){
-          System.out.println(s);
-      }
-      for(SysFieldrule s:set){
-          System.out.println(s);
       }
         return stringList;
   }
