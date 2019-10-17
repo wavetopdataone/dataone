@@ -73,12 +73,10 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         List<SysFieldrule> list = new ArrayList<>();
         String sql = "";
         String[] split;
-        if (list_data != null && source_name != null && dest_name != null) {
-            if (list_data != null) {
+        if (list_data != null && source_name != null && dest_name != null&&!"undefined".equals(list_data)&&!"undefined".equals(dest_name)) {
+
                 split = list_data.replace("$", "@").split(",@,");
-            } else {
-                return ToDataMessage.builder().status("0").message("请选择要同步的列").build();
-            }
+
             SysTablerule byJobIdAndSourceTable = new SysTablerule();
             SysDbinfo sysDbinfo = new SysDbinfo();
             //查詢关联的数据库连接表jobrela
@@ -145,7 +143,11 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             map.put("data", sysFieldrules);
             return map;
         }else{
+        if (list_data != null&&!"undefined".equals(list_data)) {
             return ToDataMessage.builder().status("1").message("保存成功").build();
+        }else {
+            return ToDataMessage.builder().status("0").message("请选择要同步的列").build();
+        }
         }
     }
 
