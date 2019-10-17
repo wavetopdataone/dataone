@@ -116,7 +116,11 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 }
                 list = DBConns.getResult(sysDbinfo, sql, split);
                 for (SysFieldrule sysFieldrule : list) {
+
                     sysFieldrule1 = new SysFieldrule();
+                    sysFieldrule1.setFieldName(sysFieldrule.getFieldName());
+                    sysFieldrule1.setScale(sysFieldrule.getScale());
+                    sysFieldrule1.setType(sysFieldrule.getType());
                     sysFieldrule1.setDestFieldName(sysFieldrule.getFieldName());
                     sysFieldrule1.setJobId(job_id);
                     sysFieldrule1.setSourceName(source_name);
