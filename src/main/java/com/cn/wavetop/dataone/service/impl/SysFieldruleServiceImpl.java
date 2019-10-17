@@ -73,9 +73,9 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         List<SysFieldrule> list = new ArrayList<>();
         String sql = "";
         String[] split;
-        if (list_data != null && source_name != null && dest_name != null&&!"undefined".equals(list_data)&&!"undefined".equals(dest_name)) {
+        if (list_data != null && source_name != null && dest_name != null && !"undefined".equals(list_data) && !"undefined".equals(dest_name)) {
 
-                split = list_data.replace("$", "@").split(",@,");
+            split = list_data.replace("$", "@").split(",@,");
 
             SysTablerule byJobIdAndSourceTable = new SysTablerule();
             SysDbinfo sysDbinfo = new SysDbinfo();
@@ -87,8 +87,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             } else {
                 return ToDataMessage.builder().status("0").message("该任务没有连接").build();
             }
+            int a = sysTableruleRespository.deleteByJobIdAndSourceTable(job_id, source_name);
             if (!source_name.equals(dest_name)) {
-                int a = sysTableruleRespository.deleteByJobIdAndSourceTable(job_id, source_name);
                 byJobIdAndSourceTable.setDestTable(dest_name);
                 byJobIdAndSourceTable.setJobId(job_id);
                 byJobIdAndSourceTable.setSourceTable(source_name);
@@ -140,7 +140,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             map.put("status", 1);
             map.put("message", "保存成功");
             map.put("data", sysFieldrules);
-        }else{
+        } else {
             map.put("status", 1);
             map.put("message", "保存成功");
         }
