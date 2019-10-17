@@ -68,6 +68,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     @Override
     public Object editFieldrule(String list_data, String source_name, String dest_name, Long job_id) {
         System.out.println(list_data);
+        Map<Object, Object> map = new HashMap();
         SysFieldrule sysFieldrule1 = new SysFieldrule();
         List<SysFieldrule> sysFieldrules = new ArrayList<>();
         List<SysFieldrule> list = new ArrayList<>();
@@ -137,18 +138,20 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             SysJobrela sysJobrelaById = sysJobrelaRespository.findById(job_id1);
             sysJobrelaById.setJobStatus(Long.valueOf(0));
 
-            Map<Object, Object> map = new HashMap();
+
             map.put("status", 1);
             map.put("message", "保存成功");
             map.put("data", sysFieldrules);
-            return map;
         }else{
         if (list_data != null&&!"undefined".equals(list_data)) {
-            return ToDataMessage.builder().status("1").message("保存成功").build();
+            map.put("status", 1);
+            map.put("message", "保存成功");
         }else {
-            return ToDataMessage.builder().status("0").message("请选择要同步的列").build();
+            map.put("status", 1);
+            map.put("message", "请选择要同步的列");
         }
         }
+        return map;
     }
 
     @Transactional
