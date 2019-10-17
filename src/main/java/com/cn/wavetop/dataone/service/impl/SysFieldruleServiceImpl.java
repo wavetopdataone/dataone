@@ -88,7 +88,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 return ToDataMessage.builder().status("0").message("该任务没有连接").build();
             }
             if (!source_name.equals(dest_name)) {
-                int a = sysTableruleRespository.deleteByJobIdAndSourceName(job_id, source_name);
+                int a = sysTableruleRespository.deleteByJobIdAndSourceTable(job_id, source_name);
                 byJobIdAndSourceTable.setDestTable(dest_name);
                 byJobIdAndSourceTable.setJobId(job_id);
                 byJobIdAndSourceTable.setSourceTable(source_name);
