@@ -134,7 +134,7 @@ public class DBConns {
         return list;
     }
 
-  public  static List<SysFieldrule> getResult(SysDbinfo sysDbinfo, String sql, String[] split){
+  public  static List<SysFieldrule> getResult(SysDbinfo sysDbinfo, String sql, String list_data){
       List<SysFieldrule> sysFieldruleList = new ArrayList<SysFieldrule>();
       List<SysFieldrule> stringList = new ArrayList<SysFieldrule>();
       SysFieldrule sysFieldrule=new SysFieldrule();
@@ -142,8 +142,11 @@ public class DBConns {
       Statement stmt = null;
       ResultSet rs = null;
       Set<SysFieldrule> set=new HashSet<SysFieldrule>();
-      if(split!=null) {
-          for(String s:split) {
+      if(list_data!=null) {
+          String[] splits = list_data.replace("$","@").split(",@,");
+          System.out.println(splits);
+          for(String s:splits) {
+              System.out.println(s);
               sysFieldrule=new SysFieldrule();
               String[] b = s.split(",");
               sysFieldrule.setFieldName(b[0]);
@@ -206,6 +209,12 @@ public class DBConns {
           if (set.contains(num)) {
               iterator.remove();
           }
+      }
+      for(SysFieldrule s:stringList){
+          System.out.println(s);
+      }
+      for(SysFieldrule s:set){
+          System.out.println(s);
       }
         return stringList;
   }
