@@ -73,9 +73,9 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         List<SysFieldrule> list = new ArrayList<>();
         String sql = "";
         String[] split;
-        if (list_data != null && source_name != null && dest_name != null&&!"undefined".equals(list_data)&&!"undefined".equals(dest_name)) {
+        if (list_data != null && source_name != null && dest_name != null && !"undefined".equals(list_data) && !"undefined".equals(dest_name)) {
 
-                split = list_data.replace("$", "@").split(",@,");
+            split = list_data.replace("$", "@").split(",@,");
 
             SysTablerule byJobIdAndSourceTable = new SysTablerule();
             SysDbinfo sysDbinfo = new SysDbinfo();
@@ -140,7 +140,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             map.put("status", 1);
             map.put("message", "保存成功");
             map.put("data", sysFieldrules);
-        }else{
+        } else {
             map.put("status", 1);
             map.put("message", "保存成功");
         }
