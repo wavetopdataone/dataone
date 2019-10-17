@@ -38,7 +38,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     @Autowired
     private SysDbinfoRespository sysDbinfoRespository;
     @Autowired
-    private  SysFieldruleRepository sysFieldruleRepository;
+    private SysFieldruleRepository sysFieldruleRepository;
+
     @Override
     public Object getFieldruleAll() {
         return ToData.builder().status("1").data(repository.findAll()).build();
@@ -67,24 +68,24 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     @Override
     public Object editFieldrule(String list_data, String source_name, String dest_name, Long job_id) {
         System.out.println(list_data);
-        SysFieldrule sysFieldrule1=new SysFieldrule();
+        SysFieldrule sysFieldrule1 = new SysFieldrule();
         List<SysFieldrule> sysFieldrules = new ArrayList<>();
         List<SysFieldrule> list = new ArrayList<>();
-        String sql="";
+        String sql = "";
         String[] split = list_data.split(",$,");
-        SysTablerule byJobIdAndSourceTable=new SysTablerule();
-        SysDbinfo sysDbinfo=new SysDbinfo();
+        SysTablerule byJobIdAndSourceTable = new SysTablerule();
+        SysDbinfo sysDbinfo = new SysDbinfo();
         //查詢关联的数据库连接表jobrela
-        List<SysJobrela> sysJobrelaList=sysJobrelaRepository.findById(job_id.longValue());
+        List<SysJobrela> sysJobrelaList = sysJobrelaRepository.findById(job_id.longValue());
         //查询到数据库连接
-        if(sysJobrelaList!=null&&sysJobrelaList.size()>0) {
+        if (sysJobrelaList != null && sysJobrelaList.size() > 0) {
             sysDbinfo = sysDbinfoRespository.findById(sysJobrelaList.get(0).getSourceId().longValue());
-        }else{
+        } else {
             return ToDataMessage.builder().status("0").message("该任务没有连接").build();
         }
-        if(!source_name.equals(dest_name)){
-            int a=sysTableruleRespository.deleteByJobIdAndSourceName(job_id,source_name);
-            System.out.println(a+"----------------------");
+        if (!source_name.equals(dest_name)) {
+            int a = sysTableruleRespository.deleteByJobIdAndSourceName(job_id, source_name);
+            System.out.println(a + "----------------------");
             byJobIdAndSourceTable.setDestTable(dest_name);
             byJobIdAndSourceTable.setJobId(job_id);
             byJobIdAndSourceTable.setSourceTable(source_name);
@@ -94,8 +95,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
 
         for (String s : split) {
             String[] ziduan = s.split(",");
-            if(!ziduan[0].equals(ziduan[1])){
-                sysFieldruleRepository.deleteByJobIdAndSourceName(job_id,source_name,2);
+            if (!ziduan[0].equals(ziduan[1])) {
+                sysFieldruleRepository.deleteByJobIdAndSourceName(job_id, source_name, 2);
                 SysFieldrule build = SysFieldrule.builder().fieldName(ziduan[0])
                         .destFieldName(ziduan[1])
                         .jobId(job_id)
@@ -103,26 +104,26 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                         .scale(ziduan[3])
                         .sourceName(source_name)
                         .destName(dest_name).varFlag(Long.valueOf(2)).build();
-                 sysFieldrules.add(repository.save(build));
-            }else{
-                sysFieldruleRepository.deleteByJobIdAndSourceName(job_id,source_name,1);
-              if(sysDbinfo.getType()==2){
-                  sql = "select column_name,data_type,CHARACTER_MAXIMUM_LENGTH from information_schema.columns where table_name='" + source_name + "'";
+                sysFieldrules.add(repository.save(build));
+            } else {
+                sysFieldruleRepository.deleteByJobIdAndSourceName(job_id, source_name, 1);
+                if (sysDbinfo.getType() == 2) {
+                    sql = "select column_name,data_type,CHARACTER_MAXIMUM_LENGTH from information_schema.columns where table_name='" + source_name + "'";
 
-              }else if(sysDbinfo.getType()==1){
-                  sql = "SELECT COLUMN_NAME, DATA_TYPE, NVL(DATA_LENGTH,0), NVL(DATA_PRECISION,0), NVL(DATA_SCALE,0), NULLABLE, COLUMN_ID ,DATA_TYPE_OWNER FROM DBA_TAB_COLUMNS WHERE TABLE_NAME='" + source_name
-                          + "' AND OWNER='" + sysDbinfo.getSchema() + "'";
-              }
-                list=DBConns.getResult(sysDbinfo,sql,split);
-               for(SysFieldrule sysFieldrule:list){
-                   sysFieldrule1=new SysFieldrule();
-                   sysFieldrule1.setDestFieldName(sysFieldrule.getFieldName());
-                   sysFieldrule1.setJobId(job_id);
-                   sysFieldrule1.setSourceName(source_name);
-                   sysFieldrule1.setDestName(dest_name);
-                   sysFieldrule1.setVarFlag(Long.valueOf(1));
-                   SysFieldrule sysFieldrule2= sysFieldruleRepository.save(sysFieldrule1);
-               }
+                } else if (sysDbinfo.getType() == 1) {
+                    sql = "SELECT COLUMN_NAME, DATA_TYPE, NVL(DATA_LENGTH,0), NVL(DATA_PRECISION,0), NVL(DATA_SCALE,0), NULLABLE, COLUMN_ID ,DATA_TYPE_OWNER FROM DBA_TAB_COLUMNS WHERE TABLE_NAME='" + source_name
+                            + "' AND OWNER='" + sysDbinfo.getSchema() + "'";
+                }
+                list = DBConns.getResult(sysDbinfo, sql, split);
+                for (SysFieldrule sysFieldrule : list) {
+                    sysFieldrule1 = new SysFieldrule();
+                    sysFieldrule1.setDestFieldName(sysFieldrule.getFieldName());
+                    sysFieldrule1.setJobId(job_id);
+                    sysFieldrule1.setSourceName(source_name);
+                    sysFieldrule1.setDestName(dest_name);
+                    sysFieldrule1.setVarFlag(Long.valueOf(1));
+                    SysFieldrule sysFieldrule2 = sysFieldruleRepository.save(sysFieldrule1);
+                }
 
             }
         }
@@ -136,6 +137,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         map.put("data", sysFieldrules);
         return map;
     }
+
     @Transactional
     @Override
     public Object deleteFieldrule(String source_name) {
@@ -155,7 +157,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         Long type = sysDbinfo.getType();
         String sql = "";
         ArrayList<Object> data = new ArrayList<>();
-        ArrayList<Object> list = new ArrayList<>();
+        ArrayList<Object> list;
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -166,7 +168,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 stmt = conn.prepareStatement(sql);
                 rs = stmt.executeQuery(sql);
                 while (rs.next()) {
-                    list.clear();
+                    list = new ArrayList<>();
                     list.add(rs.getString("column_name"));
                     list.add(rs.getString("data_type"));
                     list.add(rs.getString("CHARACTER_MAXIMUM_LENGTH"));
@@ -185,7 +187,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 stmt = conn.prepareStatement(sql);
                 rs = stmt.executeQuery(sql);
                 while (rs.next()) {
-                    list.clear();
+//                    list.clear();
+                    list = new ArrayList<>();
                     list.add(rs.getString("COLUMN_NAME"));
                     list.add(rs.getString("DATA_TYPE"));
                     list.add(rs.getString("NVL(DATA_LENGTH,0)"));
