@@ -11,6 +11,7 @@ import com.cn.wavetop.dataone.service.SysGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class SysGroupServiceImpl implements SysGroupService {
 
         }
     }
-
+    @Transactional
     @Override
     public Object addGroup(SysGroup sysGroup) {
         if (repository.existsById(sysGroup.getId())) {
@@ -57,7 +58,7 @@ public class SysGroupServiceImpl implements SysGroupService {
             return map;
         }
     }
-
+    @Transactional
     @Override
     public Object editGroup(SysGroup sysGroup) {
         HashMap<Object, Object> map = new HashMap();
@@ -78,7 +79,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         }
         return map;
     }
-
+    @Transactional
     @Override
     public Object deleteGroup(Long id) {
         HashMap<Object, Object> map = new HashMap();

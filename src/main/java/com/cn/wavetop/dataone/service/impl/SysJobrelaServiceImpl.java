@@ -54,7 +54,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         }
 
     }
-
+    @Transactional
     @Override
     public Object addJobrela(SysJobrela sysJobrela) {
        // long id = sysJobrela.getId();
@@ -83,7 +83,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             return map;
         }
     }
-
+    @Transactional
     @Override
     public Object editJobrela(SysJobrela sysJobrela) {
         HashMap<Object, Object> map = new HashMap();
@@ -120,7 +120,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         }
         return map;
     }
-
+    @Transactional
     @Override
     public Object deleteJobrela(Long id) {
         HashMap<Object, Object> map = new HashMap();

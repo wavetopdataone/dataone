@@ -41,7 +41,7 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
             return ToData.builder().status("1").data(sysJobinfos).build();
         }
     }
-
+    @Transactional
     @Override
     public Object addJobinfo(SysJobinfo jobinfo) {
         long syncRange = jobinfo.getSyncRange();
@@ -59,7 +59,7 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
             return map;
         }
     }
-
+    @Transactional
     @Override
     public Object editJobinfo(SysJobinfo jobinfo) {
         HashMap<Object, Object> map = new HashMap();

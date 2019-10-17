@@ -7,6 +7,7 @@ import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.ErrorLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,7 @@ public class ErrorLogServiceImpl  implements ErrorLogService {
 
         }
     }
-
+    @Transactional
     @Override
     public Object addErrorlog(ErrorLog errorLog) {
 
