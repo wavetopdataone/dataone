@@ -179,6 +179,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Transactional
     @Override
     public Object start(Long id) {
+        System.out.println(id);
         HashMap<Object, Object> map = new HashMap();
         long id1 = id;
         SysJobrela byId = repository.findById(id1);
@@ -213,10 +214,12 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Transactional
     @Override
     public Object pause(Long id) {
+        System.out.println(id);
         HashMap<Object, Object> map = new HashMap();
         long id1 = id;
         SysJobrela byId = repository.findById(id1);
         long jobStatus = byId.getJobStatus();
+        System.out.println(jobStatus);
         if (jobStatus == 1 ) {
             byId.setJobStatus(Long.valueOf(21)); //  2 代表暂停中，21代表暂停动作
             repository.save(byId);
@@ -247,6 +250,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Transactional
     @Override
     public Object end(Long id) {
+        System.out.println(id);
         HashMap<Object, Object> map = new HashMap();
         long id1 = id;
         SysJobrela byId = repository.findById(id1);

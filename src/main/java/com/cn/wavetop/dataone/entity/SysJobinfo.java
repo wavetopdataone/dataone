@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -28,6 +25,7 @@ public class SysJobinfo {
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private Long id;
   private String players;
+  @Column(nullable = false)
   private Long syncRange;
   private Long syncWay;
   private String readFrequency;
@@ -46,6 +44,7 @@ public class SysJobinfo {
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @CreatedDate
   private Date endTime;
+  @Column(nullable = false)
   private Long jobId;
 
 
