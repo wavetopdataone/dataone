@@ -28,7 +28,7 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long> 
 
     int countByJobStatus(long i);
 
-    List<SysJobrela> findByJobNameContaining(String job_name);
+    List<SysJobrela> findByJobNameContainingOrderByIdDesc(String job_name);
 
     List<SysJobrela> findByJobStatus(Long job_status);
 

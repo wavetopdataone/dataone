@@ -161,7 +161,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Override
     public Object queryJobrela(String job_name) {
         HashMap<Object, Object> map = new HashMap();
-        List<SysJobrela> data = repository.findByJobNameContaining(job_name);
+        List<SysJobrela> data = repository.findByJobNameContainingOrderByIdDesc(job_name);
         if (data != null && data.size() > 0) {
             map.put("status", 1);
             map.put("data", data);
