@@ -16,7 +16,7 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long> 
     boolean existsByDestNameOrSourceName(String name, String name1);
 
     boolean existsByDestIdOrSourceId(long id, long id1);
-    List<SysJobrela> findAllOrderById();
+    List<SysJobrela> findAllByOrderByIdDesc();
 
     SysJobrela  findById(long id);
 

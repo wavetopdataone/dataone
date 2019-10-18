@@ -2,6 +2,7 @@ package com.cn.wavetop.dataone.dao;
 
 import com.cn.wavetop.dataone.entity.SysDbinfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @Author yongz
  * @Date 2019/10/11、14:37
  */
+@Repository
 public interface SysDbinfoRespository  extends JpaRepository<SysDbinfo,Long> {
 
 

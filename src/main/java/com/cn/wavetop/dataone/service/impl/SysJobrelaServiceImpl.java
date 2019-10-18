@@ -35,7 +35,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 
     @Override
     public Object getJobrelaAll() {
-        return ToData.builder().status("1").data(repository.findAllOrderById()).build();
+        return ToData.builder().status("1").data(repository.findAllByOrderByIdDesc()).build();
     }
 
     @Override
