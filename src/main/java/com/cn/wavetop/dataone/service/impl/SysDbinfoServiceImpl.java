@@ -77,6 +77,7 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
                 } else if (sysDbinfo.getType() == 2) {
                     conn = DBConns.getMySQLConn(sysDbinfo);
                 }
+
                 if(conn!=null) {
                     SysDbinfo data = repository.save(sysDbinfo);
                     map.put("status", 1);

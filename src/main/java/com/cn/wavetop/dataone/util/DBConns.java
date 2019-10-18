@@ -22,6 +22,7 @@ public class DBConns {
     public static Connection getMySQLConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         String url="jdbc:mysql://"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+"/"+sysDbinfo.getDbname()+"?characterEncoding=utf8&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai";
         Class.forName("com.mysql.jdbc.Driver");
+        DriverManager.setLoginTimeout(3);
         return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
     }
     /**
@@ -31,6 +32,7 @@ public class DBConns {
     public static Connection getOracleConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         String url = "jdbc:oracle:thin:@"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+":"+sysDbinfo.getDbname();
         Class.forName("oracle.jdbc.driver.OracleDriver");
+        DriverManager.setLoginTimeout(3);
         return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
 
     }
