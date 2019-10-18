@@ -83,13 +83,13 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
                     map.put("status", 1);
                     map.put("data", data);
                 }else{
-                    map.put("status", 0);
+                    map.put("status", 3);
                     map.put("message", "数据库连接有问题");
                 }
                 return map;
             }
         }catch (Exception e){
-            map.put("status", 0);
+            map.put("status", 3);
             map.put("message", "数据库连接不对");
             return map;
         }finally {
@@ -105,36 +105,56 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
     @Override
     public Object editDbinfo(SysDbinfo sysDbinfo) {
         Map<Object, Object> map = new HashMap();
-        boolean flag = sysJobrelarepository.existsByDestNameOrSourceName(sysDbinfo.getName(), sysDbinfo.getName());
-        System.out.println(flag);
-        if (!flag) {
-            boolean flag2 = repository.existsByName(sysDbinfo.getName());
-            System.out.println(flag2);
-            if (!flag2) {
-                map.put("status", 0);
-                map.put("message", "修改失败");
-            } else {
-                SysDbinfo old = repository.findByName(sysDbinfo.getName());
-               // old.setId(sysDbinfo.getId());
-                old.setName(sysDbinfo.getName());
-                old.setDbname(sysDbinfo.getDbname());
-                old.setHost(sysDbinfo.getHost());
-                old.setPassword(sysDbinfo.getPassword());
-                old.setPort(sysDbinfo.getPort());
-                old.setSchema(sysDbinfo.getSchema());
-                old.setSourDest(sysDbinfo.getSourDest());
-                old.setType(sysDbinfo.getType());
-                old.setUser(sysDbinfo.getUser());
+        Connection conn = null;
+        try {
+            boolean flag = sysJobrelarepository.existsByDestNameOrSourceName(sysDbinfo.getName(), sysDbinfo.getName());
+            System.out.println(flag);
+            if (!flag) {
+                boolean flag2 = repository.existsByName(sysDbinfo.getName());
+                System.out.println(flag2);
+                if (!flag2) {
+                    map.put("status", 0);
+                    map.put("message", "修改失败");
+                } else {
+                    if (sysDbinfo.getType() == 1) {
+                        conn = DBConns.getOracleConn(sysDbinfo);
+                    } else if (sysDbinfo.getType() == 2) {
+                        conn = DBConns.getMySQLConn(sysDbinfo);
+                    }
 
-                SysDbinfo save = repository.save(old);
-                map.put("status", 1);
-                map.put("message", "修改成功");
-                map.put("data", save);
+                    if (conn != null) {
+                        SysDbinfo old = repository.findByName(sysDbinfo.getName());
+                        // old.setId(sysDbinfo.getId());
+                        old.setName(sysDbinfo.getName());
+                        old.setDbname(sysDbinfo.getDbname());
+                        old.setHost(sysDbinfo.getHost());
+                        old.setPassword(sysDbinfo.getPassword());
+                        old.setPort(sysDbinfo.getPort());
+                        old.setSchema(sysDbinfo.getSchema());
+                        old.setSourDest(sysDbinfo.getSourDest());
+                        old.setType(sysDbinfo.getType());
+                        old.setUser(sysDbinfo.getUser());
+
+                        SysDbinfo save = repository.save(old);
+                        map.put("status", 1);
+                        map.put("message", "修改成功");
+                        map.put("data", save);
+                    }
+                }
+            }else{
+                    map.put("status", 2);
+                    map.put("message", "正在被使用");
+                }
+        }catch (Exception e){
+                map.put("status", 3);
+                map.put("message", "数据库连接不对");
+            }finally {
+                try {
+                    DBConns.close(conn);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-        } else {
-            map.put("status", 2);
-            map.put("message", "正在被使用");
-        }
         return map;
     }
 

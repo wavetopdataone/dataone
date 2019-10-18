@@ -25,12 +25,14 @@ public class SysJobinfo {
   @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
   private Long id;
   private String players;
-  @Column(nullable = false)
+  @Column(name="sync_range", columnDefinition="INT default 1",nullable = false)
   private Long syncRange;
+  @Column(name="sync_way", columnDefinition="INT default 0")
   private Long syncWay;
   private String readFrequency;
 
   private Long readBegin;
+//  @Column(name="read_way", columnDefinition="STRING default 0")
   private String readWay;
   private Long dataEnc;
   private String maxSourceRead;
