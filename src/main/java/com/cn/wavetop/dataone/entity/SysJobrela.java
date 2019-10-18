@@ -32,9 +32,11 @@ public class SysJobrela {
   private Long destId;
   private Long sourceType;
   private Long destType;
-
+  @Column(name="sync_range", columnDefinition="INT default 0")
   private Long syncRange;
+  @Column(name="job_rate", columnDefinition="DOUBLE default 0.00")
   private Double jobRate;
+  @Column(name="job_status", columnDefinition="INT default 5")
   private Long jobStatus;
 
 

@@ -1,9 +1,6 @@
 package com.cn.wavetop.dataone.controller;
-
 import com.cn.wavetop.dataone.entity.ErrorLog;
-import com.cn.wavetop.dataone.entity.ErrorQueueSettings;
 import com.cn.wavetop.dataone.service.ErrorLogService;
-import com.cn.wavetop.dataone.service.ErrorQueueSettingsService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +38,9 @@ public class ErrorLogController {
 
     @ApiImplicitParam
     @PostMapping("/edit_errorlog")
-    public Object edit_errorlog(@RequestBody ErrorLog ErrorLog) {
-        System.out.println(ErrorLog);
-        return service.editErrorlog(ErrorLog);
+    public Object edit_errorlog(@RequestBody ErrorLog errorLog) {
+        System.out.println(errorLog);
+        return service.editErrorlog(errorLog);
     }
 
     @ApiImplicitParam(name = "id", value = "id", dataType = "long")

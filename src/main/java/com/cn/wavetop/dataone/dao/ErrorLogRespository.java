@@ -1,7 +1,6 @@
 package com.cn.wavetop.dataone.dao;
 
 import com.cn.wavetop.dataone.entity.ErrorLog;
-import com.cn.wavetop.dataone.entity.ErrorQueueSettings;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

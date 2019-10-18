@@ -1,8 +1,6 @@
 package com.cn.wavetop.dataone.controller;
 
-import com.cn.wavetop.dataone.entity.ErrorLog;
 import com.cn.wavetop.dataone.entity.MailnotifySettings;
-import com.cn.wavetop.dataone.service.ErrorLogService;
 import com.cn.wavetop.dataone.service.MailnotifySettingsService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

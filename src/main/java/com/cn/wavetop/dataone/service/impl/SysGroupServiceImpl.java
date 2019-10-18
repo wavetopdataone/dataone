@@ -1,9 +1,6 @@
 package com.cn.wavetop.dataone.service.impl;
 
-import com.cn.wavetop.dataone.dao.SysFieldruleRespository;
 import com.cn.wavetop.dataone.dao.SysGroupRespository;
-import com.cn.wavetop.dataone.entity.ErrorLog;
-import com.cn.wavetop.dataone.entity.SysDbinfo;
 import com.cn.wavetop.dataone.entity.SysFieldrule;
 import com.cn.wavetop.dataone.entity.SysGroup;
 import com.cn.wavetop.dataone.entity.vo.ToData;
@@ -13,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 

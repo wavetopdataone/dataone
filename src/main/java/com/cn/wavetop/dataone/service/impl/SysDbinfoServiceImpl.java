@@ -5,10 +5,15 @@ import com.cn.wavetop.dataone.dao.SysJobrelaRespository;
 import com.cn.wavetop.dataone.entity.SysDbinfo;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.SysDbinfoService;
+import com.cn.wavetop.dataone.util.DBConns;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -60,14 +65,38 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
         //System.out.println(sysDbinfo);
         //sysDbinfo.getId();
        // if (repository.existsByIdOrName(sysDbinfo.getId(), sysDbinfo.getName())) {
-        if (repository.existsByName(sysDbinfo.getName())) {
-            return ToData.builder().status("0").message("任务已存在").build();
-        } else {
-            SysDbinfo data = repository.save(sysDbinfo);
-            HashMap<Object, Object> map = new HashMap();
-            map.put("status", 1);
-            map.put("data", data);
+        Connection conn = null;
+
+        HashMap<Object, Object> map = new HashMap();
+        try {
+            if (repository.existsByName(sysDbinfo.getName())) {
+                return ToData.builder().status("0").message("任务已存在").build();
+            } else {
+                if (sysDbinfo.getType() == 1) {
+                    conn = DBConns.getOracleConn(sysDbinfo);
+                } else if (sysDbinfo.getType() == 2) {
+                    conn = DBConns.getMySQLConn(sysDbinfo);
+                }
+                if(conn!=null) {
+                    SysDbinfo data = repository.save(sysDbinfo);
+                    map.put("status", 1);
+                    map.put("data", data);
+                }else{
+                    map.put("status", 0);
+                    map.put("message", "数据库连接有问题");
+                }
+                return map;
+            }
+        }catch (Exception e){
+            map.put("status", 0);
+            map.put("message", "数据库连接不对");
             return map;
+        }finally {
+            try {
+                DBConns.close(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

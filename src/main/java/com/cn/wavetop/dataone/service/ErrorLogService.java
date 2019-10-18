@@ -1,7 +1,6 @@
 package com.cn.wavetop.dataone.service;
 
 import com.cn.wavetop.dataone.entity.ErrorLog;
-import com.cn.wavetop.dataone.entity.ErrorQueueSettings;
 
 /**
  * @Author yongz

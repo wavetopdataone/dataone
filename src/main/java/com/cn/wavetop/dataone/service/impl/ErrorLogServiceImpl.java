@@ -2,7 +2,6 @@ package com.cn.wavetop.dataone.service.impl;
 
 import com.cn.wavetop.dataone.dao.ErrorLogRespository;
 import com.cn.wavetop.dataone.entity.ErrorLog;
-import com.cn.wavetop.dataone.entity.ErrorQueueSettings;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.ErrorLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @Author yongz

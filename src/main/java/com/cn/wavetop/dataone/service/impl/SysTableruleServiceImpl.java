@@ -209,12 +209,6 @@ public class SysTableruleServiceImpl implements SysTableruleService {
 
     @Override
     public Object linkDataTable(SysDbinfo sysDbinfo) {
-       System.out.println(sysDbinfo+"------------------------------------");
-        if (sysDbinfo.getType()==2) {
-            System.out.println(true);
-        }else{
-            System.out.println(false);
-        }
         String sql = "";
         List<Object> list = new ArrayList<Object>();
         Connection conn = null;
@@ -229,7 +223,6 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 rs = stmt.executeQuery(sql);
                 String tableName = null;
                 while (rs.next()) {
-
                     tableName = rs.getString(1);
                     list.add(tableName);
                     System.out.println(tableName);
