@@ -134,7 +134,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
 
             long job_id1 = job_id;
             SysJobrela sysJobrelaById = sysJobrelaRespository.findById(job_id1);
-            sysJobrelaById.setJobStatus(Long.valueOf(0));
+            sysJobrelaById.setJobStatus("0");
 
 
             map.put("status", 1);

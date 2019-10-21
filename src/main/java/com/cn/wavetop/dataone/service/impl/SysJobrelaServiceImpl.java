@@ -72,7 +72,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             sysJobrela.setSourceType(source.getType());
             sysJobrela.setDestId(dest.getId());
             sysJobrela.setDestType(dest.getType());
-            sysJobrela.setJobStatus(Long.valueOf(5));
+            sysJobrela.setJobStatus("5");
 
 
             SysJobrela save = repository.save(sysJobrela);
@@ -127,8 +127,8 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         long id1 = id;
         SysJobrela JobrelabyId = repository.findById(id1);
         if (JobrelabyId != null) {
-            long jobStatus = JobrelabyId.getJobStatus();
-            if (jobStatus != 1) {
+            String jobStatus = JobrelabyId.getJobStatus();
+            if (!"1".equals(jobStatus)) {
                 Userlog build = Userlog.builder().user("admin").jobName(JobrelabyId.getJobName()).time(new Date()).operate("删除").build();
                 userlogRespository.save(build);
                 repository.deleteById(id);
@@ -149,12 +149,12 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Override
     public Object jobrelaCount() {
         int[] num = new int[6];
-        num[0] = repository.countByJobStatus(1); //运行中
-        num[1] = repository.countByJobStatus(4);//异常
-        num[2] = repository.countByJobStatus(2);//暂停中
-        num[3] = repository.countByJobStatus(5);//待完善
-        num[4] = repository.countByJobStatus(0);//待激活
-        num[5] = repository.countByJobStatus(3);//终止中
+        num[0] = repository.countByJobStatusLike(1+"%"); //运行中
+        num[1] = repository.countByJobStatusLike(4+"%");//异常
+        num[2] = repository.countByJobStatusLike(2+"%");//暂停中
+        num[3] = repository.countByJobStatusLike(5+"%");//待完善
+        num[4] = repository.countByJobStatusLike(0+"%");//待激活
+        num[5] = repository.countByJobStatusLike(3+"%");//终止中
         return num;
     }
     @Transactional
@@ -174,7 +174,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 
     @Override
     public Object someJobrela(Long job_status) {
-        return ToData.builder().status("1").data( repository.findByJobStatus(job_status)).build();
+        return ToData.builder().status("1").data( repository.findByJobStatusLike(job_status+"%")).build();
     }
     @Transactional
     @Override
@@ -183,9 +183,9 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         HashMap<Object, Object> map = new HashMap();
         long id1 = id;
         SysJobrela byId = repository.findById(id1);
-        long jobStatus = byId.getJobStatus();
-        if (jobStatus == 0 || jobStatus == 2 || jobStatus == 3) {
-            byId.setJobStatus(Long.valueOf(11)); // 1代表运行中，11代表开始动作
+        String jobStatus = byId.getJobStatus();
+        if ("0".equals(jobStatus)  || "2".equals(jobStatus) ||  "3".equals(jobStatus)) {
+            byId.setJobStatus("11"); // 1代表运行中，11代表开始动作
             repository.save(byId);
 
             try {
@@ -218,10 +218,10 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         HashMap<Object, Object> map = new HashMap();
         long id1 = id;
         SysJobrela byId = repository.findById(id1);
-        long jobStatus = byId.getJobStatus();
+        String jobStatus = byId.getJobStatus();
         System.out.println(jobStatus);
-        if (jobStatus == 1 ) {
-            byId.setJobStatus(Long.valueOf(21)); //  2 代表暂停中，21代表暂停动作
+        if ( "1".equals(jobStatus) ) {
+            byId.setJobStatus("21"); //  2 代表暂停中，21代表暂停动作
             repository.save(byId);
 
             try {
@@ -254,9 +254,9 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         HashMap<Object, Object> map = new HashMap();
         long id1 = id;
         SysJobrela byId = repository.findById(id1);
-        long jobStatus = byId.getJobStatus();
-        if (jobStatus != 1 ) {
-            byId.setJobStatus(Long.valueOf(31)); // 3代表终止，31 代表停止功能
+        String jobStatus = byId.getJobStatus();
+        if ( !"1".equals(jobStatus)) {
+            byId.setJobStatus("31"); // 3代表终止，31 代表停止功能
             repository.save(byId);
 
             try {
