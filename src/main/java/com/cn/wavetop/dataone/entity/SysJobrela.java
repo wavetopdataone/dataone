@@ -36,7 +36,7 @@ public class SysJobrela {
   private Long syncRange;
   @Column(name="job_rate", columnDefinition="DOUBLE default 0.00")
   private Double jobRate;
-  @Column(name="job_status", columnDefinition="STRING default 5")
+  @Column(name="job_status", columnDefinition="VARCHAR(128) default '5'")
   private String jobStatus;
 
 

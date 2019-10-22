@@ -70,13 +70,14 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             }
             tablerule.setSourceTable(stringBuffer.toString());
             stringList = DBConns.getConn(sysDbinfo, tablerule, sql);
-            if(sysJobrelaList!=null&&sysJobrelaList.size()>0) {
-                sysJobrelaList.get(0).setJobStatus("0");
-                SysJobrela sysJobrela = sysJobrelaRepository.save(sysJobrelaList.get(0));
-            }
+
             tablerule=new SysTablerule();
         }else{
             stringList = DBConns.getConn(sysDbinfo, tablerule, sql);
+        }
+        if(sysJobrelaList!=null&&sysJobrelaList.size()>0) {
+            sysJobrelaList.get(0).setJobStatus("0");
+            SysJobrela sysJobrela = sysJobrelaRepository.save(sysJobrelaList.get(0));
         }
         for(String s:stringList){
             list.add(SysTablerule.builder().sourceTable(s).build());

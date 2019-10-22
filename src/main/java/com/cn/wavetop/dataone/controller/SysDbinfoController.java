@@ -20,6 +20,7 @@ public class SysDbinfoController {
     @Autowired
     private SysDbinfoService service;
 
+
     @ApiOperation(value = "查看全部", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
     @GetMapping("/dbinfo_all")
     public Object dbinfo_all() {
