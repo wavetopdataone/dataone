@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 /**
- * 用户对象 sys_user
+ * 部门表 sys_dept
  * 
  * @author ruoyi
  */
@@ -22,7 +22,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SysUser
+public class SysDept
 {
     private static final long serialVersionUID = 1L;
     /** 用户ID */
@@ -30,39 +30,32 @@ public class SysUser
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
     private Long id;
 
-    /** 部门ID */
-    private Long deptId;
+    /** 父部门ID */
+    private Long parentId;
 
-    /** 登录名称 */
-    private String loginName;
+    /** 祖级列表 */
+    private String ancestors;
 
-    /** 用户名称 */
-    private String userName;
+    /** 部门名称 */
+    private String deptName;
 
-    /** 用户邮箱 */
+    /** 显示顺序 */
+    private String orderNum;
+
+    /** 负责人 */
+    private String leader;
+
+    /** 联系电话 */
+    private String phone;
+
+    /** 邮箱 */
     private String email;
 
-    /** 手机号码 */
-    private String phoneNumber;
-
-    /** 用户性别 */
-    private String sex;
-
-    /** 用户头像 */
-    private String avatar;
-
-    /** 密码 */
-    private String password;
-
-    /** 盐加密 */
-    private String salt;
-
-    /** 帐号状态（0正常 1停用） */
+    /** 部门状态:0正常,1停用 */
     private String status;
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
-
 
     /**创建者**/
     private String createUser;
@@ -72,5 +65,6 @@ public class SysUser
     private String updateUser;
     /**修改时间**/
     private Date updateTime;
+
 
 }

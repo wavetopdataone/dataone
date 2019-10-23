@@ -22,8 +22,8 @@ public class SysJobrelaController {
 
     @ApiOperation(value = "查看全部", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
     @GetMapping("/jobrela_all")
-    public Object jobrela_all() {
-        return service.getJobrelaAll();
+    public Object jobrela_all(Integer current,Integer size) {
+        return service.getJobrelaAll( current, size);
     }
 
     @ApiImplicitParam
@@ -62,16 +62,16 @@ public class SysJobrelaController {
     //模糊查询
     @ApiImplicitParam
     @PostMapping("/query_jobrela")
-    public Object query_jobrela(String job_name) {
+    public Object query_jobrela(String job_name,Integer current,Integer size ) {
 
-        return service.queryJobrela(job_name);
+        return service.queryJobrela(job_name,current,size);
     }
 
     //
     @ApiImplicitParam
     @PostMapping("/some_jobrela")
-    public Object some_jobrela(Long job_status) {
-        return service.someJobrela(job_status);
+    public Object some_jobrela(Long job_status,Integer current,Integer size) {
+        return service.someJobrela(job_status,current,size);
     }
 
     @ApiImplicitParam

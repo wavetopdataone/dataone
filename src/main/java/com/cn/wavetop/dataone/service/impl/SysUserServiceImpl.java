@@ -1,116 +1,130 @@
 package com.cn.wavetop.dataone.service.impl;
 
+import com.cn.wavetop.dataone.config.shiro.CredentialMatcher;
 import com.cn.wavetop.dataone.dao.SysUserRepository;
 import com.cn.wavetop.dataone.entity.SysUser;
+import com.cn.wavetop.dataone.entity.vo.SysUserRoleVo;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysUserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
     @Autowired
     private SysUserRepository sysUserRepository;
 
+
+    @Override
+    public Object login(String name, String password) {
+        List<SysUser> list=sysUserRepository.findAllByLoginName(name);
+        List<SysUserRoleVo> s=new ArrayList<>();
+        UsernamePasswordToken token=new UsernamePasswordToken(name,password);
+        Subject subject= SecurityUtils.getSubject();
+        Map<Object,Object> map=new HashMap<>();
+        try{
+            if(list!=null&&list.size()>0) {
+                if(list.get(0).getStatus().equals("0")) {
+                    subject.login(token);
+                    s = sysUserRepository.findByLoginName(name);
+                    map.put("status", "1");
+                    map.put("data", s);
+                    map.put("message", "登录成功");
+                }else{
+                    map.put("status", "3");
+                    map.put("message", "账号被冻结");
+                }
+
+            }else{
+                map.put("status", "0");
+                map.put("message", "用户不存在");
+            }
+        }catch (Exception e){
+            map.put("status","2");
+            map.put("message","密码错误");
+        }
+        return map;
+    }
+
+    //退出
+    @Override
+    public Object loginOut() {
+        Subject subject= SecurityUtils.getSubject();
+        subject.logout();
+        return ToDataMessage.builder().status("1").message("退出成功").build();
+    }
+
     @Override
     public Object findAll() {
-        List<SysUser> sysUserList=sysUserRepository.findAll();
-        return ToData.builder().status("1").data(sysUserList).build();
+        sysUserRepository.findAll();
+        return null;
     }
 
     @Override
     public Object findById(long id) {
-        List<SysUser> sysUserList=sysUserRepository.findById(id);
-        if(sysUserList!=null&&sysUserList.size()>0){
-            return ToData.builder().status("1").data(sysUserList).build();
-        }else{
-            return ToDataMessage.builder().status("0").message("没有找到").build();
-        }
+        return null;
     }
-    @Transactional
+
     @Override
     public Object update(SysUser sysUser) {
-        try{
-            List<SysUser> sysUserList= sysUserRepository.findById(sysUser.getId());
-            System.out.println(sysUserList);
-            List<SysUser> userList=new ArrayList<SysUser>();
-            if(sysUserList!=null&&sysUserList.size()>0){
-                sysUserList.get(0).setId(sysUser.getId());
-                sysUserList.get(0).setUsername(sysUser.getUsername());
-                sysUserList.get(0).setMail(sysUser.getMail());
-                sysUserList.get(0).setGroupId(sysUser.getGroupId());
-                sysUserList.get(0).setState(sysUser.getState());
-                sysUserList.get(0).setRemark(sysUser.getRemark());
-                sysUserList.get(0).setPassword(sysUser.getPassword());
-                SysUser user=  sysUserRepository.save(sysUserList.get(0));
-                sysUserList= sysUserRepository.findById(user.getId());
-                if(user!=null&&!"".equals(user)){
-                    return ToData.builder().status("1").data(sysUserList).message("修改成功").build();
-                }else{
-                    return ToDataMessage.builder().status("0").message("修改失败").build();
-                }
-
-            }else{
-                SysUser user= sysUserRepository.save(sysUser);
-
-                userList.add(user);
-                return ToData.builder().status("1").data(userList).message("添加成功").build();
-
-            }
-        }catch (Exception e){
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return ToDataMessage.builder().status("0").message("发生错误").build();
-        }
-
-
+        return null;
     }
+
     @Transactional
     @Override
     public Object addSysUser(SysUser sysUser) {
-        try{
-            System.out.println(sysUser+"-----------"+sysUser.getId());
-            if(sysUserRepository.findById(sysUser.getId())!=null&&sysUserRepository.findById(sysUser.getId()).size()>0){
-
-                return ToDataMessage.builder().status("0").message("已存在").build();
-            }else{
-                SysUser user= sysUserRepository.save(sysUser);
-                List<SysUser> userList=new ArrayList<SysUser>();
-                userList.add(user);
-                return ToData.builder().status("1").data(userList).message("添加成功").build();
-            }
-        }catch (Exception e){
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return ToDataMessage.builder().status("0").message("发生错误").build();
+       List<SysUser> list=sysUserRepository.findAllByLoginName(sysUser.getLoginName());
+        HashMap<String,String> map=new HashMap<>();
+        if(list!=null&&list.size()>0) {
+            map.put("status","0");
+            map.put("message","用户已存在");
+        }else{
+            String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
+            sysUser.setSalt(saltAndCiphertext[0]);
+            sysUser.setPassword(saltAndCiphertext[1]);
+            SysUser suser = sysUserRepository.save(sysUser);
+            map.put("status","1");
+            map.put("message","添加成功");
         }
-
+        return map;
 
     }
     @Transactional
     @Override
-    public Object delete(long id) {
+    public Object delete(String name) {
         try{
-            List<SysUser> sysUserList= sysUserRepository.findById(id);
-            if(sysUserList!=null&&sysUserList.size()>0){
-                int result=sysUserRepository.deleteById(id);
+            if(sysUserRepository.findAllByLoginName(name)!=null&&sysUserRepository.findAllByLoginName(name).size()>0) {
+                int result= sysUserRepository.deleteByLoginName(name);
                 if(result>0){
                     return ToDataMessage.builder().status("1").message("删除成功").build();
                 }else{
-                    return ToDataMessage.builder().status("0").message("删除失败").build();
+                    return ToDataMessage.builder().status("2").message("删除失败").build();
                 }
             }else{
-                return ToDataMessage.builder().status("0").message("没有删除对象").build();
+                return ToDataMessage.builder().status("0").message("用户不存在").build();
             }
         }catch (Exception e){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ToDataMessage.builder().status("0").message("发生错误").build();
         }
 
+    }
 
+    //根据用户名查找角色权限
+    @Override
+    public Object findRolePerms(String userName) {
+        List<SysUserRoleVo> s=  sysUserRepository.findByLoginName(userName);
+        return s;
     }
 }

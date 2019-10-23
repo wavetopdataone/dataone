@@ -7,14 +7,18 @@ import com.cn.wavetop.dataone.dao.SysJobrelaRespository;
 import com.cn.wavetop.dataone.dao.UserlogRespository;
 import com.cn.wavetop.dataone.entity.*;
 import com.cn.wavetop.dataone.entity.vo.ToData;
+import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysJobrelaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+
 
 /**
  * @Author yongz
@@ -33,9 +37,16 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Autowired
     private SysJobinfoRespository sysJobinfoRespository;
 
+
+
     @Override
-    public Object getJobrelaAll() {
-        return ToData.builder().status("1").data(repository.findAllByOrderByIdDesc()).build();
+    public Object getJobrelaAll(Integer current,Integer size) {
+
+        Map<Object,Object> map=new HashMap<>();
+        Pageable pageable = new PageRequest(current-1, size, Sort.Direction.DESC, "id");
+        map.put("status","1");
+        map.put("data",repository.findAll(pageable).getContent());
+        return map;
     }
 
     @Override
@@ -159,9 +170,10 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     }
     @Transactional
     @Override
-    public Object queryJobrela(String job_name) {
+    public Object queryJobrela(String job_name,Integer current ,Integer size) {
         HashMap<Object, Object> map = new HashMap();
-        List<SysJobrela> data = repository.findByJobNameContainingOrderByIdDesc(job_name);
+        Pageable page = PageRequest.of(current-1 , size);
+        List<SysJobrela> data = repository.findByJobNameContainingOrderByIdDesc(job_name,page);
         if (data != null && data.size() > 0) {
             map.put("status", 1);
             map.put("data", data);
@@ -173,8 +185,13 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     }
 
     @Override
-    public Object someJobrela(Long job_status) {
-        return ToData.builder().status("1").data( repository.findByJobStatusLike(job_status+"%")).build();
+    public Object someJobrela(Long job_status,Integer current,Integer size) {
+        if (current < 1) {
+            return ToDataMessage.builder().status("0").message("当前页不能小于1").build();
+        } else {
+            Pageable page = PageRequest.of(current - 1, size);
+            return ToData.builder().status("1").data(repository.findByJobStatusLikeOrderByIdDesc(job_status + "%",page)).build();
+        }
     }
     @Transactional
     @Override
