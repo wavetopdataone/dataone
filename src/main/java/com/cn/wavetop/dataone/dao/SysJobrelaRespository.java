@@ -22,7 +22,6 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
 
     Page<SysJobrela> findAll(Pageable pageable);
     boolean existsByDestNameOrSourceName(String name, String name1);
-
     boolean existsByDestIdOrSourceId(long id, long id1);
     List<SysJobrela> findAllByOrderByIdDesc();
 

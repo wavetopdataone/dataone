@@ -41,10 +41,11 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 
     @Override
     public Object getJobrelaAll(Integer current,Integer size) {
-
+        List<SysJobrela> list=repository.findAll();
         Map<Object,Object> map=new HashMap<>();
         Pageable pageable = new PageRequest(current-1, size, Sort.Direction.DESC, "id");
         map.put("status","1");
+        map.put("totalCount",list.size());
         map.put("data",repository.findAll(pageable).getContent());
         return map;
     }
@@ -176,6 +177,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         List<SysJobrela> data = repository.findByJobNameContainingOrderByIdDesc(job_name,page);
         if (data != null && data.size() > 0) {
             map.put("status", 1);
+            map.put("totalCount",data.size());
             map.put("data", data);
         } else {
             map.put("status", 0);
@@ -186,11 +188,16 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 
     @Override
     public Object someJobrela(Long job_status,Integer current,Integer size) {
+        Map<Object,Object> map=new HashMap<>();
         if (current < 1) {
             return ToDataMessage.builder().status("0").message("当前页不能小于1").build();
         } else {
             Pageable page = PageRequest.of(current - 1, size);
-            return ToData.builder().status("1").data(repository.findByJobStatusLikeOrderByIdDesc(job_status + "%",page)).build();
+            List<SysJobrela> list=repository.findByJobStatusLikeOrderByIdDesc(job_status + "%",page);
+            map.put("status","1");
+            map.put("totalCount",list.size());
+            map.put("data",list);
+            return map;
         }
     }
     @Transactional

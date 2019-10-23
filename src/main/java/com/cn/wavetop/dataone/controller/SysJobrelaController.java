@@ -20,8 +20,8 @@ public class SysJobrelaController {
     @Autowired
     private SysJobrelaService service;
 
-    @ApiOperation(value = "查看全部", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
-    @GetMapping("/jobrela_all")
+    @ApiOperation(value = "查看全部", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
+    @PostMapping("/jobrela_all")
     public Object jobrela_all(Integer current,Integer size) {
         return service.getJobrelaAll( current, size);
     }
