@@ -209,8 +209,10 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         } else {
             Pageable page = PageRequest.of(current - 1, size);
             List<SysJobrela> list=repository.findByJobStatusLikeOrderByIdDesc(job_status + "%",page);
+            List<SysJobrela> sysJobrelaList=repository.findByJobStatusLikeOrderByIdDesc( job_status + "%");
+
             map.put("status","1");
-            map.put("totalCount",list.size());
+            map.put("totalCount",sysJobrelaList.size());
             map.put("data",list);
             return map;
         }

@@ -32,13 +32,13 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
     boolean existsByIdOrJobName(long id, String jobName);
 
     SysJobrela findByIdOrJobName(long id, String jobName);
-
     int countByJobStatusLike(String i);
 
     List<SysJobrela> findByJobNameContainingOrderByIdDesc(String job_name, Pageable pageable);
     List<SysJobrela> findByJobNameContainingOrderByIdDesc(String job_name);
    // @Query(value ="select * from SysJobrela where jobStatus like concat(:job_status,'%')" ,nativeQuery = true)
     List<SysJobrela> findByJobStatusLikeOrderByIdDesc(String job_status,Pageable pageable);
+    List<SysJobrela> findByJobStatusLikeOrderByIdDesc(String job_status);
 
     boolean existsByJobName(String jobName);
 }
