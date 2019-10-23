@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
@@ -35,7 +32,7 @@ public class SysUserServiceImpl implements SysUserService {
         Map<Object,Object> map=new HashMap<>();
         try{
             if(list!=null&&list.size()>0) {
-                if(list.get(0).getStatus().equals("0")) {
+                if(list.get(0).getStatus().equals("1")) {
                     subject.login(token);
                     s = sysUserRepository.findByLoginName(name);
                     map.put("status", "1");
@@ -93,6 +90,8 @@ public class SysUserServiceImpl implements SysUserService {
             String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
             sysUser.setSalt(saltAndCiphertext[0]);
             sysUser.setPassword(saltAndCiphertext[1]);
+            sysUser.setStatus("1");
+            sysUser.setCreateTime(new Date());
             SysUser suser = sysUserRepository.save(sysUser);
             map.put("status","1");
             map.put("message","添加成功");

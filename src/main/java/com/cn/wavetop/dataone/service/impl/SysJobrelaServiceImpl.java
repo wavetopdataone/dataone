@@ -16,7 +16,12 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.awt.print.Book;
 import java.util.*;
 
 
@@ -41,12 +46,12 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 
     @Override
     public Object getJobrelaAll(Integer current,Integer size) {
-        List<SysJobrela> list=repository.findAll();
-        Map<Object,Object> map=new HashMap<>();
         Pageable pageable = new PageRequest(current-1, size, Sort.Direction.DESC, "id");
+        Page<SysJobrela> list=repository.findAll(pageable);
+        Map<Object,Object> map=new HashMap<>();
         map.put("status","1");
-        map.put("totalCount",list.size());
-        map.put("data",repository.findAll(pageable).getContent());
+        map.put("totalCount",list.getTotalElements());
+        map.put("data",list.getContent());
         return map;
     }
 
@@ -175,9 +180,19 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         HashMap<Object, Object> map = new HashMap();
         Pageable page = PageRequest.of(current-1 , size);
         List<SysJobrela> data = repository.findByJobNameContainingOrderByIdDesc(job_name,page);
+        List<SysJobrela> list = repository.findByJobNameContainingOrderByIdDesc(job_name);
+        //具体的条件查询带分页的可以用这个
+//        Page<SysJobrela> bookPage = repository.findAll(new Specification<SysJobrela>(){
+//            @Override
+//            public Predicate toPredicate(Root<SysJobrela> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+//                Predicate p1 = criteriaBuilder.equal(root.get("jobName").as(String.class), job_name);
+//                query.where(criteriaBuilder.and(p1));
+//                return query.getRestriction();
+//            }
+//        },page);
         if (data != null && data.size() > 0) {
             map.put("status", 1);
-            map.put("totalCount",data.size());
+            map.put("totalCount",list.size());
             map.put("data", data);
         } else {
             map.put("status", 0);
