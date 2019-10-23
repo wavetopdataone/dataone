@@ -28,7 +28,7 @@ public class MyShiroRelam extends AuthorizingRealm {
 //    private SysUserRoleRepository sysUserRoleRepository;
 
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+    public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo authorizationInfo=new SimpleAuthorizationInfo();
         SysUser tbUsers=(SysUser) principalCollection.getPrimaryPrincipal();
         List<SysUserRoleVo> list=sysUserRespository.findByLoginName(tbUsers.getLoginName());

@@ -9,7 +9,10 @@ import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.ModularRealmAuthorizer;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -34,7 +37,11 @@ public class SysUserServiceImpl implements SysUserService {
             if(list!=null&&list.size()>0) {
                 if(list.get(0).getStatus().equals("1")) {
                     subject.login(token);
+                    //查的是用户角色权限三张表
                     s = sysUserRepository.findByLoginName(name);
+//                    //比较用户是否有super这个权限
+//                    System.out.println("-------------"+SecurityUtils.getSubject().isPermitted("super"));
+//
                     map.put("status", "1");
                     map.put("data", s);
                     map.put("message", "登录成功");
@@ -81,6 +88,9 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional
     @Override
     public Object addSysUser(SysUser sysUser) {
+//        if(SecurityUtils.getSubject().isPermitted("super")||SecurityUtils.getSubject().isPermitted("admin")){
+//            if(SecurityUtils.getSubject().isPermitted("super")){}
+//        }
        List<SysUser> list=sysUserRepository.findAllByLoginName(sysUser.getLoginName());
         HashMap<String,String> map=new HashMap<>();
         if(list!=null&&list.size()>0) {
