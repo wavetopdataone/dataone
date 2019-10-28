@@ -26,6 +26,8 @@ public class SysUserJobrela {
     private Long userId;
     //任务id
     private Long JobrelaId;
+    //部门id
+    private Long deptId;
     //表名
     private String tableName;
     //权限字符

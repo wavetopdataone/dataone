@@ -41,4 +41,11 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
     List<SysJobrela> findByJobStatusLikeOrderByIdDesc(String job_status);
 
     boolean existsByJobName(String jobName);
+
+
+    //根据用户id查询任务分页显示
+    @Query(value = "select * from sys_jobrela j,sys_user u,sys_user_jobrela uj where u.id=uj.user_id and uj.jobrela_id=j.id and u.id=?1",nativeQuery = true)
+    List<SysJobrela>  findByUserId(Long userId,Pageable pageable);
+    @Query(value = "select * from sys_jobrela j,sys_user u,sys_user_jobrela uj where u.id=uj.user_id and uj.jobrela_id=j.id and u.id=?1",nativeQuery = true)
+    List<SysJobrela> findByUserId(Long userId);
 }
