@@ -30,6 +30,8 @@ public class SysRole
     @Id // 标识主键
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
     private Long id;
+//    父角色ID
+    private Long parent_id;
 
     /** 角色名称 */
     private String roleName;

@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.service.impl;
 
+import com.cn.wavetop.dataone.config.shiro.MyShiroRelam;
 import com.cn.wavetop.dataone.dao.SysMonitoringRepository;
 import com.cn.wavetop.dataone.dao.SysRelaRepository;
 import com.cn.wavetop.dataone.dao.SysTableruleRepository;
@@ -25,7 +26,6 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
     private SysMonitoringRepository sysMonitoringRepository;
     @Autowired
     private SysTableruleRepository sysTableruleRepository;
-
     @Override
     public Object findAll() {
         List<SysMonitoring> sysUserList=sysMonitoringRepository.findAll();
