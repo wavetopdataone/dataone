@@ -23,7 +23,7 @@ public class DBConns {
         String url="jdbc:mysql://"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+"/"+sysDbinfo.getDbname()+"?characterEncoding=utf8&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai";
         Class.forName("com.mysql.jdbc.Driver");
         DriverManager.setLoginTimeout(3);
-        return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
+        return DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
     }
     /**
      * 获取Oracle对象
@@ -216,7 +216,7 @@ public class DBConns {
         SysDbinfo mysql = SysDbinfo.builder().host("192.168.1.226").port(Long.valueOf(3306)).dbname("dataone").user("root").password("888888").build();
         Connection mySQLConn = getMySQLConn(mysql);
         System.out.println(mySQLConn);
-        SysDbinfo oracle = SysDbinfo.builder().host("47.103.108.82").port(Long.valueOf(1521)).dbname("ORCL").user("zhengyong").password("zhengyong").build();
+        SysDbinfo oracle = SysDbinfo.builder().host("192.168.103.238").port(Long.valueOf(1521)).dbname("ORCL").user("test").password("test").build();
         Connection oracleConn = getOracleConn(oracle);
         System.out.println(oracleConn);
     }
