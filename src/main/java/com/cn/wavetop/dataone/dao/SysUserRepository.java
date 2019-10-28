@@ -1,7 +1,9 @@
 package com.cn.wavetop.dataone.dao;
 
+import com.cn.wavetop.dataone.entity.SysRole;
 import com.cn.wavetop.dataone.entity.SysUser;
 import com.cn.wavetop.dataone.entity.TbUsers;
+import com.cn.wavetop.dataone.entity.vo.SysUserDept;
 import com.cn.wavetop.dataone.entity.vo.SysUserRoleVo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,10 +16,42 @@ import java.util.List;
 @Repository
 public interface SysUserRepository extends JpaRepository<SysUser,Long> {
 
-    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserRoleVo(s.id,r.id,s.loginName,r.roleName,r.roleKey,m.perms) from SysUser as s,SysRole as r,SysUserRole as e,SysMenu as m,SysRoleMenu rm where s.id=e.userId and r.id=e.roleId and r.id=rm.roleId and rm.menuId=m.id and s.loginName=:loginName")
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserRoleVo(s.id,r.id,s.loginName,r.roleName,r.roleKey,m.perms,r.remark) from SysUser as s,SysRole as r,SysUserRole as e,SysMenu as m,SysRoleMenu rm where s.id=e.userId and r.id=e.roleId and r.id=rm.roleId and rm.menuId=m.id and s.loginName=:loginName")
     List<SysUserRoleVo> findByLoginName(String loginName);
 
     SysUser findByUserNameAndPassword(String userName,String password);
     List<SysUser> findAllByLoginName(String loginName);
     int deleteByLoginName(String loginName);
+    SysUser findByEmail(String email);
+    Long countByDeptId(Long deptId);
+    @Query("select count(u.id) from SysUser u,SysRole r,SysUserRole ur where u.id=ur.userId and ur.roleId=r.id and r.roleKey='2' and u.deptId=:deptId")
+    Long countByDeptIdandPerms(Long deptId);
+
+    List<SysUser> findByDeptId(Long deptId);
+
+    @Query("select u from SysUser u where u.deptId=:deptId")
+    List<SysUser> findUser(Long deptId);
+
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.email,d.deptName,r.roleName) from SysUser u,SysRole r,SysUserRole ur,SysDept d where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and r.roleKey=:perms order by u.id")
+    List<SysUserDept>   findUserByUserPerms(String perms);
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.email,d.deptName,r.roleName) from SysUser u,SysRole r,SysUserRole ur,SysDept d where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and u.deptId=(select su.deptId from SysUser su where su.id=:userId) and r.roleKey<>:perms order by u.id")
+    List<SysUserDept> findUserByPerms(Long userId,String perms);
+
+//根据超级管理员模糊查询用户名显示管理员
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.email,d.deptName,r.roleName) from SysUser u ,SysUserRole ur,SysRole r,SysDept d where u.id=ur.userId and ur.roleId=r.id and r.id=2 and u.deptId=d.id and u.loginName LIKE CONCAT('%',:userName,'%') order by u.id")
+    List<SysUserDept> findByUserName(String userName);
+
+    //根据管理员模糊查询用户名显示当前部门的用户
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.email,d.deptName,r.roleName) from SysUser u ,SysUserRole ur,SysRole r,SysDept d  where u.id=ur.userId and ur.roleId=r.id and r.id=3 and u.deptId=d.id and u.deptId=:deptId and u.loginName LIKE CONCAT('%',:userName,'%') order by u.id ")
+    List<SysUserDept> findByDeptUserName(Long deptId,String userName);
+   //根据组名查询用户
+    @Query("select  new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.email,d.deptName,r.roleName) from SysUser u,SysUserRole ur,SysRole r,SysDept d  where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and u.deptId=:deptId order by u.id")
+    List<SysUserDept> findUserByDeptId(Long deptId);
+
+    //根据部门编号和角色查找用户
+    @Query("select  u from SysUser u,SysUserRole ur,SysRole r,SysDept d  where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and r.id=2 and u.deptId=:deptId ")
+    List<SysUser> findUserByDeptIdAndRoleKey(Long deptId);
+    //查询冻结的用户是什么角色
+    @Query("select  r from SysRole r  where r.id in (select ur.roleId from SysUserRole ur where ur.userId=:id)")
+    List<SysRole> findUserById(Long id);
 }

@@ -4,6 +4,7 @@ import com.cn.wavetop.dataone.entity.SysJobinfo;
 import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.service.SysJobinfoService;
 import com.cn.wavetop.dataone.service.SysJobrelaService;
+import com.cn.wavetop.dataone.service.SysUserJobrelaService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class SysJobrelaController {
 
     @Autowired
     private SysJobrelaService service;
+    @Autowired
+    private SysUserJobrelaService sysUserJobrelaService;
 
     @ApiOperation(value = "查看全部", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
     @PostMapping("/jobrela_all")
@@ -32,10 +35,10 @@ public class SysJobrelaController {
         return service.checkJobinfoById(id);
     }
 
-    @ApiImplicitParam
+    @ApiOperation(value = "添加任务添加参与人", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "添加任务添加参与人")
     @PostMapping("/add_jobrela")
-    public Object add_jobrela(@RequestBody  SysJobrela sysJobrela) {
-        return service.addJobrela(sysJobrela);
+    public Object add_jobrela(@RequestBody  SysJobrela sysJobrela,@RequestParam(required = false) String names) {
+        return service.addJobrela(sysJobrela,names);
     }
 
     @ApiImplicitParam
@@ -92,4 +95,17 @@ public class SysJobrelaController {
     public Object end(Long id) {
         return service.end(id);
     }
+
+    @ApiImplicitParam
+    @PostMapping("/sel_jobrela")
+    public Object selJobrela(Integer current,Integer size) {
+        return service.selJobrela(current,size);
+    }
+
+    @ApiOperation(value = "为用户选任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为用户选任务")
+    @PostMapping("/addUserJob")
+    public Object addUserJobRela(Long userId,String jobrela_id) {
+        return sysUserJobrelaService.addUserJobRela(userId,jobrela_id);
+    }
+
 }
