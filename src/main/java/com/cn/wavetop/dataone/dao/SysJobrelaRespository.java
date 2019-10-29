@@ -33,6 +33,8 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
 
     SysJobrela findByIdOrJobName(long id, String jobName);
     int countByJobStatusLike(String i);
+    @Query("select count(u.id) from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId and u.id=:id and sj.jobStatus like :i")
+    int countByJobStatus(Long id,String i);
 
     List<SysJobrela> findByJobNameContainingOrderByIdDesc(String job_name, Pageable pageable);
     List<SysJobrela> findByJobNameContainingOrderByIdDesc(String job_name);
@@ -44,8 +46,20 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
 
 
     //根据用户id查询任务分页显示
-    @Query(value = "select * from sys_jobrela j,sys_user u,sys_user_jobrela uj where u.id=uj.user_id and uj.jobrela_id=j.id and u.id=?1",nativeQuery = true)
+    @Query(value = "select * from sys_jobrela j,sys_user u,sys_user_jobrela uj where u.id=uj.user_id and uj.jobrela_id=j.id and u.id=?1 order by uj.id desc",nativeQuery = true)
     List<SysJobrela>  findByUserId(Long userId,Pageable pageable);
-    @Query(value = "select * from sys_jobrela j,sys_user u,sys_user_jobrela uj where u.id=uj.user_id and uj.jobrela_id=j.id and u.id=?1",nativeQuery = true)
+    @Query(value = "select * from sys_jobrela j,sys_user u,sys_user_jobrela uj where u.id=uj.user_id and uj.jobrela_id=j.id and u.id=?1 order by uj.id desc",nativeQuery = true)
     List<SysJobrela> findByUserId(Long userId);
+
+    //根據用戶id和任務名的模糊查詢分頁
+    @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId  and sj.jobName like CONCAT('%',:job_name,'%') and u.id=:userId order by sj.id desc")
+    List<SysJobrela>  findByUserIdJobName(Long userId,String job_name,Pageable pageable);
+    @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId  and sj.jobName like CONCAT('%',:job_name,'%') and u.id=:userId order by sj.id desc")
+    List<SysJobrela>  findByUserIdJobName(Long userId,String job_name);
+    //根據用戶id和狀態的模糊查詢分頁
+    @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId and u.id=:userId and sj.jobStatus like CONCAT(:jobstatus,'%') order by sj.id desc")
+    List<SysJobrela>  findByUserIdJobStatus(Long userId,String jobstatus,Pageable pageable);
+    @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId and u.id=:userId and sj.jobStatus like CONCAT(:jobstatus,'%') order by sj.id desc")
+    List<SysJobrela>  findByUserIdJobStatus(Long userId,String jobstatus);
+
 }

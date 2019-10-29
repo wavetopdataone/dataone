@@ -18,7 +18,8 @@ public class SysUserDept {
 
     /** 登录名称 */
     private String loginName;
-
+    /** 角色 */
+    private String password;
 
     /** 用户邮箱 */
     private String email;
@@ -27,10 +28,11 @@ public class SysUserDept {
     /** 角色 */
     private String roleName;
 
-    public SysUserDept(Long userId, Long deptId, String loginName, String email, String deptName, String roleName) {
+    public SysUserDept(Long userId, Long deptId, String loginName,String password, String email, String deptName, String roleName) {
         this.userId = userId;
         this.deptId = deptId;
         this.loginName = loginName;
+        this.password = password;
         this.email = email;
         this.deptName = deptName;
         this.roleName = roleName;

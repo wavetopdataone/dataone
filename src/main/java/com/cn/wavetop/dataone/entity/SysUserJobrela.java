@@ -25,7 +25,7 @@ public class SysUserJobrela {
     //用户id
     private Long userId;
     //任务id
-    private Long JobrelaId;
+    private Long jobrelaId;
     //部门id
     private Long deptId;
     //表名

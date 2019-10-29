@@ -1,9 +1,9 @@
 package com.cn.wavetop.dataone.controller;
 
 import com.cn.wavetop.dataone.entity.SysUser;
-import com.cn.wavetop.dataone.entity.TbUsers;
+import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysUserService;
-import com.cn.wavetop.dataone.service.TbUsersService;
+import com.cn.wavetop.dataone.util.PermissionUtils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,4 +92,14 @@ public class SysUserController {
         return sysUserService.updateStatus(id,status);
     }
 
+    @ApiOperation(value = "根据用户id查询用户详细信息",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "根据用户id查询用户详细信息")
+    @PostMapping("/selSysUser")
+    public Object selSysUser(Long userId){
+        return sysUserService.selSysUser(userId);
+    }
+    @ApiOperation(value = "移交团队id是管理员userid是编辑者",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "移交团队id是管理员userid是编辑者")
+    @PostMapping("/HandedTeam")
+    public Object HandedTeam(Long id,Long userId ){
+        return sysUserService.HandedTeam(id,userId);
+    }
 }

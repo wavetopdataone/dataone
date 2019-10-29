@@ -1,6 +1,5 @@
 package com.cn.wavetop.dataone.controller;
 
-import com.cn.wavetop.dataone.entity.SysJobinfo;
 import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.service.SysJobinfoService;
 import com.cn.wavetop.dataone.service.SysJobrelaService;
@@ -23,7 +22,7 @@ public class SysJobrelaController {
     @Autowired
     private SysUserJobrelaService sysUserJobrelaService;
 
-    @ApiOperation(value = "查看全部", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
+    @ApiOperation(value = "根据用户权限不同显示不同任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
     @PostMapping("/jobrela_all")
     public Object jobrela_all(Integer current,Integer size) {
         return service.getJobrelaAll( current, size);
@@ -73,7 +72,7 @@ public class SysJobrelaController {
     //
     @ApiImplicitParam
     @PostMapping("/some_jobrela")
-    public Object some_jobrela(Long job_status,Integer current,Integer size) {
+    public Object some_jobrela(String job_status,Integer current,Integer size) {
         return service.someJobrela(job_status,current,size);
     }
 
@@ -96,7 +95,7 @@ public class SysJobrelaController {
         return service.end(id);
     }
 
-    @ApiImplicitParam
+    @ApiOperation(value = "管理员编辑者查看任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "管理员编辑者查看任务")
     @PostMapping("/sel_jobrela")
     public Object selJobrela(Integer current,Integer size) {
         return service.selJobrela(current,size);

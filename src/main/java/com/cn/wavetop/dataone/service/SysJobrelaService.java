@@ -21,7 +21,7 @@ public interface SysJobrelaService {
 
     Object queryJobrela(String job_name,Integer current ,Integer size);
 
-    Object someJobrela(Long job_status,Integer current ,Integer size);
+    Object someJobrela(String job_status,Integer current ,Integer size);
 
     Object start(Long id);
 

@@ -9,7 +9,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SysUserJobrelaRepository extends JpaRepository<SysUserJobrela,Long> {
         boolean existsAllByUserId(Long userId);
-    @Modifying
-    @Query("delete from SysUserJobrela where jobrelaId = :jobrela_id")
+        @Modifying
+        @Query("delete from SysUserJobrela where jobrelaId = :jobrela_id")
         Integer deleteByJobrelaId(Long jobrela_id);
+
+        @Modifying
+        @Query("delete from SysUserJobrela where userId = :userId")
+        Integer deleteByUserId(Long userId);
 }

@@ -2,6 +2,7 @@ package com.cn.wavetop.dataone.service.impl;
 
 import com.cn.wavetop.dataone.config.shiro.CredentialMatcher;
 import com.cn.wavetop.dataone.dao.SysRoleMenuRepository;
+import com.cn.wavetop.dataone.dao.SysUserJobrelaRepository;
 import com.cn.wavetop.dataone.dao.SysUserRepository;
 import com.cn.wavetop.dataone.dao.SysUserRoleRepository;
 import com.cn.wavetop.dataone.entity.SysRole;
@@ -35,7 +36,8 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserRoleRepository sysUserRoleRepository;
     @Autowired
     private SysRoleMenuRepository sysRoleMenuRepository;
-
+    @Autowired
+    private SysUserJobrelaRepository sysUserJobrelaRepository;
 
     @Override
     public Object login(String name, String password) {
@@ -64,7 +66,7 @@ public class SysUserServiceImpl implements SysUserService {
                     s = sysUserRepository.findByLoginName(name);
 //                    //比较用户是否有super这个权限
                     map.put("status", "1");
-                    map.put("data", s);
+                    map.put("name", s.get(0).getUserName());
                     map.put("message", "登录成功");
                 }else{
                     map.put("status", "3");
@@ -99,7 +101,7 @@ public class SysUserServiceImpl implements SysUserService {
         if(PermissionUtils.isPermitted("1")){
             list=sysUserRepository.findUserByUserPerms("2");
 
-            SysUserDept sysUserDept=new SysUserDept(PermissionUtils.getSysUser().getId(),PermissionUtils.getSysUser().getDeptId(),PermissionUtils.getSysUser().getLoginName(),PermissionUtils.getSysUser().getEmail(),"","超级管理员");
+            SysUserDept sysUserDept=new SysUserDept(PermissionUtils.getSysUser().getId(),PermissionUtils.getSysUser().getDeptId(),PermissionUtils.getSysUser().getLoginName(),PermissionUtils.getSysUser().getPassword(),PermissionUtils.getSysUser().getEmail(),"","超级管理员");
             list.add(0,sysUserDept);
 
             map.put("status","1");
@@ -127,18 +129,23 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional
     @Override
     public Object update(SysUser sysUser) {
-        Optional<SysUser> sysUser1=sysUserRepository.findById(sysUser.getId());
-        sysUser1.get().setLoginName(sysUser.getLoginName());
-        sysUser1.get().setEmail(sysUser.getEmail());
-        sysUser1.get().setUserName(sysUser.getLoginName());
-        String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
-        sysUser1.get().setSalt(saltAndCiphertext[0]);
-        sysUser1.get().setPassword(saltAndCiphertext[1]);
-        sysUser1.get().setStatus("1");
-        sysUser1.get().setUpdateUser(PermissionUtils.getSysUser().getLoginName());
-        sysUser1.get().setUpdateTime(PermissionUtils.getSysUser().getCreateTime());
-        sysUserRepository.save(sysUser1.get());
-        return ToDataMessage.builder().status("1").message("修改成功").build();
+        List<SysUser> list = sysUserRepository.findAllByLoginName(sysUser.getLoginName());
+        Optional<SysUser> sysUser1 = sysUserRepository.findById(sysUser.getId());
+        if (list != null && list.size() > 0) {
+            return ToDataMessage.builder().status("0").message("用户已存在").build();
+        } else {
+            sysUser1.get().setLoginName(sysUser.getLoginName());
+            sysUser1.get().setEmail(sysUser.getEmail());
+            sysUser1.get().setUserName(sysUser.getLoginName());
+            String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
+            sysUser1.get().setSalt(saltAndCiphertext[0]);
+            sysUser1.get().setPassword(saltAndCiphertext[1]);
+            sysUser1.get().setStatus("1");
+            sysUser1.get().setUpdateUser(PermissionUtils.getSysUser().getLoginName());
+            sysUser1.get().setUpdateTime(PermissionUtils.getSysUser().getCreateTime());
+            sysUserRepository.save(sysUser1.get());
+            return ToDataMessage.builder().status("1").message("修改成功").build();
+        }
     }
 
 
@@ -289,28 +296,32 @@ public class SysUserServiceImpl implements SysUserService {
     //根据部门Id查询该部门下的用户
     @Override
     public Object findUserByDept(Long deptId){
+        List<SysUserDept> list=new ArrayList<>();
         if(PermissionUtils.isPermitted("1")){
-
+            list= sysUserRepository.findUserByDeptId("2",deptId);
         }else if(PermissionUtils.isPermitted("2")){
-
-        }else{
+            list= sysUserRepository.findUserByDeptId("3",PermissionUtils.getSysUser().getDeptId());
+       }else{
             return ToDataMessage.builder().status("0").message("权限不足").build();
         }
-       List<SysUserDept> list= sysUserRepository.findUserByDeptId(deptId);
       return ToData.builder().status("1").data(list).build();
     }
     //超级管理员为管理员选择分组（id是用户id，我在第一页下一步保存了用户并把id传给前端 ）（deptid能穿就不要deptName）
     @Transactional
     @Override
     public Object updateUser(Long id,Long DeptId) {
-        List<SysUser> list = sysUserRepository.findUserByDeptIdAndRoleKey(DeptId);
-        if (list != null && list.size() > 0) {
-           return ToDataMessage.builder().status("0").message("该分组下已有管理员");
-        } else {
-            Optional<SysUser> sysUser = sysUserRepository.findById(id);
-            sysUser.get().setDeptId(DeptId);
-            sysUserRepository.save(sysUser.get());
-            return ToDataMessage.builder().status("1").message("用户分组成功").build();
+        if(PermissionUtils.isPermitted("1")) {
+            List<SysUser> list = sysUserRepository.findUserByDeptIdAndRoleKey(Long.valueOf(2),DeptId);
+            if (list != null && list.size() > 0) {
+                return ToDataMessage.builder().status("0").message("该分组下已有管理员");
+            } else {
+                Optional<SysUser> sysUser = sysUserRepository.findById(id);
+                sysUser.get().setDeptId(DeptId);
+                sysUserRepository.save(sysUser.get());
+                return ToDataMessage.builder().status("1").message("用户分组成功").build();
+            }
+        }else{
+            return ToDataMessage.builder().status("2").message("权限不足").build();
         }
     }
 
@@ -362,5 +373,39 @@ public class SysUserServiceImpl implements SysUserService {
             map.put("message","权限不足");
         }
         return map;
+    }
+
+    //根据用户id查询用户详细的信息
+    public Object selSysUser(Long userId){
+        Map<Object,Object> map=new HashMap<>();
+        List<SysUserDept> sysUser=new ArrayList<>();
+        if(PermissionUtils.isPermitted("1")){
+           sysUser=sysUserRepository.findUserByUserIdAndRoleKey(Long.valueOf(2),userId);
+          map.put("status","1");
+          map.put("data",sysUser);
+        }else if(PermissionUtils.isPermitted("2")){
+            sysUser=sysUserRepository.findUserByUserIdAndRoleKey(Long.valueOf(3),userId);
+            map.put("status","1");
+            map.put("data",sysUser);
+        }else{
+            ToDataMessage.builder().status("0").message("权限不足").build();
+        }
+
+        return map;
+    }
+
+    //移交团队 id是管理员 userid是编辑者id
+    @Transactional
+    @Override
+    public Object HandedTeam(Long id, Long userId) {
+        if(PermissionUtils.isPermitted("1")){
+            sysUserRepository.deleteById(id);
+            sysUserRoleRepository.deleteByUserId(userId);
+            sysUserJobrelaRepository.deleteByUserId(userId);
+            sysUserRepository.updataById(id,userId);
+            return  ToDataMessage.builder().status("1").message("团队已移交").build();
+        }else{
+           return  ToDataMessage.builder().status("2").message("权限不足").build();
+        }
     }
 }

@@ -211,12 +211,25 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Override
     public Object jobrelaCount() {
         int[] num = new int[6];
-        num[0] = repository.countByJobStatusLike(1 + "%"); //运行中
-        num[1] = repository.countByJobStatusLike(4 + "%");//异常
-        num[2] = repository.countByJobStatusLike(2 + "%");//暂停中
-        num[3] = repository.countByJobStatusLike(5 + "%");//待完善
-        num[4] = repository.countByJobStatusLike(0 + "%");//待激活
-        num[5] = repository.countByJobStatusLike(3 + "%");//终止中
+        Long id=PermissionUtils.getSysUser().getId();//登录用户的id
+        if(PermissionUtils.isPermitted("1")){
+            num[0] = repository.countByJobStatusLike(1 + "%"); //运行中
+            num[1] = repository.countByJobStatusLike(4 + "%");//异常
+            num[2] = repository.countByJobStatusLike(2 + "%");//暂停中
+            num[3] = repository.countByJobStatusLike(5 + "%");//待完善
+            num[4] = repository.countByJobStatusLike(0 + "%");//待激活
+            num[5] = repository.countByJobStatusLike(3 + "%");//终止中
+        }else if(PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")){
+            num[0] = repository.countByJobStatus(id,1 + "%"); //运行中
+            num[1] = repository.countByJobStatus(id,4 + "%");//异常
+            num[2] = repository.countByJobStatus(id,2 + "%");//暂停中
+            num[3] = repository.countByJobStatus(id,5 + "%");//待完善
+            num[4] = repository.countByJobStatus(id,0 + "%");//待激活
+            num[5] = repository.countByJobStatus(id,3 + "%");//终止中
+        }else{
+            return ToDataMessage.builder().status("0").message("权限不足").build();
+        }
+
         return num;
     }
 
@@ -225,9 +238,14 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     public Object queryJobrela(String job_name, Integer current, Integer size) {
         HashMap<Object, Object> map = new HashMap();
         Pageable page = PageRequest.of(current - 1, size);
-        List<SysJobrela> data = repository.findByJobNameContainingOrderByIdDesc(job_name, page);
-        List<SysJobrela> list = repository.findByJobNameContainingOrderByIdDesc(job_name);
-        //具体的条件查询带分页的可以用这个
+        Long id=PermissionUtils.getSysUser().getId();//登录用户的id
+        List<SysJobrela> data=new ArrayList<>();
+        List<SysJobrela> list=new ArrayList<>();
+
+        if(PermissionUtils.isPermitted("1")) {
+             data = repository.findByJobNameContainingOrderByIdDesc(job_name, page);
+             list = repository.findByJobNameContainingOrderByIdDesc(job_name);
+            //具体的条件查询带分页的可以用这个
 //        Page<SysJobrela> bookPage = repository.findAll(new Specification<SysJobrela>(){
 //            @Override
 //            public Predicate toPredicate(Root<SysJobrela> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -236,31 +254,59 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 //                return query.getRestriction();
 //            }
 //        },page);
-        if (data != null && data.size() > 0) {
-            map.put("status", 1);
-            map.put("totalCount", list.size());
-            map.put("data", data);
-        } else {
+            if (data != null && data.size() > 0) {
+                map.put("status", 1);
+                map.put("totalCount", list.size());
+                map.put("data", data);
+            } else {
+                map.put("status", 0);
+                map.put("message", "任务不存在");
+            }
+        }else if(PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")){
+            data = repository.findByUserIdJobName(id,job_name, page);
+            list = repository.findByUserIdJobName(id,job_name);
+            if (data != null && data.size() > 0) {
+                map.put("status", 1);
+                map.put("totalCount", list.size());
+                map.put("data", data);
+            } else {
+                map.put("status", 0);
+                map.put("message", "任务不存在");
+            }
+        }else{
             map.put("status", 0);
-            map.put("message", "任务不存在");
+            map.put("message", "权限不足");
         }
         return map;
     }
 
     @Override
-    public Object someJobrela(Long job_status, Integer current, Integer size) {
+    public Object someJobrela(String job_status, Integer current, Integer size) {
         Map<Object, Object> map = new HashMap<>();
+        Long id=PermissionUtils.getSysUser().getId();//登录用户的id
+        List<SysJobrela> list=new ArrayList<>();
+        List<SysJobrela> sysJobrelaList=new ArrayList<>();
         if (current < 1) {
             return ToDataMessage.builder().status("0").message("当前页不能小于1").build();
         } else {
             Pageable page = PageRequest.of(current - 1, size);
-            List<SysJobrela> list = repository.findByJobStatusLikeOrderByIdDesc(job_status + "%", page);
-            List<SysJobrela> sysJobrelaList = repository.findByJobStatusLikeOrderByIdDesc(job_status + "%");
-
-            map.put("status", "1");
-            map.put("totalCount", sysJobrelaList.size());
-            map.put("data", list);
-            return map;
+            if(PermissionUtils.isPermitted("1")) {
+                list = repository.findByJobStatusLikeOrderByIdDesc(job_status + "%", page);
+                sysJobrelaList = repository.findByJobStatusLikeOrderByIdDesc(job_status + "%");
+                map.put("status", "1");
+                map.put("totalCount", sysJobrelaList.size());
+                map.put("data", list);
+            }else if(PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")){
+                list = repository.findByUserIdJobStatus(id,job_status, page);
+                sysJobrelaList = repository.findByUserIdJobStatus(id,job_status);
+                map.put("status", "1");
+                map.put("totalCount", sysJobrelaList.size());
+                map.put("data", list);
+            }else{
+                map.put("status", 0);
+                map.put("message", "权限不足");
+            }
+                return map;
         }
     }
 

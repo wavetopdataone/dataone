@@ -16,4 +16,6 @@ public interface SysUserService  {
     Object findUserByDept(Long deptId);
     Object updateUser(Long id,Long DeptId);
     Object updateStatus(Long id,String status);
+    Object selSysUser(Long userId);
+    Object HandedTeam(Long id,Long userId);
 }
