@@ -14,15 +14,20 @@ public class PermissionUtils {
 
     @Autowired
     private SysUserRepository sysUserRepository;
-
+      private static   Subject subjects=null;
+    public static void setSubject(Subject subject){
+        subjects=subject;
+    }
     //拿到登录的用户
     public static SysUser getSysUser(){
-        SysUser sysUser =(SysUser) SecurityUtils.getSubject().getPrincipal();
+        SysUser sysUser =(SysUser)subjects.getPrincipal();
+        System.out.println(sysUser+"-----------------------");
            return sysUser;
     }
 
     public static boolean isPermitted(String perms){
-      return SecurityUtils.getSubject().isPermitted(perms);
+
+        return subjects.isPermitted(perms);
     }
 
     //邮箱验证

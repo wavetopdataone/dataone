@@ -54,15 +54,15 @@ public class SysUserServiceImpl implements SysUserService {
         List<SysUser> list=sysUserRepository.findAllByLoginName(name);
         UsernamePasswordToken token=new UsernamePasswordToken(name,password);
         Subject subject= SecurityUtils.getSubject();
+
         try{
             if(list!=null&&list.size()>0) {
                 if(list.get(0).getStatus().equals("1")) {
                     subject.login(token);
+                    PermissionUtils.setSubject(subject);
                     //查的是用户角色权限三张表
                     s = sysUserRepository.findByLoginName(name);
 //                    //比较用户是否有super这个权限
-//                    System.out.println("-------------"+SecurityUtils.getSubject().isPermitted("super"));
-//
                     map.put("status", "1");
                     map.put("data", s);
                     map.put("message", "登录成功");

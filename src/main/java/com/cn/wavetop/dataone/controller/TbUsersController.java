@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
-public class TbUsersController {
+public class  TbUsersController {
 
     @Autowired
     private TbUsersService tbUsersService;
