@@ -36,10 +36,16 @@ public class SysDeptServiceImpl implements SysDeptService {
        List<SysDept> list=sysDeptRepository.findAll();
         SysUserDeptVo sysUserDeptVo;
        List<SysUserDeptVo> userDeptVoList=new ArrayList<>();
+       int index=0;
        if(PermissionUtils.isPermitted("1")) {
            for (SysDept sysDept : list) {
                sysUserDeptVo = new SysUserDeptVo(sysDept.getId(), sysDept.getDeptName(), sysUserRepository.countByDeptIdandPerms(sysDept.getId()));
-               userDeptVoList.add(sysUserDeptVo);
+               if(sysUserDeptVo.getCountUser()==0){
+                   userDeptVoList.add(index,sysUserDeptVo);
+                     index++;
+               }else{
+                   userDeptVoList.add(index,sysUserDeptVo);
+               }
            }
            map.put("status","1");
            map.put("data",userDeptVoList);

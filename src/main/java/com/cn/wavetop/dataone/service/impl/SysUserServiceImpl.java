@@ -65,9 +65,7 @@ public class SysUserServiceImpl implements SysUserService {
                     //查的是用户角色权限三张表
                     s = sysUserRepository.findByLoginName(name);
 //                    //比较用户是否有super这个权限
-                    map.put("status", "1");
-                    map.put("name", s.get(0).getUserName());
-                    map.put("message", "登录成功");
+                    return ToData.builder().status("1").data(s).build();
                 }else{
                     map.put("status", "3");
                     map.put("message", "账号被冻结");
