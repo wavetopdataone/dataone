@@ -18,18 +18,25 @@ import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.ModularRealmAuthorizer;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.util.*;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
+    private final SessionDAO sessionDAO;
     @Autowired
     private SysUserRepository sysUserRepository;
     @Autowired
@@ -38,6 +45,11 @@ public class SysUserServiceImpl implements SysUserService {
     private SysRoleMenuRepository sysRoleMenuRepository;
     @Autowired
     private SysUserJobrelaRepository sysUserJobrelaRepository;
+    @Autowired
+    public SysUserServiceImpl(SessionDAO a) {
+        this.sessionDAO = a;
+
+    }
 
     @Override
     public Object login(String name, String password) {
@@ -55,17 +67,34 @@ public class SysUserServiceImpl implements SysUserService {
         }
         List<SysUser> list=sysUserRepository.findAllByLoginName(name);
         UsernamePasswordToken token=new UsernamePasswordToken(name,password);
+        //ThreadContext.bind(SecurityUtils.getSubject());
         Subject subject= SecurityUtils.getSubject();
-
+//        Session sessionss=subject.getSession();
+//        System.out.println(sessionss.getId()+"dsadsaxuezihao.................");
         try{
             if(list!=null&&list.size()>0) {
                 if(list.get(0).getStatus().equals("1")) {
                     subject.login(token);
-                    PermissionUtils.setSubject(subject);
+                    //PermissionUtils.setSubject(subject);
+//                    Collection<Session> sessions = sessionDAO.getActiveSessions();
+//                    for (Session session : sessions) {
+//                        SimplePrincipalCollection principalCollection = (SimplePrincipalCollection) session
+//                                .getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+//                        SysUser userDO = (SysUser) principalCollection.getPrimaryPrincipal();
+//
+//                        System.out.println(userDO+"dsadsadsa-----------------");
+//                        System.out.println( s +"dsadsadsa-----------------");
+//
+//                    }
+//                    System.out.println("---------------------");
+                    Serializable tokenId = subject.getSession().getId();
+                    System.out.println(tokenId);
                     //查的是用户角色权限三张表
                     s = sysUserRepository.findByLoginName(name);
 //                    //比较用户是否有super这个权限
-                    return ToData.builder().status("1").data(s).build();
+                    map.put("status", "1");
+                    map.put("authToken", tokenId);
+                    map.put("data", s);
                 }else{
                     map.put("status", "3");
                     map.put("message", "账号被冻结");

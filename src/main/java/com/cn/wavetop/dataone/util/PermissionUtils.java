@@ -20,14 +20,15 @@ public class PermissionUtils {
     }
     //拿到登录的用户
     public static SysUser getSysUser(){
-        SysUser sysUser =(SysUser)subjects.getPrincipal();
+        SysUser sysUser =(SysUser)SecurityUtils.getSubject().getPrincipal();
         System.out.println(sysUser+"-----------------------");
            return sysUser;
     }
 
+    //权限判断
     public static boolean isPermitted(String perms){
 
-        return subjects.isPermitted(perms);
+        return SecurityUtils.getSubject().isPermitted(perms);
     }
 
     //邮箱验证
