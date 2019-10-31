@@ -89,6 +89,8 @@ public class SysUserServiceImpl implements SysUserService {
 //                    System.out.println("---------------------");
                     Serializable tokenId = subject.getSession().getId();
                     System.out.println(tokenId);
+                   //美其效果
+                    subject.getSession().setTimeout(36000*60*1000);
                     //查的是用户角色权限三张表
                     s = sysUserRepository.findByLoginName(name);
 //                    //比较用户是否有super这个权限
@@ -179,7 +181,9 @@ public class SysUserServiceImpl implements SysUserService {
     //写的添加，还没有放上去
     @Transactional
     @Override
-    public Object addSysUser(SysUser sysUser,Long id){
+    public Object addSysUser(SysUser sysUser,String id){
+        System.out.println(sysUser+"wocaocaocoa"+id);
+        Long ids=Long.valueOf(id);
         List<SysUser> list=sysUserRepository.findAllByLoginName(sysUser.getLoginName());
         HashMap<Object,Object> map=new HashMap<>();
         SysUserRole sysUserRole=new SysUserRole();
@@ -188,14 +192,13 @@ public class SysUserServiceImpl implements SysUserService {
         if(list!=null&&list.size()>0) {
             return ToDataMessage.builder().status("0").message("用户已存在").build();
         }else{
-            SysUser user =(SysUser) SecurityUtils.getSubject().getPrincipal();
             String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
             sysUser.setSalt(saltAndCiphertext[0]);
             sysUser.setPassword(saltAndCiphertext[1]);
             sysUser.setUserName(sysUser.getLoginName());
             sysUser.setStatus("1");
             sysUser.setCreateTime(new Date());
-            sysUser.setCreateUser(user.getLoginName());
+            sysUser.setCreateUser(PermissionUtils.getSysUser().getLoginName());
 //            map.put("status","1");
 //            map.put("message","添加成功");
         }
@@ -204,14 +207,14 @@ public class SysUserServiceImpl implements SysUserService {
         if(!PermissionUtils.isPermitted("3")){
             if(PermissionUtils.isPermitted("1")){
                 //判断超级管理员创建的是否是管理员 2是管理员角色的id
-                 if(id==2){
+                 if(ids==2){
                      SysUser suser = sysUserRepository.save(sysUser);
                      sysUser1=sysUserRepository.findAllByLoginName(sysUser.getLoginName());
                      sysUserRole.setUserId(sysUser1.get(0).getId());
-                     sysUserRole.setRoleId(id);
+                     sysUserRole.setRoleId(ids);
                      sysUserRoleRepository.save(sysUserRole);
-                     sysRoleMenu.setMenuId(id);
-                     sysRoleMenu.setRoleId(id);
+                     sysRoleMenu.setMenuId(ids);
+                     sysRoleMenu.setRoleId(ids);
                      sysRoleMenuRepository.save(sysRoleMenu);
                      map.put("status","1");
                      map.put("perms","1");
@@ -221,13 +224,13 @@ public class SysUserServiceImpl implements SysUserService {
                      return ToDataMessage.builder().status("0").message("超级管理员不能创建编辑者角色").build();
                  }
             }else if(PermissionUtils.isPermitted("2")){
-                if(id==3){
+                if(ids==3){
                     SysUser suser = sysUserRepository.save(sysUser);
                     suser.setDeptId(PermissionUtils.getSysUser().getDeptId());
                     sysUserRepository.save(suser);
                     sysUser1=sysUserRepository.findAllByLoginName(sysUser.getLoginName());
                     sysUserRole.setUserId(sysUser1.get(0).getId());
-                    sysUserRole.setRoleId(id);
+                    sysUserRole.setRoleId(ids);
                     sysUserRoleRepository.save(sysUserRole);
                     map.put("status","1");
                     map.put("perms","2");

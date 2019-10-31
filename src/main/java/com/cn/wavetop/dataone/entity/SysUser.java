@@ -2,6 +2,7 @@ package com.cn.wavetop.dataone.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class SysUser
     private Long deptId;
 
     /** 登录名称 */
+    @JsonProperty(value = "login_name")
     private String loginName;
 
     /** 用户名称 */

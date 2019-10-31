@@ -18,11 +18,14 @@ public class CORSAuthenticationFilter extends FormAuthenticationFilter {
 
     public CORSAuthenticationFilter() {
         super();
+        System.out.println("111111111111111111111111111111111111111");
+
     }
 
 
     @Override
     public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        System.out.println("111111111111111111111111111111111111111");
         if (((HttpServletRequest) request).getMethod().toUpperCase().equals(REQUET_TYPE)) {
             return true;
         }
@@ -32,6 +35,8 @@ public class CORSAuthenticationFilter extends FormAuthenticationFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+        System.out.println("111111111111111111111111111111111111111");
+
         HttpServletResponse res = (HttpServletResponse)response;
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setStatus(HttpServletResponse.SC_OK);

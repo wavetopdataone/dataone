@@ -20,7 +20,12 @@ public class PermissionUtils {
     }
     //拿到登录的用户
     public static SysUser getSysUser(){
-        SysUser sysUser =(SysUser)SecurityUtils.getSubject().getPrincipal();
+        Subject subject=SecurityUtils.getSubject();
+        SysUser sysUser=new SysUser();
+        if (subject != null)
+        {
+         sysUser =(SysUser)subject.getPrincipal();
+        }
         System.out.println(sysUser+"-----------------------");
            return sysUser;
     }

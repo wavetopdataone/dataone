@@ -9,7 +9,7 @@ public interface SysUserService  {
     Object findAll();
     Object findById();
     Object update(SysUser sysUser);
-    Object addSysUser(SysUser sysUser,Long id);
+    Object addSysUser(SysUser sysUser,String id);
     Object delete(String userName);
     Object findRolePerms(String userName);
     Object findByUserName(String userName);

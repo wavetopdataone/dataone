@@ -29,14 +29,22 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager securityManager){
         ShiroFilterFactoryBean bean=new ShiroFilterFactoryBean();
         bean.setSecurityManager(securityManager);
-//        LinkedHashMap<String,String> filterMap=new LinkedHashMap<>();
-//        filterMap.put("/index","authc");
+        bean.setLoginUrl("/login");
+       LinkedHashMap<String,String> filterChainDefinitionMap=new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/sys_user/login", "anon");
+        filterChainDefinitionMap.put("/**", "authc");
+//        filterMap.put("http://192.168.1.25:8000//sys_user/login","anon");
 //        filterMap.put("/login","anon");
-        //bean.setFilterChainDefinitionMap(filterMap);
+       bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         //自定义拦截器
         Map<String, Filter> customFilterMap = new LinkedHashMap<>();
         customFilterMap.put("corsAuthenticationFilter", new CORSAuthenticationFilter());
+        customFilterMap.put("kickout", kickoutSessionFilter());
+        customFilterMap.put("authc", new ShiroFormAuthenticationFilter());
         bean.setFilters(customFilterMap);
+//        filterMap.put("/**", "corsAuthenticationFilter,kickout");
+//               bean.setFilterChainDefinitionMap(filterMap);
         return bean;
     }
 
@@ -45,8 +53,8 @@ public class ShiroConfig {
     public SecurityManager securityManager(@Qualifier("myShiroRelam") MyShiroRelam myShiroRelam,@Qualifier("sessionManager")SessionManager sessionManager){
         DefaultWebSecurityManager manager=new DefaultWebSecurityManager();
         //manager.setCacheManager(cacheManager());
-        manager.setCacheManager(ehCacheManager());
         manager.setSessionManager(sessionManager);
+        manager.setCacheManager(ehCacheManager());
         manager.setRealm(myShiroRelam);
         return manager;
     }
@@ -111,7 +119,22 @@ public class ShiroConfig {
         return new MemorySessionDAO();//使用默认的MemorySessionDAO
     }
 
-
+    /**
+     * 同一个用户多设备登录限制
+     */
+    public KickoutSessionFilter kickoutSessionFilter()
+    {
+        KickoutSessionFilter kickoutSessionFilter = new KickoutSessionFilter();
+        kickoutSessionFilter.setCacheManager(ehCacheManager());
+        kickoutSessionFilter.setSessionManager(sessionManager());
+        // 同一个用户最大的会话数，默认-1无限制；比如2的意思是同一个用户允许最多同时两个人登录
+        kickoutSessionFilter.setMaxSession(-1);
+        // 是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；踢出顺序
+        kickoutSessionFilter.setKickoutAfter(false);
+        // 被踢出后重定向到的地址；
+        kickoutSessionFilter.setKickoutUrl("http://192.168.1.16:8002/user/login");
+        return kickoutSessionFilter;
+    }
 
 //    //配置异常处理，不配置的话没有权限后台报错，前台不会跳转到403页面
 //    @Bean(name="simpleMappingExceptionResolver")

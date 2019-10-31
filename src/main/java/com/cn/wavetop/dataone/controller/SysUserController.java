@@ -16,9 +16,9 @@ public class SysUserController {
     private SysUserService sysUserService;
 
 
-    @ApiOperation(value = "添加", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "添加用户")
+    @ApiImplicitParam
     @PostMapping("/addUser")
-    public Object regist(@RequestBody SysUser sysUser,Long id) {
+    public Object regist(@RequestBody SysUser sysUser,String id) {
 
         return sysUserService.addSysUser(sysUser,id);
     }
