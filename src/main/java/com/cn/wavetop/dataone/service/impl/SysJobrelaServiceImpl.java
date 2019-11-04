@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.service.impl;
 
+import com.cn.wavetop.dataone.aop.MyLog;
 import com.cn.wavetop.dataone.aop.ServiceLogAspect;
 import com.cn.wavetop.dataone.dao.*;
 import com.cn.wavetop.dataone.entity.*;
@@ -438,8 +439,8 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Override
     public Object selJobrela(Integer current, Integer size) {
         Map<Object, Object> map = new HashMap<>();
-        if (!PermissionUtils.isPermitted("1")) {
-            Pageable pageable = new PageRequest(current - 1, size, Sort.Direction.DESC, "id");
+        if (PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")) {
+            Pageable pageable = new PageRequest(current - 1, size);
             List<SysJobrela> list = repository.findByUserId(PermissionUtils.getSysUser().getId(), pageable);
             List<SysJobrela> list2 = repository.findByUserId(PermissionUtils.getSysUser().getId());
             map.put("status", "1");
@@ -452,22 +453,64 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         return map;
     }
 
-    //根据用户id查询已经分配的任务 没写完
     @Override
     public Object selJobrelaByUserId(Long userId, String name, Integer current, Integer size) {
-        Map<Object, Object> map = new HashMap<>();
-        if (PermissionUtils.isPermitted("2")) {
-            Pageable pageable = new PageRequest(current - 1, size, Sort.Direction.DESC, "id");
-            List<SysJobrela> list = repository.findByUserId(PermissionUtils.getSysUser().getId(), pageable);
-            List<SysJobrela> list2 = repository.findByUserId(PermissionUtils.getSysUser().getId());
-            map.put("status", "1");
-            map.put("totalCount", list2.size());
-            map.put("data", list);
-        } else {
-            map.put("status", "0");
-            map.put("data", "权限不足");
-        }
-        return map;
+        return null;
     }
 
+//    //根据用户id查询已经分配的任务 没写完
+//    @Override
+//    public Object selJobrelaByUserId(Long userId, String name, Integer current, Integer size) {
+//        Map<Object, Object> map = new HashMap<>();
+//        if (PermissionUtils.isPermitted("2")) {
+//            Pageable pageable = new PageRequest(current - 1, size, Sort.Direction.DESC, "id");
+//            List<SysJobrela> list = repository.findByUserId(PermissionUtils.getSysUser().getId(), pageable);
+//            List<SysJobrela> list2 = repository.findByUserId(PermissionUtils.getSysUser().getId());
+//            map.put("status", "1");
+//            map.put("totalCount", list2.size());
+//            map.put("data", list);
+//        } else {
+//            map.put("status", "0");
+//            map.put("data", "权限不足");
+//        }
+//        return map;
+//    }
+
+    //根据用户名或者任务名或者全部的查询任务
+    public Object selJobrelaUser(String status,String name,Integer current,Integer size){
+        Pageable pageable = new PageRequest(current - 1, size);
+        Map<Object,Object> map=new HashMap<>();
+        List<SysJobrela> list=new ArrayList<>();
+        List<SysJobrela> data=new ArrayList<>();
+        if(PermissionUtils.isPermitted("2")) {
+            if (status.equals("1")) {
+                if (name != null && !"".equals(name)) {
+                    list = repository.findByUserNameJobName(PermissionUtils.getSysUser().getId(), name,PermissionUtils.getSysUser().getDeptId(), pageable);
+                    data = repository.findByUserNameJobName(PermissionUtils.getSysUser().getId(), name,PermissionUtils.getSysUser().getDeptId());
+                } else {
+                    list = repository.findByUserId(PermissionUtils.getSysUser().getId(), pageable);
+                    data = repository.findByUserId(PermissionUtils.getSysUser().getId());
+                }
+
+            } else if (status.equals("2")) {
+                List<SysUser> sysUserList = sysUserRepository.findAllByLoginName(name);
+                if(sysUserList!=null&&sysUserList.size()>0) {
+                    list = repository.findByUserId(sysUserList.get(0).getId(), pageable);
+                    data = repository.findByUserId(sysUserList.get(0).getId());
+                }
+            } else if (status.equals("3")) {
+                list = repository.findByUserIdJobName(PermissionUtils.getSysUser().getId(), name, pageable);
+                data = repository.findByUserIdJobName(PermissionUtils.getSysUser().getId(), name);
+
+            } else {
+                return ToDataMessage.builder().status("2").message("状态不对").build();
+            }
+            map.put("status", "1");
+            map.put("data", list);
+            map.put("totalCount", data.size());
+            return map;
+        }else{
+            return ToDataMessage.builder().status("0").message("权限不足").build();
+        }
+    }
 }

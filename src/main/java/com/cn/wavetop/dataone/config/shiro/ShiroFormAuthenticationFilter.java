@@ -26,12 +26,12 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         if (isLoginRequest(request, response)) {
             if (isLoginSubmission(request, response)) {
-
+                System.out.println("hahahhahahahahaha");
                 return executeLogin(request, response);
             } else {
-
-                //allow them to see the login page ;)
+                System.out.println("henghengehneg");
                 return true;
+                //allow them to see the login page ;)
             }
         } else {
             HttpServletRequest req = (HttpServletRequest)request;
@@ -44,7 +44,8 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
 
             //前端Ajax请求时requestHeader里面带一些参数，用于判断是否是前端的请求
             String ajaxHeader = req.getHeader("authToken");
-            if (ajaxHeader != null || req.getHeader("authToken") != null) {
+            if (ajaxHeader != null || req.getHeader("x-requested-with") != null) {
+                System.out.println("------wowowowowowowo");
                 //前端Ajax请求，则不会重定向
                 resp.setHeader("Access-Control-Allow-Origin",  req.getHeader("Origin"));
                 resp.setHeader("Access-Control-Allow-Credentials", "true");
@@ -53,11 +54,12 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
                 PrintWriter out = resp.getWriter();
                 Map<Object,Object> map=new HashMap<>();
                 map.put("message", "请重新登录！");
-                map.put("statusCode", -401);
+                map.put("status", "401");
                 out.println(map);
                 out.flush();
                 out.close();
             } else {
+               // return false;
                 saveRequestAndRedirectToLogin(request, response);
             }
             return false;

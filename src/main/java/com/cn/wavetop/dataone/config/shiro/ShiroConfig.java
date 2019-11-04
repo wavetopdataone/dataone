@@ -17,10 +17,12 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 
 @Configuration
 public class ShiroConfig {
@@ -30,21 +32,33 @@ public class ShiroConfig {
         ShiroFilterFactoryBean bean=new ShiroFilterFactoryBean();
         bean.setSecurityManager(securityManager);
         bean.setLoginUrl("/login");
-       LinkedHashMap<String,String> filterChainDefinitionMap=new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/login", "anon");
-        filterChainDefinitionMap.put("/sys_user/login", "anon");
-        filterChainDefinitionMap.put("/**", "authc");
-//        filterMap.put("http://192.168.1.25:8000//sys_user/login","anon");
-//        filterMap.put("/login","anon");
-       bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         //自定义拦截器
         Map<String, Filter> customFilterMap = new LinkedHashMap<>();
-        customFilterMap.put("corsAuthenticationFilter", new CORSAuthenticationFilter());
+       // customFilterMap.put("corsAuthenticationFilter", new CORSAuthenticationFilter());
+       //不能同时登录一个账号
         customFilterMap.put("kickout", kickoutSessionFilter());
+       //登录拦截判断
         customFilterMap.put("authc", new ShiroFormAuthenticationFilter());
+        //权限拦截判断
+       // customFilterMap.put("authorization", new ShiroRoleAuthorizationFilter());
         bean.setFilters(customFilterMap);
-//        filterMap.put("/**", "corsAuthenticationFilter,kickout");
-//               bean.setFilterChainDefinitionMap(filterMap);
+         //过滤器
+        LinkedHashMap<String,String> filterChainDefinitionMap=new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+        filterChainDefinitionMap.put("/v2/**", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/static/**", "anon");
+        filterChainDefinitionMap.put("/", "anon");
+        filterChainDefinitionMap.put("/login", "anon");
+       // filterChainDefinitionMap.put("/sys_user/login**", "anon");
+        filterChainDefinitionMap.put("/sys_user/login/", "anon");
+        filterChainDefinitionMap.put("/sys_user/login_out/", "anon");
+
+
+
+        //filterChainDefinitionMap.put("/**", "authc,kickout");
+              bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
 
@@ -105,6 +119,7 @@ public class ShiroConfig {
     }
     @Bean
     public CacheManager cacheManager() {
+
         return new MemoryConstrainedCacheManager();
     }
 
@@ -128,26 +143,26 @@ public class ShiroConfig {
         kickoutSessionFilter.setCacheManager(ehCacheManager());
         kickoutSessionFilter.setSessionManager(sessionManager());
         // 同一个用户最大的会话数，默认-1无限制；比如2的意思是同一个用户允许最多同时两个人登录
-        kickoutSessionFilter.setMaxSession(-1);
+        kickoutSessionFilter.setMaxSession(1);
         // 是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；踢出顺序
         kickoutSessionFilter.setKickoutAfter(false);
         // 被踢出后重定向到的地址；
-        kickoutSessionFilter.setKickoutUrl("http://192.168.1.16:8002/user/login");
+        kickoutSessionFilter.setKickoutUrl("/login");
         return kickoutSessionFilter;
     }
 
-//    //配置异常处理，不配置的话没有权限后台报错，前台不会跳转到403页面
-//    @Bean(name="simpleMappingExceptionResolver")
-//    public SimpleMappingExceptionResolver
-//    createSimpleMappingExceptionResolver() {
-//        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
-//        Properties mappings = new Properties();
-//        mappings.setProperty("DatabaseException", "databaseError");//数据库异常处理
-//        mappings.setProperty("UnauthorizedException","403");
-//        simpleMappingExceptionResolver.setExceptionMappings(mappings);  // None by default
-//        simpleMappingExceptionResolver.setDefaultErrorView("error");    // No default
-//        simpleMappingExceptionResolver.setExceptionAttribute("ex");     // Default is "exception"
-//        return simpleMappingExceptionResolver;
-//    }
+    //配置异常处理，不配置的话没有权限后台报错，前台不会跳转到403页面
+    @Bean(name="simpleMappingExceptionResolver")
+    public SimpleMappingExceptionResolver
+    createSimpleMappingExceptionResolver() {
+        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
+        Properties mappings = new Properties();
+        mappings.setProperty("DatabaseException", "databaseError");//数据库异常处理
+        mappings.setProperty("UnauthorizedException","403");
+        simpleMappingExceptionResolver.setExceptionMappings(mappings);  // None by default
+        simpleMappingExceptionResolver.setDefaultErrorView("error");    // No default
+        simpleMappingExceptionResolver.setExceptionAttribute("ex");     // Default is "exception"
+        return simpleMappingExceptionResolver;
+    }
 
 }

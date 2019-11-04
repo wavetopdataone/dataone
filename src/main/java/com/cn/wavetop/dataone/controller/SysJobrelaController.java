@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.controller;
 
+import com.cn.wavetop.dataone.aop.MyLog;
 import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.service.SysJobinfoService;
 import com.cn.wavetop.dataone.service.SysJobrelaService;
@@ -34,18 +35,20 @@ public class SysJobrelaController {
         return service.checkJobinfoById(id);
     }
 
+    @MyLog(value = "添加任务")
     @ApiOperation(value = "添加任务添加参与人", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "添加任务添加参与人")
     @PostMapping("/add_jobrela")
     public Object add_jobrela(@RequestBody  SysJobrela sysJobrela,@RequestParam(required = false) String names) {
         return service.addJobrela(sysJobrela,names);
     }
-
+    @MyLog(value = "修改任务")
     @ApiImplicitParam
     @PostMapping("/edit_jobrela")
     public Object edit_jobrela(@RequestBody SysJobrela sysJobrela) {
         System.out.println(sysJobrela);
         return service.editJobrela(sysJobrela);
     }
+    @MyLog(value = "删除任务")
     @ApiImplicitParam
     @PostMapping("/delete_jobrela")
     public Object delete_jobrela(Long id) {
@@ -75,20 +78,21 @@ public class SysJobrelaController {
     public Object some_jobrela(String job_status,Integer current,Integer size) {
         return service.someJobrela(job_status,current,size);
     }
-
+    @MyLog(value = "启动任务")
     @ApiImplicitParam
     @PostMapping("/start")
     public Object start(Long id) {
         return service.start(id);
     }
 
-
+    @MyLog(value = "暂停任务")
     @ApiImplicitParam
     @PostMapping("/pause")
     public Object pause(Long id) {
         return service.pause(id);
     }
 
+    @MyLog(value = "结束任务")
     @ApiImplicitParam
     @PostMapping("/end")
     public Object end(Long id) {
@@ -101,10 +105,16 @@ public class SysJobrelaController {
         return service.selJobrela(current,size);
     }
 
+    @MyLog(value = "为用户选任务")
     @ApiOperation(value = "为用户选任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为用户选任务")
     @PostMapping("/addUserJob")
     public Object addUserJobRela(Long userId,String jobrela_id) {
         return sysUserJobrelaService.addUserJobRela(userId,jobrela_id);
+    }
+    @ApiOperation(value = "根据用户名或任务名分页查询任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为用户选任务")
+    @PostMapping("/selJobrelaUser")
+    public Object selJobrelaUser(String status ,String name ,Integer current,Integer size) {
+        return service.selJobrelaUser(status,name,current,size);
     }
 
 }

@@ -26,7 +26,6 @@ public class PermissionUtils {
         {
          sysUser =(SysUser)subject.getPrincipal();
         }
-        System.out.println(sysUser+"-----------------------");
            return sysUser;
     }
 

@@ -33,4 +33,7 @@ public interface SysJobrelaService {
     Object selJobrela(Integer current,Integer size);
     //根据用户查询出该管理员下面已分配的任务
     Object selJobrelaByUserId(Long userId,String name,Integer current,Integer size);
+
+    Object selJobrelaUser(String status,String name,Integer current,Integer size);
+
 }

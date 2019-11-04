@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 登录帐号控制过滤器
@@ -35,7 +37,7 @@ public class KickoutSessionFilter extends AccessControlFilter
     /**
      * 同一个用户最大会话数
      **/
-    private int maxSession = -1;
+    private int maxSession = 1;
 
     /**
      * 踢出之前登录的/之后登录的用户 默认false踢出之前登录的用户
@@ -45,7 +47,7 @@ public class KickoutSessionFilter extends AccessControlFilter
     /**
      * 踢出后到的地址
      **/
-    private String kickoutUrl;
+    private String kickoutUrl="/login";
 
     private SessionManager sessionManager;
     private Cache<String, Deque<Serializable>> cache;
@@ -74,6 +76,9 @@ public class KickoutSessionFilter extends AccessControlFilter
             SysUser user = PermissionUtils.getSysUser();
             String loginName = user.getLoginName();
             Serializable sessionId = session.getId();
+            System.out.println(sessionId+"shayisi");
+            System.out.println(user+"34567812");
+            System.out.println(cache.get(loginName)+"3456781-----------cache");
 
             // 读取缓存用户 没有就存入
             Deque<Serializable> deque = cache.get(loginName);
@@ -150,7 +155,11 @@ public class KickoutSessionFilter extends AccessControlFilter
         HttpServletResponse res = (HttpServletResponse) response;
         if (ServletUtils.isAjaxRequest(req))
         {
-            ServletUtils.renderString(res, objectMapper.writeValueAsString("已在其他地方登录"));
+            Map<Object,Object> map=new HashMap<>();
+            map.put("status","402");
+            map.put("message","用户已在其他地方登录");
+
+            ServletUtils.renderString(res, objectMapper.writeValueAsString(map));
         }
         else
         {

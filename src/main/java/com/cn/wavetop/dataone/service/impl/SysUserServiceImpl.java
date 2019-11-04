@@ -88,6 +88,10 @@ public class SysUserServiceImpl implements SysUserService {
 //                    }
 //                    System.out.println("---------------------");
                     Serializable tokenId = subject.getSession().getId();
+
+
+                    Session session=subject.getSession();
+                    session.setAttribute("user",SecurityUtils.getSubject());
                     System.out.println(tokenId);
                    //美其效果
                     subject.getSession().setTimeout(36000*60*1000);
@@ -130,7 +134,7 @@ public class SysUserServiceImpl implements SysUserService {
         if(PermissionUtils.isPermitted("1")){
             list=sysUserRepository.findUserByUserPerms("2");
 
-            SysUserDept sysUserDept=new SysUserDept(PermissionUtils.getSysUser().getId(),PermissionUtils.getSysUser().getDeptId(),PermissionUtils.getSysUser().getLoginName(),PermissionUtils.getSysUser().getPassword(),PermissionUtils.getSysUser().getEmail(),"","超级管理员");
+            SysUserDept sysUserDept=new SysUserDept(PermissionUtils.getSysUser().getId(),PermissionUtils.getSysUser().getDeptId(),PermissionUtils.getSysUser().getLoginName(),PermissionUtils.getSysUser().getPassword(),PermissionUtils.getSysUser().getEmail(),"","超级管理员",PermissionUtils.getSysUser().getStatus());
             list.add(0,sysUserDept);
 
             map.put("status","1");
@@ -188,9 +192,11 @@ public class SysUserServiceImpl implements SysUserService {
         HashMap<Object,Object> map=new HashMap<>();
         SysUserRole sysUserRole=new SysUserRole();
         SysRoleMenu sysRoleMenu=new SysRoleMenu();
-
+       SysUser sysUser3 = sysUserRepository.findByEmail(sysUser.getEmail());
         if(list!=null&&list.size()>0) {
             return ToDataMessage.builder().status("0").message("用户已存在").build();
+        }else if(sysUser3!=null) {
+            return ToDataMessage.builder().status("0").message("邮箱已存在").build();
         }else{
             String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
             sysUser.setSalt(saltAndCiphertext[0]);
@@ -213,9 +219,9 @@ public class SysUserServiceImpl implements SysUserService {
                      sysUserRole.setUserId(sysUser1.get(0).getId());
                      sysUserRole.setRoleId(ids);
                      sysUserRoleRepository.save(sysUserRole);
-                     sysRoleMenu.setMenuId(ids);
-                     sysRoleMenu.setRoleId(ids);
-                     sysRoleMenuRepository.save(sysRoleMenu);
+//                     sysRoleMenu.setMenuId(ids);
+//                     sysRoleMenu.setRoleId(ids);
+//                     sysRoleMenuRepository.save(sysRoleMenu);
                      map.put("status","1");
                      map.put("perms","1");
                      map.put("id",suser.getId());
@@ -282,13 +288,13 @@ public class SysUserServiceImpl implements SysUserService {
                 if(result>0){
                     return ToDataMessage.builder().status("1").message("删除成功").build();
                 }else{
-                    return ToDataMessage.builder().status("2").message("删除失败").build();
+                    return ToDataMessage.builder().status("0").message("删除失败").build();
                 }
             }else{
                 return ToDataMessage.builder().status("0").message("用户不存在").build();
             }
             }else{
-                return ToDataMessage.builder().status("3").message("超级管理员不能删除编辑者").build();
+                return ToDataMessage.builder().status("0").message("超级管理员不能删除编辑者").build();
 
             }
         }catch (Exception e){
@@ -309,14 +315,22 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Object findByUserName(String userName) {
         List<SysUserDept> list=new ArrayList<>();
-        List<SysUserDept> sysUserDepts=new ArrayList<>();
         if(PermissionUtils.isPermitted("1")){
-            //超级管理员对管理员的模糊查询
-            list=sysUserRepository.findByUserName(userName);
-
+            if(userName!=null) {
+                //超级管理员对管理员的模糊查询
+                list = sysUserRepository.findByUserName(userName);
+            }else{
+                list=sysUserRepository.findUserByUserPerms("2");
+                SysUserDept sysUserDept=new SysUserDept(PermissionUtils.getSysUser().getId(),PermissionUtils.getSysUser().getDeptId(),PermissionUtils.getSysUser().getLoginName(),PermissionUtils.getSysUser().getPassword(),PermissionUtils.getSysUser().getEmail(),"","超级管理员",PermissionUtils.getSysUser().getStatus());
+                list.add(0,sysUserDept);
+            }
         }else if(PermissionUtils.isPermitted("2")){
+            if(userName!=null) {
             //该管理员所在部门的用户的模糊查询
             list=sysUserRepository.findByDeptUserName(PermissionUtils.getSysUser().getDeptId(),userName);
+            }else{
+            list=sysUserRepository.findUserByPerms(PermissionUtils.getSysUser().getId(),"1");
+            }
         }else{
            return ToDataMessage.builder().status("0").message("权限不足").build();
         }
@@ -340,6 +354,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional
     @Override
     public Object updateUser(Long id,Long DeptId) {
+        System.out.println(id+"-----------"+DeptId+"----------------");
         if(PermissionUtils.isPermitted("1")) {
             List<SysUser> list = sysUserRepository.findUserByDeptIdAndRoleKey(Long.valueOf(2),DeptId);
             if (list != null && list.size() > 0) {
@@ -351,11 +366,12 @@ public class SysUserServiceImpl implements SysUserService {
                 return ToDataMessage.builder().status("1").message("用户分组成功").build();
             }
         }else{
-            return ToDataMessage.builder().status("2").message("权限不足").build();
+            return ToDataMessage.builder().status("0").message("权限不足").build();
         }
     }
 
     //冻结用户或者解冻 //冻结用户status：0是冻结用户
+    @Transactional
     @Override
     public Object updateStatus(Long id, String status) {
         //查询冻结的用户是什么角色
@@ -399,7 +415,7 @@ public class SysUserServiceImpl implements SysUserService {
                 map.put("message","管理员只能冻结编辑者");
             }
         }else{
-            map.put("status","3");
+            map.put("status","0");
             map.put("message","权限不足");
         }
         return map;
@@ -429,13 +445,42 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Object HandedTeam(Long id, Long userId) {
         if(PermissionUtils.isPermitted("1")){
-            sysUserRepository.deleteById(id);
-            sysUserRoleRepository.deleteByUserId(userId);
-            sysUserJobrelaRepository.deleteByUserId(userId);
-            sysUserRepository.updataById(id,userId);
-            return  ToDataMessage.builder().status("1").message("团队已移交").build();
+            Optional<SysUser> sysUser= sysUserRepository.findById(id);
+            Optional<SysUser> sysUser2= sysUserRepository.findById(userId);
+            if(sysUser!=null&&sysUser2!=null) {
+                sysUserRepository.deleteById(id);
+                sysUserRoleRepository.deleteByUserId(userId);
+                sysUserJobrelaRepository.deleteByUserId(userId);
+                sysUserRepository.updataById(id, userId);
+                return ToDataMessage.builder().status("1").message("团队已移交").build();
+            }else{
+                return ToDataMessage.builder().status("0").message("不存在用户").build();
+            }
         }else{
-           return  ToDataMessage.builder().status("2").message("权限不足").build();
+           return  ToDataMessage.builder().status("0").message("权限不足").build();
+        }
+    }
+
+    @Override
+    public Object seleUserBystatus(String status) {
+        if(PermissionUtils.isPermitted("2")){
+            if(status.equals("2")){
+                List<SysUserDept> list= sysUserRepository.findUserByDeptId("3",PermissionUtils.getSysUser().getDeptId());
+                return ToData.builder().status("1").data(list).build();
+            }else{
+                return ToData.builder().status("1").build();
+            }
+        }else{
+            return ToDataMessage.builder().status("0").message("权限不足").build();
+        }
+    }
+    //超级管理员移交权限根据管理员id查询出编辑者
+    public Object selectUserByParentId(Long userId) {
+        if(PermissionUtils.isPermitted("1")){
+            List<SysUserDept> list=sysUserRepository.findUserByUserId(userId,"3");
+            return ToData.builder().status("1").data(list).build();
+        }else{
+          return  ToDataMessage.builder().status("0").message("权限不足").build();
         }
     }
 }

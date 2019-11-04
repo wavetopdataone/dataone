@@ -27,8 +27,8 @@ public class SysUserDept {
     private String deptName;
     /** 角色 */
     private String roleName;
-
-    public SysUserDept(Long userId, Long deptId, String loginName,String password, String email, String deptName, String roleName) {
+    private String status;
+    public SysUserDept(Long userId, Long deptId, String loginName,String password, String email, String deptName, String roleName,String status) {
         this.userId = userId;
         this.deptId = deptId;
         this.loginName = loginName;
@@ -36,5 +36,6 @@ public class SysUserDept {
         this.email = email;
         this.deptName = deptName;
         this.roleName = roleName;
+        this.status = status;
     }
 }

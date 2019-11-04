@@ -18,4 +18,6 @@ public interface SysUserService  {
     Object updateStatus(Long id,String status);
     Object selSysUser(Long userId);
     Object HandedTeam(Long id,Long userId);
+    Object seleUserBystatus(String status);
+    Object selectUserByParentId(Long userId);
 }

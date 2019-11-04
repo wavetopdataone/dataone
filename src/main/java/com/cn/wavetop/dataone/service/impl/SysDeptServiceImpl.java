@@ -5,6 +5,7 @@ import com.cn.wavetop.dataone.dao.SysUserJobrelaRepository;
 import com.cn.wavetop.dataone.dao.SysUserRepository;
 import com.cn.wavetop.dataone.dao.SysUserRoleRepository;
 import com.cn.wavetop.dataone.entity.SysDept;
+import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.entity.SysUser;
 import com.cn.wavetop.dataone.entity.SysUserRole;
 import com.cn.wavetop.dataone.entity.vo.SysUserDeptVo;
@@ -13,6 +14,10 @@ import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysDeptService;
 import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,11 +38,14 @@ public class SysDeptServiceImpl implements SysDeptService {
     @Override
     public Object selDept() {
         Map<Object,Object> map=new HashMap<>();
-       List<SysDept> list=sysDeptRepository.findAll();
+        //Pageable pageable = new PageRequest(current - 1, size, Sort.Direction.DESC, "id");
+        //Page<SysDept> list = sysDeptRepository.findAll(pageable);
+        List<SysDept> list=sysDeptRepository.findAll();
         SysUserDeptVo sysUserDeptVo;
        List<SysUserDeptVo> userDeptVoList=new ArrayList<>();
        int index=0;
        if(PermissionUtils.isPermitted("1")) {
+          // for (SysDept sysDept : list.getTotalElements()) {
            for (SysDept sysDept : list) {
                sysUserDeptVo = new SysUserDeptVo(sysDept.getId(), sysDept.getDeptName(), sysUserRepository.countByDeptIdandPerms(sysDept.getId()));
                if(sysUserDeptVo.getCountUser()==0){
@@ -53,12 +61,17 @@ public class SysDeptServiceImpl implements SysDeptService {
        }else if(PermissionUtils.isPermitted("2")){
          Optional<SysUser> sysUser= sysUserRepository.findById(PermissionUtils.getSysUser().getId());
          Optional<SysDept> sysDept=sysDeptRepository.findById(sysUser.get().getDeptId());
-         List<SysUser> lists=sysUserRepository.findByDeptId(sysUser.get().getDeptId());
-           sysUserDeptVo = new SysUserDeptVo(sysDept.get().getId(),sysDept.get().getDeptName(),Long.valueOf(lists.size()));
-           userDeptVoList.add(sysUserDeptVo);
-           map.put("status","1");
-           map.put("data",userDeptVoList);
-           map.put("size",userDeptVoList.size());
+         if(sysDept!=null) {
+             List<SysUser> lists = sysUserRepository.findByDeptId(sysUser.get().getDeptId());
+             sysUserDeptVo = new SysUserDeptVo(sysDept.get().getId(), sysDept.get().getDeptName(), Long.valueOf(lists.size()));
+             userDeptVoList.add(sysUserDeptVo);
+             map.put("status", "1");
+             map.put("data", userDeptVoList);
+             map.put("size", userDeptVoList.size());
+         }else{
+             return ToData.builder().status("2").message("该用户没有分组").build();
+
+         }
        }else{
            return ToData.builder().status("0").message("权限不足").build();
        }

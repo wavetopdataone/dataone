@@ -56,10 +56,20 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
     List<SysJobrela>  findByUserIdJobName(Long userId,String job_name,Pageable pageable);
     @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId  and sj.jobName like CONCAT('%',:job_name,'%') and u.id=:userId order by sj.id desc")
     List<SysJobrela>  findByUserIdJobName(Long userId,String job_name);
+
     //根據用戶id和狀態的模糊查詢分頁
     @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId and u.id=:userId and sj.jobStatus like CONCAT(:jobstatus,'%') order by sj.id desc")
     List<SysJobrela>  findByUserIdJobStatus(Long userId,String jobstatus,Pageable pageable);
     @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId and u.id=:userId and sj.jobStatus like CONCAT(:jobstatus,'%') order by sj.id desc")
     List<SysJobrela>  findByUserIdJobStatus(Long userId,String jobstatus);
 
+    //根據用戶名称或者任務名的模糊查詢分頁
+@Query(nativeQuery = true,value = "select * from sys_jobrela j,sys_user u,sys_user_jobrela uj where u.id=uj.user_id and uj.jobrela_id=j.id  and \n" +
+        " ( j.job_name like CONCAT('%',?2,'%') and u.id=?1) or(u.id in (select su.id from sys_user su ,sys_role r,sys_user_role ur where su.id=ur.user_id and ur.role_id=r.id and r.role_key='3' and su.dept_id=?3 and u.login_name like CONCAT('%',?1,'%'))) order by j.id desc")
+     List<SysJobrela> findByUserNameJobName(Long userId, String job_name,Long deptId, Pageable pageable);
+
+
+    @Query(nativeQuery = true,value = "select * from sys_jobrela j,sys_user u,sys_user_jobrela uj where u.id=uj.user_id and uj.jobrela_id=j.id  and \n" +
+            " ( j.job_name like CONCAT('%',?2,'%') and u.id=?1) or(u.id in (select su.id from sys_user su ,sys_role r,sys_user_role ur where su.id=ur.user_id and ur.role_id=r.id and r.role_key='3' and su.dept_id=?3 and u.login_name like CONCAT('%',?1,'%'))) order by j.id desc")
+    List<SysJobrela>  findByUserNameJobName(Long userId,String job_name,Long deptId);
 }

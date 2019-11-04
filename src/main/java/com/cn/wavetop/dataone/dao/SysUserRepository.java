@@ -30,20 +30,20 @@ public interface SysUserRepository extends JpaRepository<SysUser,Long> {
     @Query("select u from SysUser u where u.deptId=:deptId")
     List<SysUser> findUser(Long deptId);
 
-    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName) from SysUser u,SysRole r,SysUserRole ur,SysDept d where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and r.roleKey=:perms order by u.id")
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName,u.status) from SysUser u,SysRole r,SysUserRole ur,SysDept d where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and r.roleKey=:perms order by u.id")
     List<SysUserDept>   findUserByUserPerms(String perms);
-    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName) from SysUser u,SysRole r,SysUserRole ur,SysDept d where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and u.deptId=(select su.deptId from SysUser su where su.id=:userId) and r.roleKey<>:perms order by u.id")
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName,u.status) from SysUser u,SysRole r,SysUserRole ur,SysDept d where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and u.deptId=(select su.deptId from SysUser su where su.id=:userId) and r.roleKey<>:perms order by u.id")
     List<SysUserDept> findUserByPerms(Long userId,String perms);
 
 //根据超级管理员模糊查询用户名显示管理员
-    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName) from SysUser u ,SysUserRole ur,SysRole r,SysDept d where u.id=ur.userId and ur.roleId=r.id and r.id=2 and u.deptId=d.id and u.loginName LIKE CONCAT('%',:userName,'%') order by u.id")
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName,u.status) from SysUser u ,SysUserRole ur,SysRole r,SysDept d where u.id=ur.userId and ur.roleId=r.id and r.id=2 and u.deptId=d.id and u.loginName LIKE CONCAT('%',:userName,'%') or u.email LIKE CONCAT('%',:userName,'%') order by u.id")
     List<SysUserDept> findByUserName(String userName);
 
     //根据管理员模糊查询用户名显示当前部门的用户
-    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName) from SysUser u ,SysUserRole ur,SysRole r,SysDept d  where u.id=ur.userId and ur.roleId=r.id and r.id=3 and u.deptId=d.id and u.deptId=:deptId and u.loginName LIKE CONCAT('%',:userName,'%') order by u.id ")
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName,u.status) from SysUser u ,SysUserRole ur,SysRole r,SysDept d  where u.id=ur.userId and ur.roleId=r.id and r.id=3 and u.deptId=d.id and u.deptId=:deptId and u.loginName LIKE CONCAT('%',:userName,'%') or u.email LIKE CONCAT('%',:userName,'%') order by u.id ")
     List<SysUserDept> findByDeptUserName(Long deptId,String userName);
    //根据组名查询用户
-    @Query("select  new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName) from SysUser u,SysUserRole ur,SysRole r,SysDept d  where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and r.roleKey=:perms and u.deptId=:deptId order by u.id")
+    @Query("select  new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName,u.status) from SysUser u,SysUserRole ur,SysRole r,SysDept d  where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and r.roleKey=:perms and u.deptId=:deptId order by u.id")
     List<SysUserDept> findUserByDeptId(String perms,Long deptId);
 
     //根据部门编号和角色查找用户
@@ -53,7 +53,7 @@ public interface SysUserRepository extends JpaRepository<SysUser,Long> {
     @Query("select  r from SysRole r  where r.id in (select ur.roleId from SysUserRole ur where ur.userId=:id)")
     List<SysRole> findUserById(Long id);
     //根据用户编号和角色查找用户角色部门信息
-    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName) from SysUser u,SysUserRole ur,SysRole r,SysDept d  where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and r.id=:roleId and u.id=:userId ")
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName,u.status) from SysUser u,SysUserRole ur,SysRole r,SysDept d  where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and r.id=:roleId and u.id=:userId ")
     List<SysUserDept> findUserByUserIdAndRoleKey(Long roleId,Long userId);
 
 
@@ -64,4 +64,6 @@ public interface SysUserRepository extends JpaRepository<SysUser,Long> {
     @Query("delete from SysUser where id=:id")
     void deleteById(Long id);
 
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName,u.status) from SysUser u,SysRole r,SysUserRole ur,SysDept d where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and u.deptId=(select su.deptId from SysUser su where su.id=:userId) and r.roleKey=:perms order by u.id")
+    List<SysUserDept> findUserByUserId(Long userId,String perms);
 }
