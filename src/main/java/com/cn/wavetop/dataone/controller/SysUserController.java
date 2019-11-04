@@ -59,7 +59,6 @@ public class SysUserController {
 
         return sysUserService.update(sysUser);
     }
-    @MyLog(value = "退出登录")
     @ApiOperation(value = "退出登录",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "退出登录")
     @PostMapping("/login_out")
     public Object loginOut(){
