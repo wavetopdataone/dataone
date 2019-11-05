@@ -1,14 +1,9 @@
 package com.cn.wavetop.dataone.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.cn.wavetop.dataone.config.shiro.CredentialMatcher;
-import com.cn.wavetop.dataone.dao.SysRoleMenuRepository;
-import com.cn.wavetop.dataone.dao.SysUserJobrelaRepository;
-import com.cn.wavetop.dataone.dao.SysUserRepository;
-import com.cn.wavetop.dataone.dao.SysUserRoleRepository;
-import com.cn.wavetop.dataone.entity.SysRole;
-import com.cn.wavetop.dataone.entity.SysRoleMenu;
-import com.cn.wavetop.dataone.entity.SysUser;
-import com.cn.wavetop.dataone.entity.SysUserRole;
+import com.cn.wavetop.dataone.dao.*;
+import com.cn.wavetop.dataone.entity.*;
 import com.cn.wavetop.dataone.entity.vo.SysUserDept;
 import com.cn.wavetop.dataone.entity.vo.SysUserRoleVo;
 import com.cn.wavetop.dataone.entity.vo.ToData;
@@ -45,6 +40,10 @@ public class SysUserServiceImpl implements SysUserService {
     private SysRoleMenuRepository sysRoleMenuRepository;
     @Autowired
     private SysUserJobrelaRepository sysUserJobrelaRepository;
+    @Autowired
+    private SysLogRepository sysLogRepository;
+    @Autowired
+    private SysDeptRepository sysDeptRepository;
     @Autowired
     public SysUserServiceImpl(SessionDAO a) {
         this.sessionDAO = a;
@@ -101,6 +100,28 @@ public class SysUserServiceImpl implements SysUserService {
                     map.put("status", "1");
                     map.put("authToken", tokenId);
                     map.put("data", s);
+
+                    SysLog sysLog=new SysLog();
+                    sysLog.setCreateDate(new Date());
+                    if(PermissionUtils.getSysUser().getDeptId()!=0&&PermissionUtils.getSysUser().getDeptId()!=null) {
+                        //获取部门信息
+                        Optional<SysDept> sysDepts = sysDeptRepository.findById(PermissionUtils.getSysUser().getDeptId());
+                        String deptName = "";
+                        if (sysDepts != null) {
+                            deptName = sysDepts.get().getDeptName();
+                            sysLog.setDeptName(deptName);
+                        }
+                    }
+                    sysLog.setIp(session.getHost());
+                    sysLog.setMethod("com.cn.wavetop.dataone.controller.SysUserController.login");
+                    Object[] args=null;
+
+                    String params = JSON.toJSONString(args);
+                    sysLog.setParams(params);
+                    sysLog.setOperation("登录");
+                    sysLog.setRoleName(s.get(0).getRoleName());
+                    sysLog.setUsername(name);
+                    sysLogRepository.save(sysLog);
                 }else{
                     map.put("status", "3");
                     map.put("message", "账号被冻结");
@@ -121,6 +142,33 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Object loginOut() {
         Subject subject= SecurityUtils.getSubject();
+
+        SysLog sysLog=new SysLog();
+        sysLog.setCreateDate(new Date());
+        if(PermissionUtils.getSysUser().getDeptId()!=0&&PermissionUtils.getSysUser().getDeptId()!=null) {
+            //获取部门信息
+            Optional<SysDept> sysDepts = sysDeptRepository.findById(PermissionUtils.getSysUser().getDeptId());
+            String deptName = "";
+            if (sysDepts != null) {
+                deptName = sysDepts.get().getDeptName();
+                sysLog.setDeptName(deptName);
+            }
+        }
+        //获取角色信息
+        List<SysRole> sysRoles= sysUserRepository.findUserById(PermissionUtils.getSysUser().getId());
+        String roleName = "";
+        if(sysRoles!=null&&sysRoles.size()>0) {
+            roleName = sysRoles.get(0).getRoleName();
+            sysLog.setRoleName(roleName);
+        }
+        sysLog.setIp(subject.getSession().getHost());
+        sysLog.setMethod("com.cn.wavetop.dataone.controller.SysUserController.loginOut");
+        Object[] args=null;
+        String params = JSON.toJSONString(args);
+        sysLog.setParams(params);
+        sysLog.setOperation("退出登录");
+        sysLog.setUsername(PermissionUtils.getSysUser().getLoginName());
+        sysLogRepository.save(sysLog);
         subject.logout();
         return ToDataMessage.builder().status("1").message("退出成功").build();
     }
@@ -170,9 +218,11 @@ public class SysUserServiceImpl implements SysUserService {
             sysUser1.get().setLoginName(sysUser.getLoginName());
             sysUser1.get().setEmail(sysUser.getEmail());
             sysUser1.get().setUserName(sysUser.getLoginName());
-            String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
-            sysUser1.get().setSalt(saltAndCiphertext[0]);
-            sysUser1.get().setPassword(saltAndCiphertext[1]);
+            if(sysUser.getPassword()!=null&&sysUser.getPassword()!="") {
+                String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
+                sysUser1.get().setSalt(saltAndCiphertext[0]);
+                sysUser1.get().setPassword(saltAndCiphertext[1]);
+            }
             sysUser1.get().setStatus("1");
             sysUser1.get().setUpdateUser(PermissionUtils.getSysUser().getLoginName());
             sysUser1.get().setUpdateTime(PermissionUtils.getSysUser().getCreateTime());

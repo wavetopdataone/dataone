@@ -57,7 +57,7 @@ public class ShiroConfig {
 
 
 
-        //filterChainDefinitionMap.put("/**", "authc,kickout");
+       // filterChainDefinitionMap.put("/**", "authc,kickout");
               bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
@@ -77,6 +77,8 @@ public class ShiroConfig {
     public MyShiroRelam  myShiroRelam(@Qualifier("credentialsMatcher") CredentialMatcher matcher){
       MyShiroRelam myShiroRelam=new MyShiroRelam();
       myShiroRelam.setCredentialsMatcher(matcher);
+
+     // myShiroRelam.setCacheManager(ehCacheManager());
         return myShiroRelam;
     }
 
@@ -107,6 +109,8 @@ public class ShiroConfig {
     public SessionManager sessionManager(){
         ShiroSessionManager sessionManager = new ShiroSessionManager();
         sessionManager.setSessionDAO(new EnterpriseCacheSessionDAO());
+        // 删除过期的session
+        sessionManager.setDeleteInvalidSessions(true);
 
 //        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 //        sessionManager.setSessionDAO(sessionDAO());
@@ -126,6 +130,13 @@ public class ShiroConfig {
     @Bean
     public EhCacheManager ehCacheManager() {
         EhCacheManager cacheManager = new EhCacheManager();
+        //ry的意思跟我這個一樣的吧
+//        net.sf.ehcache.CacheManager cacheManagers = net.sf.ehcache.CacheManager.getCacheManager("es");
+//        if(cacheManagers==null) {
+//            cacheManager.setCacheManager(new net.sf.ehcache.CacheManager());
+//        }else{
+//            cacheManager.setCacheManager(cacheManagers);
+//        }
         cacheManager.setCacheManagerConfigFile("classpath:ehcache-shiro.xml");
         return cacheManager;
     }
@@ -152,17 +163,17 @@ public class ShiroConfig {
     }
 
     //配置异常处理，不配置的话没有权限后台报错，前台不会跳转到403页面
-    @Bean(name="simpleMappingExceptionResolver")
-    public SimpleMappingExceptionResolver
-    createSimpleMappingExceptionResolver() {
-        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
-        Properties mappings = new Properties();
-        mappings.setProperty("DatabaseException", "databaseError");//数据库异常处理
-        mappings.setProperty("UnauthorizedException","403");
-        simpleMappingExceptionResolver.setExceptionMappings(mappings);  // None by default
-        simpleMappingExceptionResolver.setDefaultErrorView("error");    // No default
-        simpleMappingExceptionResolver.setExceptionAttribute("ex");     // Default is "exception"
-        return simpleMappingExceptionResolver;
-    }
+//    @Bean(name="simpleMappingExceptionResolver")
+//    public SimpleMappingExceptionResolver
+//    createSimpleMappingExceptionResolver() {
+//        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
+//        Properties mappings = new Properties();
+//        mappings.setProperty("DatabaseException", "databaseError");//数据库异常处理
+//        mappings.setProperty("UnauthorizedException","403");
+//        simpleMappingExceptionResolver.setExceptionMappings(mappings);  // None by default
+//        simpleMappingExceptionResolver.setDefaultErrorView("error");    // No default
+//        simpleMappingExceptionResolver.setExceptionAttribute("ex");     // Default is "exception"
+//        return simpleMappingExceptionResolver;
+//    }
 
 }

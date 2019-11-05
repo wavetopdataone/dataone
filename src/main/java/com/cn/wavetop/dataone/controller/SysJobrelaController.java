@@ -36,10 +36,10 @@ public class SysJobrelaController {
     }
 
     @MyLog(value = "添加任务")
-    @ApiOperation(value = "添加任务添加参与人", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "添加任务添加参与人")
+    @ApiOperation(value = "添加任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "添加任务添加参与人")
     @PostMapping("/add_jobrela")
-    public Object add_jobrela(@RequestBody  SysJobrela sysJobrela,@RequestParam(required = false) String names) {
-        return service.addJobrela(sysJobrela,names);
+    public Object add_jobrela(@RequestBody  SysJobrela sysJobrela) {
+        return service.addJobrela(sysJobrela);
     }
     @MyLog(value = "修改任务")
     @ApiImplicitParam
@@ -113,8 +113,28 @@ public class SysJobrelaController {
     }
     @ApiOperation(value = "根据用户名或任务名分页查询任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为用户选任务")
     @PostMapping("/selJobrelaUser")
-    public Object selJobrelaUser(String status ,String name ,Integer current,Integer size) {
-        return service.selJobrelaUser(status,name,current,size);
+    public Object selJobrelaUser(String status ,String name ) {
+        return service.selJobrelaUser(status,name);
+    }
+    @ApiOperation(value = "根据用户查询任务默认被勾选", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "根据用户查询任务默认被勾选")
+    @PostMapping("/selJobrelaChecked")
+    public Object selJobrelaChecked(Long userId) {
+        return service.seleJobrelaByUser(userId);
+    }
+    @ApiOperation(value = "根据任务id获取参与人", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "根据任务id获取参与人")
+    @PostMapping("/selUserByJobId")
+    public Object selUserByJobId(Long jobId) {
+        return service.selUserByJobId(jobId);
+    }
+    @ApiOperation(value = "为任务选择参与人", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为任务选择参与人")
+    @PostMapping("/addUserByJobId")
+    public Object addUserByJobId(Long jobId,String userId) {
+        return service.addUserByJobId(jobId,userId);
     }
 
+    @ApiOperation(value = "后台查询", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "后台查询")
+    @GetMapping("/findById")
+    public Object findById(Long jobId) {
+        return service.findById(jobId);
+    }
 }

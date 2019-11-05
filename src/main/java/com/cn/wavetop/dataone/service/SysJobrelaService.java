@@ -11,7 +11,7 @@ public interface SysJobrelaService {
 
     Object checkJobinfoById(long id);
 
-    Object addJobrela(SysJobrela sysJobrela,String names);
+    Object addJobrela(SysJobrela sysJobrela);
 
     Object editJobrela(SysJobrela sysJobrela);
 
@@ -34,6 +34,11 @@ public interface SysJobrelaService {
     //根据用户查询出该管理员下面已分配的任务
     Object selJobrelaByUserId(Long userId,String name,Integer current,Integer size);
 
-    Object selJobrelaUser(String status,String name,Integer current,Integer size);
+    Object selJobrelaUser(String status,String name);
 
+    Object seleJobrelaByUser(Long userId);
+
+    Object selUserByJobId(Long jobId);
+    Object addUserByJobId(Long jobId,String userId);
+    Object findById(Long jobId);
 }

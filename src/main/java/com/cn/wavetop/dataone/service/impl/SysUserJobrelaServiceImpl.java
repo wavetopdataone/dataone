@@ -10,6 +10,7 @@ import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -19,12 +20,14 @@ public class SysUserJobrelaServiceImpl implements SysUserJobrelaService {
     private SysUserJobrelaRepository sysUserJobrelaRepository;
     @Autowired
     private SysUserRepository sysUserRepository;
+    @Transactional
     @Override
     public Object addUserJobRela(Long userId, String jobrela_id) {
         if (!PermissionUtils.isPermitted("1")) {
             if (jobrela_id != null && !"".equals(jobrela_id) && !"undefined".equals(jobrela_id)) {
                 String[] jobrelas = jobrela_id.split(",");
                 Optional<SysUser> sysUser = sysUserRepository.findById(userId);
+                sysUserJobrelaRepository.deleteByUserId(userId);
                 for (int i = 0; i < jobrelas.length; i++) {
                     SysUserJobrela sysUserJobrela = new SysUserJobrela();
                     sysUserJobrela.setJobrelaId(Long.valueOf(jobrelas[i]));

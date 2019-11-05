@@ -2,6 +2,7 @@ package com.cn.wavetop.dataone.dao;
 
 import com.cn.wavetop.dataone.entity.SysFieldrule;
 import com.cn.wavetop.dataone.entity.SysJobrela;
+import com.cn.wavetop.dataone.entity.vo.SysJobrelaUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -72,4 +73,9 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
     @Query(nativeQuery = true,value = "select * from sys_jobrela j,sys_user u,sys_user_jobrela uj where u.id=uj.user_id and uj.jobrela_id=j.id  and \n" +
             " ( j.job_name like CONCAT('%',?2,'%') and u.id=?1) or(u.id in (select su.id from sys_user su ,sys_role r,sys_user_role ur where su.id=ur.user_id and ur.role_id=r.id and r.role_key='3' and su.dept_id=?3 and u.login_name like CONCAT('%',?1,'%'))) order by j.id desc")
     List<SysJobrela>  findByUserNameJobName(Long userId,String job_name,Long deptId);
+
+
+    @Query(value = "select new com.cn.wavetop.dataone.entity.vo.SysJobrelaUser(j.id,j.jobName,'0') from SysJobrela j,SysUser u,SysUserJobrela uj where u.id=uj.userId and uj.jobrelaId=j.id and u.id=:userId  order by uj.id desc")
+    List<SysJobrelaUser> findJobrelaByUserId(Long userId);
+
 }

@@ -130,6 +130,7 @@ public class DBConns {
             String num = iterator.next();
             if (set.contains(num)) {
                 iterator.remove();
+
             }
         }
         return list;

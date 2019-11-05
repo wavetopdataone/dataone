@@ -1,11 +1,54 @@
 package com.cn.wavetop.dataone;
 
+import com.cn.wavetop.dataone.dao.SysUserRepository;
 import com.cn.wavetop.dataone.entity.SysFieldrule;
+import com.cn.wavetop.dataone.entity.SysJobrela;
+import com.cn.wavetop.dataone.entity.SysUser;
+import com.cn.wavetop.dataone.entity.SysUserJobrela;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
 public class test {
+    @Test
+public void s(){
+
+    List<SysJobrela> list=new ArrayList<>();
+        SysJobrela sysUserJobrela=new SysJobrela();
+    sysUserJobrela.setId(Long.valueOf(95));
+    sysUserJobrela.setJobName("test1");
+        SysJobrela sysUserJobrela1=new SysJobrela();
+        sysUserJobrela1.setId(Long.valueOf(96));
+        sysUserJobrela1.setJobName("test2");
+    list.add(sysUserJobrela);
+    list.add(sysUserJobrela1);
+    List<SysJobrela> list1=new ArrayList<>();
+    SysJobrela sysUserJobrela2=new SysJobrela();
+        sysUserJobrela2.setId(Long.valueOf(95));
+        sysUserJobrela2.setJobName("test1");
+    list1.add(sysUserJobrela2);
+        for (SysJobrela str:list) {
+            if(list.contains(str)){
+                list.remove(str);
+            }
+        }
+        for (SysJobrela str:list1) {
+            str.setJobStatus("1");
+            list.add(str);
+        }
+//    for(SysJobrela set:list1){
+//        list.add(set);
+//    }
+//        Set set = new HashSet();
+//        List<SysJobrela> listNew=new ArrayList<>();
+//        set.addAll(list);
+//        listNew.addAll(set);
+    for (SysJobrela s:list){
+        System.out.println(s+"----");
+    }
+}
 
     @Test
     public void show() {

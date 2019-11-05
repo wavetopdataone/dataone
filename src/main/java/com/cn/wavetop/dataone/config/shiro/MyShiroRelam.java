@@ -65,5 +65,6 @@ public class MyShiroRelam extends AuthorizingRealm {
     public void clearCachedAuthorizationInfo()
     {
         this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
+
     }
 }
