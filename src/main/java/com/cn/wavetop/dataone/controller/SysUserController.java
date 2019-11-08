@@ -17,7 +17,6 @@ public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
 
-
     @ApiImplicitParam
     @PostMapping("/addUser")
     public Object regist(@RequestBody SysUser sysUser,String id) {
@@ -37,14 +36,12 @@ public class SysUserController {
     public Object findAll(){
         return sysUserService.findAll();
     }
-    @MyLog(value = "删除用户")
     @ApiOperation(value = "删除用户",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "删除用户")
     @PostMapping("/delete")
     public Object delete(String name){
 
         return sysUserService.delete(name);
     }
-    @MyLog(value = "给用户添加分组")
     @ApiOperation(value = "给用户添加分组",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "给用户添加分组")
     @ApiImplicitParam
     @PostMapping("/updateUser")
@@ -52,7 +49,6 @@ public class SysUserController {
 
         return sysUserService.updateUser(id,DeptId);
     }
-    @MyLog(value = "修改用户")
     @ApiOperation(value = "修改用户",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改用户")
     @PostMapping("/update")
     public Object update(@RequestBody SysUser sysUser){
@@ -90,7 +86,6 @@ public class SysUserController {
         return sysUserService.findUserByDept(deptId);
     }
 
-    @MyLog(value = "冻结用户")
     @ApiOperation(value = "冻结用户",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "冻结用户")
     @PostMapping("/updateStatus")
     public Object updateStatus(Long id ,String status){
@@ -120,7 +115,33 @@ public class SysUserController {
     @ApiOperation(value = "超级管理员移交权限根据管理员id查询出编辑者",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "超级管理员移交权限根据管理员id查询出编辑者")
     @PostMapping("/selectUser")
     public Object selectUserByParentId(Long userId ){
+
         return sysUserService.selectUserByParentId(userId);
+    }
+    @ApiOperation(value = "发送验证码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "发送验证码")
+    @PostMapping("/sendEmail")
+    public Object sendEmail(String email){
+
+        return sysUserService.sendEmail(email);
+    }
+    @ApiOperation(value = "验证码是否正确",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "验证码是否正确")
+    @PostMapping("/codeEquals")
+    public Object codeEquals(String authCode){
+
+        return sysUserService.codeEquals(authCode);
+    }
+    @ApiOperation(value = "修改密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改密码")
+    @PostMapping("/editPasswordByEmail")
+    public Object editPasswordByEmail(String email,String password){
+
+        return sysUserService.editPasswordByEmail(email,password);
+    }
+
+    @ApiOperation(value = "绑定超管邮箱和密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "绑定超管邮箱和密码")
+    @PostMapping("/bindEmail")
+    public Object  bindEmail(String email, String emailPassword){
+
+        return sysUserService.bindEmail(email,emailPassword);
     }
 
 }

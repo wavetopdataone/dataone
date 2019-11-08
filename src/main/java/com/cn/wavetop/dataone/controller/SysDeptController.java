@@ -24,19 +24,16 @@ public class SysDeptController {
         return sysDeptService.selDept();
     }
 
-    @MyLog(value = "添加分组")
     @ApiOperation(value = "添加分组", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "添加分组")
     @PostMapping("/add_dept")
     public Object addDept(@RequestBody SysDept sysDept) {
         return sysDeptService.addDept(sysDept);
     }
-    @MyLog(value = "修改分组")
     @ApiOperation(value = "修改分组", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "修改分组")
     @PostMapping("/edit_dept")
     public Object updatDept(@RequestBody SysDept sysDept) {
         return sysDeptService.updatDept(sysDept);
     }
-    @MyLog(value = "删除分组")
     @ApiOperation(value = "删除分组", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "删除分组")
     @PostMapping("/del_dept")
     public Object delDept(String deptName) {

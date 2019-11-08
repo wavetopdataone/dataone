@@ -32,7 +32,7 @@ public interface SysJobrelaService {
     //根据用户查询出该管理员下面的任务
     Object selJobrela(Integer current,Integer size);
     //根据用户查询出该管理员下面已分配的任务
-    Object selJobrelaByUserId(Long userId,String name,Integer current,Integer size);
+   // Object selJobrelaByUserId(Long userId,String name,Integer current,Integer size);
 
     Object selJobrelaUser(String status,String name);
 
@@ -41,4 +41,7 @@ public interface SysJobrelaService {
     Object selUserByJobId(Long jobId);
     Object addUserByJobId(Long jobId,String userId);
     Object findById(Long jobId);
+
+    Object findUserJob(Long userId);
+    Object findUserJobNo(Long userId);
 }

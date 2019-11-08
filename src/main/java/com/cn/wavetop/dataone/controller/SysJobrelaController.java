@@ -35,20 +35,21 @@ public class SysJobrelaController {
         return service.checkJobinfoById(id);
     }
 
-    @MyLog(value = "添加任务")
+
     @ApiOperation(value = "添加任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "添加任务添加参与人")
     @PostMapping("/add_jobrela")
     public Object add_jobrela(@RequestBody  SysJobrela sysJobrela) {
+
         return service.addJobrela(sysJobrela);
     }
-    @MyLog(value = "修改任务")
+
     @ApiImplicitParam
     @PostMapping("/edit_jobrela")
     public Object edit_jobrela(@RequestBody SysJobrela sysJobrela) {
         System.out.println(sysJobrela);
         return service.editJobrela(sysJobrela);
     }
-    @MyLog(value = "删除任务")
+
     @ApiImplicitParam
     @PostMapping("/delete_jobrela")
     public Object delete_jobrela(Long id) {
@@ -78,32 +79,32 @@ public class SysJobrelaController {
     public Object some_jobrela(String job_status,Integer current,Integer size) {
         return service.someJobrela(job_status,current,size);
     }
-    @MyLog(value = "启动任务")
+
     @ApiImplicitParam
     @PostMapping("/start")
     public Object start(Long id) {
         return service.start(id);
     }
 
-    @MyLog(value = "暂停任务")
+
     @ApiImplicitParam
     @PostMapping("/pause")
     public Object pause(Long id) {
         return service.pause(id);
     }
 
-    @MyLog(value = "结束任务")
+
     @ApiImplicitParam
     @PostMapping("/end")
     public Object end(Long id) {
         return service.end(id);
     }
 
-    @ApiOperation(value = "管理员编辑者查看任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "管理员编辑者查看任务")
-    @PostMapping("/sel_jobrela")
-    public Object selJobrela(Integer current,Integer size) {
-        return service.selJobrela(current,size);
-    }
+//    @ApiOperation(value = "管理员编辑者查看任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "管理员编辑者查看任务")
+//    @PostMapping("/sel_jobrela")
+//    public Object selJobrela(Integer current,Integer size) {
+//        return service.selJobrela(current,size);
+//    }
 
     @MyLog(value = "为用户选任务")
     @ApiOperation(value = "为用户选任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为用户选任务")
@@ -129,12 +130,29 @@ public class SysJobrelaController {
     @ApiOperation(value = "为任务选择参与人", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为任务选择参与人")
     @PostMapping("/addUserByJobId")
     public Object addUserByJobId(Long jobId,String userId) {
+
         return service.addUserByJobId(jobId,userId);
     }
 
     @ApiOperation(value = "后台查询", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "后台查询")
     @GetMapping("/findById")
     public Object findById(Long jobId) {
+
         return service.findById(jobId);
+    }
+    @ApiOperation(value = "删除该用户绑定的任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "删除该用户绑定的任务")
+    @PostMapping("/deleteUserJobRela")
+    public Object deleteUserJobRela(Long userId,String jobrela_id) {
+        return sysUserJobrelaService.deleteUserJobRela(userId,jobrela_id);
+    }
+    @ApiOperation(value = "查询用户参与的任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户没有参与的任务")
+    @PostMapping("/findUserJob")
+    public Object findUserJob(Long userId) {
+        return service.findUserJob(userId);
+    }
+    @ApiOperation(value = "查询用户没有参与的任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户参与的任务")
+    @PostMapping("/findUserJobNo")
+    public Object findUserJobNo(Long userId) {
+        return service.findUserJobNo(userId);
     }
 }

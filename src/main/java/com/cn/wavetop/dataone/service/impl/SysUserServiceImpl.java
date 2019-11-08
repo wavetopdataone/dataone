@@ -9,6 +9,8 @@ import com.cn.wavetop.dataone.entity.vo.SysUserRoleVo;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysUserService;
+import com.cn.wavetop.dataone.util.EmailUtils;
+import com.cn.wavetop.dataone.util.LogUtil;
 import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -31,13 +33,10 @@ import java.util.*;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
-    private final SessionDAO sessionDAO;
     @Autowired
     private SysUserRepository sysUserRepository;
     @Autowired
     private SysUserRoleRepository sysUserRoleRepository;
-    @Autowired
-    private SysRoleMenuRepository sysRoleMenuRepository;
     @Autowired
     private SysUserJobrelaRepository sysUserJobrelaRepository;
     @Autowired
@@ -45,16 +44,20 @@ public class SysUserServiceImpl implements SysUserService {
     @Autowired
     private SysDeptRepository sysDeptRepository;
     @Autowired
-    public SysUserServiceImpl(SessionDAO a) {
-        this.sessionDAO = a;
-
-    }
-
+    private SysLoginlogRepository sysLoginlogRepository;
+    @Autowired
+    private SysJobrelaRespository sysJobrelaRespository;
+    @Autowired
+    private EmailUtils emailUtils;
+    @Autowired
+    private LogUtil logUtil;
+    private String code=null;
     @Override
     public Object login(String name, String password) {
         SysUser sysUser=new SysUser();
         List<SysUserRoleVo> s=new ArrayList<>();
         Map<Object,Object> map=new HashMap<>();
+        String check="1";
         //验证用户登录的是否是邮箱登录
         if(PermissionUtils.flag(name)) {
             sysUser = sysUserRepository.findByEmail(name);
@@ -74,21 +77,7 @@ public class SysUserServiceImpl implements SysUserService {
             if(list!=null&&list.size()>0) {
                 if(list.get(0).getStatus().equals("1")) {
                     subject.login(token);
-                    //PermissionUtils.setSubject(subject);
-//                    Collection<Session> sessions = sessionDAO.getActiveSessions();
-//                    for (Session session : sessions) {
-//                        SimplePrincipalCollection principalCollection = (SimplePrincipalCollection) session
-//                                .getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-//                        SysUser userDO = (SysUser) principalCollection.getPrimaryPrincipal();
-//
-//                        System.out.println(userDO+"dsadsadsa-----------------");
-//                        System.out.println( s +"dsadsadsa-----------------");
-//
-//                    }
-//                    System.out.println("---------------------");
                     Serializable tokenId = subject.getSession().getId();
-
-
                     Session session=subject.getSession();
                     session.setAttribute("user",SecurityUtils.getSubject());
                     System.out.println(tokenId);
@@ -97,11 +86,17 @@ public class SysUserServiceImpl implements SysUserService {
                     //查的是用户角色权限三张表
                     s = sysUserRepository.findByLoginName(name);
 //                    //比较用户是否有super这个权限
+                    if(s.get(0).getUserId()==1) {
+                        Optional<SysUser> sysUserList = sysUserRepository.findById(Long.valueOf(1));
+                        if (sysUserList.get().getEmail() == null || "".equals(sysUserList.get().getEmail())) {
+                            check = "0";
+                        }
+                    }
                     map.put("status", "1");
                     map.put("authToken", tokenId);
                     map.put("data", s);
-
-                    SysLog sysLog=new SysLog();
+                    map.put("check", check);
+                    SysLoginlog sysLog=new SysLoginlog();
                     sysLog.setCreateDate(new Date());
                     if(PermissionUtils.getSysUser().getDeptId()!=0&&PermissionUtils.getSysUser().getDeptId()!=null) {
                         //获取部门信息
@@ -121,7 +116,7 @@ public class SysUserServiceImpl implements SysUserService {
                     sysLog.setOperation("登录");
                     sysLog.setRoleName(s.get(0).getRoleName());
                     sysLog.setUsername(name);
-                    sysLogRepository.save(sysLog);
+                    sysLoginlogRepository.save(sysLog);
                 }else{
                     map.put("status", "3");
                     map.put("message", "账号被冻结");
@@ -143,7 +138,7 @@ public class SysUserServiceImpl implements SysUserService {
     public Object loginOut() {
         Subject subject= SecurityUtils.getSubject();
 
-        SysLog sysLog=new SysLog();
+        SysLoginlog sysLog=new SysLoginlog();
         sysLog.setCreateDate(new Date());
         if(PermissionUtils.getSysUser().getDeptId()!=0&&PermissionUtils.getSysUser().getDeptId()!=null) {
             //获取部门信息
@@ -166,9 +161,9 @@ public class SysUserServiceImpl implements SysUserService {
         Object[] args=null;
         String params = JSON.toJSONString(args);
         sysLog.setParams(params);
-        sysLog.setOperation("退出登录");
+        sysLog.setOperation("登出");
         sysLog.setUsername(PermissionUtils.getSysUser().getLoginName());
-        sysLogRepository.save(sysLog);
+        sysLoginlogRepository.save(sysLog);
         subject.logout();
         return ToDataMessage.builder().status("1").message("退出成功").build();
     }
@@ -227,6 +222,7 @@ public class SysUserServiceImpl implements SysUserService {
             sysUser1.get().setUpdateUser(PermissionUtils.getSysUser().getLoginName());
             sysUser1.get().setUpdateTime(PermissionUtils.getSysUser().getCreateTime());
             sysUserRepository.save(sysUser1.get());
+
             return ToDataMessage.builder().status("1").message("修改成功").build();
         }
     }
@@ -533,4 +529,81 @@ public class SysUserServiceImpl implements SysUserService {
           return  ToDataMessage.builder().status("0").message("权限不足").build();
         }
     }
+
+    @Override
+    public Object sendEmail(String email) {
+        SysUser sysUser=null;
+        code = emailUtils.achieveCode();
+        //判断输入的是用户名还是邮箱
+        if(!PermissionUtils.flag(email)) {
+           List<SysUser> list= sysUserRepository.findAllByLoginName(email);
+           if(list!=null&&list.size()>0) {
+               email = list.get(0).getEmail();
+           }else{
+               return ToDataMessage.builder().status("0").message("用户不存在").build();
+           }
+        }
+        sysUser = sysUserRepository.findByEmail(email);
+        if(sysUser!=null){
+            Optional<SysUser> sysUserOptional=sysUserRepository.findById(Long.valueOf(1));
+           boolean flag= emailUtils.sendAuthCodeEmail(sysUserOptional.get(),email,code);
+           if(flag){
+            return ToDataMessage.builder().status("1").message("验证码已发送").build();
+           }else{
+            return ToDataMessage.builder().status("0").message("发送失败").build();
+           }
+        }else{
+            return ToDataMessage.builder().status("0").message("该用户没有注册").build();
+        }
+    }
+
+    @Transactional
+    @Override
+    public Object editPasswordByEmail(String email, String password) {
+        SysUser sysUser=null;
+        if(PermissionUtils.flag(email)){
+             sysUser= sysUserRepository.findByEmail(email);
+        }else{
+           List<SysUser> sysUserList= sysUserRepository.findAllByLoginName(email);
+           sysUser=sysUserList.get(0);
+        }
+        if(password!=null&&password!="") {
+            String[] saltAndCiphertext = CredentialMatcher.encryptPassword(password);
+            sysUser.setSalt(saltAndCiphertext[0]);
+            sysUser.setPassword(saltAndCiphertext[1]);
+            sysUserRepository.save(sysUser);
+        }
+        return ToDataMessage.builder().status("1").message("修改成功").build();
+    }
+
+    @Override
+    public Object codeEquals(String authCode) {
+        if(authCode.equals(code)){
+            return ToDataMessage.builder().status("1").message("验证码正确").build();
+        }else{
+            return ToDataMessage.builder().status("0").message("验证码输入有误").build();
+        }
+    }
+
+    @Override
+    public Object bindEmail(String email, String emailPassword) {
+        if(PermissionUtils.flag(email)){
+            return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
+        }
+        if(PermissionUtils.isPermitted("1")){
+           Optional<SysUser> sysUser= sysUserRepository.findById(Long.valueOf(1));
+           String emailType="smtp."+email.split("@")[1];
+           sysUser.get().setEmail(email);
+           sysUser.get().setEmailPassword(emailPassword);
+           sysUser.get().setEmailType(emailType);
+           sysUserRepository.save(sysUser.get());
+        }
+        return ToDataMessage.builder().status("1").message("邮箱绑定成功").build();
+    }
+//
+//    //个人信息
+//    public Object Personal(){
+//        List<SysJobrela> list = sysJobrelaRespository.findByUserId(PermissionUtils.getSysUser().getId());
+//
+//    }
 }

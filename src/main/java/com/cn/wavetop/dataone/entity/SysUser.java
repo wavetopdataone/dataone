@@ -66,8 +66,10 @@ public class SysUser
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
-
-
+    //邮箱密码
+    private String emailPassword;
+    //邮箱发送方式
+    private String emailType;
     /**创建者**/
     private String createUser;
     /**创建时间**/

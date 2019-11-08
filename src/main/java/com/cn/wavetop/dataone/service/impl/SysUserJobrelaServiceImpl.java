@@ -23,11 +23,11 @@ public class SysUserJobrelaServiceImpl implements SysUserJobrelaService {
     @Transactional
     @Override
     public Object addUserJobRela(Long userId, String jobrela_id) {
-        if (!PermissionUtils.isPermitted("1")) {
+        if (PermissionUtils.isPermitted("2")) {
             if (jobrela_id != null && !"".equals(jobrela_id) && !"undefined".equals(jobrela_id)) {
                 String[] jobrelas = jobrela_id.split(",");
                 Optional<SysUser> sysUser = sysUserRepository.findById(userId);
-                sysUserJobrelaRepository.deleteByUserId(userId);
+                //sysUserJobrelaRepository.deleteByUserId(userId);
                 for (int i = 0; i < jobrelas.length; i++) {
                     SysUserJobrela sysUserJobrela = new SysUserJobrela();
                     sysUserJobrela.setJobrelaId(Long.valueOf(jobrelas[i]));
@@ -44,7 +44,31 @@ public class SysUserJobrelaServiceImpl implements SysUserJobrelaService {
             }
 
         }else{
-            return ToDataMessage.builder().status("2").message("超级管理员不能为用户分配任务").build();
+            return ToDataMessage.builder().status("0").message("权限不足").build();
+
+        }
+
+    }
+
+    @Transactional
+    @Override
+    public Object deleteUserJobRela(Long userId, String jobrela_id) {
+        if (PermissionUtils.isPermitted("2")) {
+            if (jobrela_id != null && !"".equals(jobrela_id) && !"undefined".equals(jobrela_id)) {
+                String[] jobrelas = jobrela_id.split(",");
+                Optional<SysUser> sysUser = sysUserRepository.findById(userId);
+                //sysUserJobrelaRepository.deleteByUserId(userId);
+                for (int i = 0; i < jobrelas.length; i++) {
+                    sysUserJobrelaRepository.deleteByUserIdAndJobrelaId(userId,Long.valueOf(jobrelas[i]));
+                }
+                return ToDataMessage.builder().status("1").message("删除成功").build();
+            } else {
+                return ToDataMessage.builder().status("1").message("删除成功").build();
+
+            }
+
+        }else{
+            return ToDataMessage.builder().status("0").message("权限不足").build();
 
         }
 

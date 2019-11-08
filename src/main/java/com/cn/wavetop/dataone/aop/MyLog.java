@@ -11,5 +11,5 @@ import java.lang.annotation.*;
 @Documented //生成文档
 public @interface MyLog {
     String value() default "";
-
+    String flag() default "";
 }

@@ -20,4 +20,10 @@ public interface SysUserService  {
     Object HandedTeam(Long id,Long userId);
     Object seleUserBystatus(String status);
     Object selectUserByParentId(Long userId);
+
+    Object sendEmail(String email);
+    Object editPasswordByEmail(String email,String password);
+    Object codeEquals(String authCode);
+    //绑定邮箱
+    Object bindEmail(String email,String emailPassword);
 }
