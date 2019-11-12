@@ -16,13 +16,13 @@ public class SysUserlogController  {
     @ApiOperation(value = "查询所有管理日志",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "查询管理日志")
     @PostMapping("/findSysUserlog")
     public   Object findAllSysUserlog(Integer current, Integer size) {
-        System.out.println();
         return sysUserlogService.findAllSysUserlog(current,size);
     }
 
     @ApiOperation(value = "条件查询管理日志",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "条件查询管理日志")
     @PostMapping("/findLog")
     public Object findLog(Long deptId,String operation,String startTime,String endTime,Integer current,Integer size){
+
         return sysUserlogService.findLog(deptId,operation,startTime,endTime,current,size);
     }
 }
