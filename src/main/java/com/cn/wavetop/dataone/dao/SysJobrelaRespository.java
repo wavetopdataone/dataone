@@ -78,4 +78,17 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
     @Query(value = "select new com.cn.wavetop.dataone.entity.vo.SysJobrelaUser(j.id,j.jobName,'0') from SysJobrela j,SysUser u,SysUserJobrela uj where u.id=uj.userId and uj.jobrelaId=j.id and u.id=:userId  order by uj.id desc")
     List<SysJobrelaUser> findJobrelaByUserId(Long userId);
 
+
+    //根据部门id查询任务分页显示
+    @Query(value = "select j from SysJobrela j,SysUserJobrela uj where  uj.jobrelaId=j.id and uj.deptId=:deptId order by uj.id desc")
+    List<SysJobrela>  findByDeptId(Long deptId,Pageable pageable);
+    @Query(value = "select j from SysJobrela j,SysUserJobrela uj where  uj.jobrelaId=j.id and uj.deptId=:deptId order by uj.id desc")
+    List<SysJobrela> findByDeptId(Long deptId);
+
+    //根据部门，状态查询任务分页显示
+    @Query(value = "select j from SysJobrela j,SysUserJobrela uj where  uj.jobrelaId=j.id and uj.deptId=:deptId and j.jobStatus like CONCAT(:status,'%') order by uj.id desc")
+    List<SysJobrela>  findByDeptIdAndJobStatus(String status,Long deptId,Pageable pageable);
+    @Query(value = "select j from SysJobrela j,SysUserJobrela uj where  uj.jobrelaId=j.id and uj.deptId=:deptId and j.jobStatus like CONCAT(:status,'%') order by uj.id desc")
+    List<SysJobrela> findByDeptIdAndJobStatus(String status,Long deptId);
+
 }

@@ -26,4 +26,6 @@ public interface SysUserService  {
     Object codeEquals(String authCode);
     //绑定邮箱
     Object bindEmail(String email,String emailPassword);
+//个人设置的个人详情
+    Object Personal();
 }

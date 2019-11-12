@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.cn.wavetop.dataone.config.shiro.CredentialMatcher;
 import com.cn.wavetop.dataone.dao.*;
 import com.cn.wavetop.dataone.entity.*;
-import com.cn.wavetop.dataone.entity.vo.SysUserDept;
-import com.cn.wavetop.dataone.entity.vo.SysUserRoleVo;
-import com.cn.wavetop.dataone.entity.vo.ToData;
-import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
+import com.cn.wavetop.dataone.entity.vo.*;
 import com.cn.wavetop.dataone.service.SysUserService;
 import com.cn.wavetop.dataone.util.EmailUtils;
 import com.cn.wavetop.dataone.util.LogUtil;
@@ -207,6 +204,7 @@ public class SysUserServiceImpl implements SysUserService {
     public Object update(SysUser sysUser) {
         List<SysUser> list = sysUserRepository.findAllByLoginName(sysUser.getLoginName());
         Optional<SysUser> sysUser1 = sysUserRepository.findById(sysUser.getId());
+         SysUser sysUser2=sysUser1.get();
         if (list != null && list.size() > 0) {
             return ToDataMessage.builder().status("0").message("用户已存在").build();
         } else {
@@ -222,6 +220,9 @@ public class SysUserServiceImpl implements SysUserService {
             sysUser1.get().setUpdateUser(PermissionUtils.getSysUser().getLoginName());
             sysUser1.get().setUpdateTime(PermissionUtils.getSysUser().getCreateTime());
             sysUserRepository.save(sysUser1.get());
+            //添加任务日志
+            logUtil.saveUserlog(sysUser1.get(),sysUser2,"com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.update","修改任务");
+
 
             return ToDataMessage.builder().status("1").message("修改成功").build();
         }
@@ -232,8 +233,10 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional
     @Override
     public Object addSysUser(SysUser sysUser,String id){
-        System.out.println(sysUser+"wocaocaocoa"+id);
         Long ids=Long.valueOf(id);
+        if(PermissionUtils.flag(sysUser.getEmail())){
+            return ToDataMessage.builder().status("0").message("邮箱不正确").build();
+        }
         List<SysUser> list=sysUserRepository.findAllByLoginName(sysUser.getLoginName());
         HashMap<Object,Object> map=new HashMap<>();
         SysUserRole sysUserRole=new SysUserRole();
@@ -256,11 +259,15 @@ public class SysUserServiceImpl implements SysUserService {
         }
         List<SysUser> sysUser1=new ArrayList<>();
         //用户权限不能是编辑者
-        if(!PermissionUtils.isPermitted("3")){
+
             if(PermissionUtils.isPermitted("1")){
                 //判断超级管理员创建的是否是管理员 2是管理员角色的id
                  if(ids==2){
+
                      SysUser suser = sysUserRepository.save(sysUser);
+                     if(suser!=null) {
+                         logUtil.saveUserlog(sysUser, null, "com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.addSysUser", "添加用户");
+                     }
                      sysUser1=sysUserRepository.findAllByLoginName(sysUser.getLoginName());
                      sysUserRole.setUserId(sysUser1.get(0).getId());
                      sysUserRole.setRoleId(ids);
@@ -278,6 +285,9 @@ public class SysUserServiceImpl implements SysUserService {
             }else if(PermissionUtils.isPermitted("2")){
                 if(ids==3){
                     SysUser suser = sysUserRepository.save(sysUser);
+                    if(suser!=null) {
+                        logUtil.saveUserlog(sysUser, null, "com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.addSysUser", "添加用户");
+                    }
                     suser.setDeptId(PermissionUtils.getSysUser().getDeptId());
                     sysUserRepository.save(suser);
                     sysUser1=sysUserRepository.findAllByLoginName(sysUser.getLoginName());
@@ -291,12 +301,9 @@ public class SysUserServiceImpl implements SysUserService {
                 }else{
                     return ToDataMessage.builder().status("0").message("管理员不能创建超级管理员角色").build();
                 }
-            }else{
+            }else {
                 return ToDataMessage.builder().status("0").message("用户没有角色和权限").build();
             }
-        }else{
-            return ToDataMessage.builder().status("0").message("编辑者不能创建角色").build();
-        }
 
        return map;
     }
@@ -332,6 +339,9 @@ public class SysUserServiceImpl implements SysUserService {
                 int result= sysUserRepository.deleteByLoginName(name);
                  sysUserRoleRepository.deleteByUserId(list.get(0).getId());
                 if(result>0){
+
+                logUtil.saveUserlog(list.get(0), null, "com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.delete", "删除用户");
+
                     return ToDataMessage.builder().status("1").message("删除成功").build();
                 }else{
                     return ToDataMessage.builder().status("0").message("删除失败").build();
@@ -424,6 +434,7 @@ public class SysUserServiceImpl implements SysUserService {
         List<SysRole> list=sysUserRepository.findUserById(id);
         Optional<SysUser> sysUser=sysUserRepository.findById(id);
         Map<Object,Object> map=new HashMap<>();
+        String operation=null;
 //        if(list==null||list.size()<=0) {
 //            return ToDataMessage.builder().status("3").message("请先选择用户").build();
 //        }
@@ -434,11 +445,14 @@ public class SysUserServiceImpl implements SysUserService {
                     if (sysUser.get().getStatus().equals("1")) {
                         map.put("status", "1");
                         map.put("message", "冻结成功");
+                        operation="冻结用户";
                     } else {
                         map.put("status", "2");
                         map.put("message", "解冻成功");
+                        operation="解冻用户";
                     }
                     sysUser.get().setStatus(status);
+                    logUtil.saveUserlog(sysUser.get(),null,"com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.updateStatus",operation);
                     sysUserRepository.save(sysUser.get());
                 } else {
                     map.put("status", "0");
@@ -450,11 +464,14 @@ public class SysUserServiceImpl implements SysUserService {
                 if(sysUser.get().getStatus().equals("1")) {
                     map.put("status","1");
                     map.put("message","冻结成功");
+                    operation="冻结用户";
                 }else{
                     map.put("status","2");
                     map.put("message","解冻成功");
+                    operation="解冻用户";
                 }
                 sysUser.get().setStatus(status);
+                logUtil.saveUserlog(sysUser.get(),null,"com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.updateStatus",operation);
                 sysUserRepository.save(sysUser.get());
             }else{
                 map.put("status","0");
@@ -467,7 +484,7 @@ public class SysUserServiceImpl implements SysUserService {
         return map;
     }
 
-    //根据用户id查询用户详细的信息
+    //根据用户id查询用户详细的信息(不包括自己)
     public Object selSysUser(Long userId){
         Map<Object,Object> map=new HashMap<>();
         List<SysUserDept> sysUser=new ArrayList<>();
@@ -498,6 +515,7 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserRoleRepository.deleteByUserId(userId);
                 sysUserJobrelaRepository.deleteByUserId(userId);
                 sysUserRepository.updataById(id, userId);
+                logUtil.saveUserlog(sysUser2.get(), null, "com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.HandedTeam", "移交团队");
                 return ToDataMessage.builder().status("1").message("团队已移交").build();
             }else{
                 return ToDataMessage.builder().status("0").message("不存在用户").build();
@@ -567,11 +585,14 @@ public class SysUserServiceImpl implements SysUserService {
            List<SysUser> sysUserList= sysUserRepository.findAllByLoginName(email);
            sysUser=sysUserList.get(0);
         }
+        SysUser sysUserOld=sysUser;
         if(password!=null&&password!="") {
             String[] saltAndCiphertext = CredentialMatcher.encryptPassword(password);
             sysUser.setSalt(saltAndCiphertext[0]);
             sysUser.setPassword(saltAndCiphertext[1]);
             sysUserRepository.save(sysUser);
+            logUtil.saveUserlog(sysUser, sysUserOld, "com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.editPasswordByEmail", "修改用户");
+
         }
         return ToDataMessage.builder().status("1").message("修改成功").build();
     }
@@ -590,20 +611,30 @@ public class SysUserServiceImpl implements SysUserService {
         if(PermissionUtils.flag(email)){
             return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
         }
+        Optional<SysUser> sysUser= sysUserRepository.findById(PermissionUtils.getSysUser().getId());
         if(PermissionUtils.isPermitted("1")){
-           Optional<SysUser> sysUser= sysUserRepository.findById(Long.valueOf(1));
-           String emailType="smtp."+email.split("@")[1];
-           sysUser.get().setEmail(email);
            sysUser.get().setEmailPassword(emailPassword);
-           sysUser.get().setEmailType(emailType);
-           sysUserRepository.save(sysUser.get());
         }
+        String emailType="smtp."+email.split("@")[1];
+        sysUser.get().setEmail(email);
+        sysUser.get().setEmailType(emailType);
+        sysUserRepository.save(sysUser.get());
         return ToDataMessage.builder().status("1").message("邮箱绑定成功").build();
     }
-//
-//    //个人信息
-//    public Object Personal(){
-//        List<SysJobrela> list = sysJobrelaRespository.findByUserId(PermissionUtils.getSysUser().getId());
-//
-//    }
+
+    //个人设置页面个人信息
+    public Object Personal(){
+        List<SysJobrela> list = sysJobrelaRespository.findByUserId(PermissionUtils.getSysUser().getId());
+        SysUserPersonalVo s= sysUserRepository.findUserOneById(PermissionUtils.getSysUser().getId());
+        if(PermissionUtils.isPermitted("1")){
+            s.setUserId(PermissionUtils.getSysUser().getId());
+            s.setUserName(PermissionUtils.getSysUser().getLoginName());
+            s.setEmail(PermissionUtils.getSysUser().getEmail());
+        }
+        s.setCountJob(list.size());
+        HashMap<Object,Object> map=new HashMap<>();
+        map.put("status","1");
+        map.put("data",s);
+        return map;
+    }
 }

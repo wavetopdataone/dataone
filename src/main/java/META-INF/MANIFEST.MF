@@ -1,0 +1,46 @@
+Manifest-Version: 1.0
+Main-Class: com.cn.wavetop.dataone.DataoneApplication
+Class-Path: junit-jupiter-api-5.3.2.jar spring-tx-5.1.10.RELEASE.jar spr
+ ing-plugin-metadata-1.2.0.RELEASE.jar jackson-module-parameter-names-2.
+ 9.9.jar spring-context-5.1.10.RELEASE.jar spring-plugin-core-1.2.0.RELE
+ ASE.jar hibernate-commons-annotations-5.0.4.Final.jar javax.persistence
+ -api-2.2.jar spring-jcl-5.1.10.RELEASE.jar log4j-1.2.17.jar junit-jupit
+ er-params-5.3.2.jar jackson-annotations-2.9.0.jar commons-beanutils-1.9
+ .3.jar jackson-databind-2.9.9.3.jar jaxb-api-2.3.1.jar springfox-schema
+ -2.9.2.jar shiro-cache-1.4.0.jar spring-beans-5.1.10.RELEASE.jar logbac
+ k-core-1.2.3.jar hibernate-validator-6.0.17.Final.jar spring-boot-autoc
+ onfigure-2.1.9.RELEASE.jar shiro-lang-1.4.0.jar jandex-2.0.5.Final.jar 
+ spring-data-commons-2.1.11.RELEASE.jar spring-boot-2.1.9.RELEASE.jar lo
+ g4j-api-2.11.2.jar spring-webmvc-5.1.10.RELEASE.jar springfox-swagger-u
+ i-2.9.2.jar javassist-3.23.2-GA.jar jackson-datatype-jdk8-2.9.9.jar ojd
+ bc6-11.2.0.3.jar opentest4j-1.1.1.jar lombok-1.18.10.jar guava-20.0.jar
+  springfox-core-2.9.2.jar swagger-models-1.5.21.jar druid-1.1.10.jar sh
+ iro-event-1.4.0.jar junit-jupiter-5.6.0-M1.jar spring-aop-5.1.10.RELEAS
+ E.jar javax.activation-api-1.2.0.jar jboss-logging-3.3.3.Final.jar tomc
+ at-embed-el-9.0.26.jar log4j-to-slf4j-2.11.2.jar txw2-2.3.1.jar spring-
+ boot-starter-json-2.1.9.RELEASE.jar shiro-spring-1.4.0.jar spring-core-
+ 5.1.10.RELEASE.jar spring-expression-5.1.10.RELEASE.jar druid-spring-bo
+ ot-starter-1.1.10.jar commons-collections-3.2.2.jar junit-platform-engi
+ ne-1.3.2.jar dom4j-2.1.1.jar spring-orm-5.1.10.RELEASE.jar jackson-core
+ -2.9.9.jar spring-boot-starter-web-2.1.9.RELEASE.jar spring-boot-starte
+ r-tomcat-2.1.9.RELEASE.jar snakeyaml-1.23.jar shiro-crypto-cipher-1.4.0
+ .jar FastInfoset-1.2.15.jar spring-data-jpa-2.1.11.RELEASE.jar swagger-
+ annotations-1.5.21.jar shiro-crypto-hash-1.4.0.jar springfox-swagger2-2
+ .9.2.jar aspectjweaver-1.9.4.jar hibernate-core-5.3.12.Final.jar spring
+ fox-swagger-common-2.9.2.jar spring-boot-starter-data-jpa-2.1.9.RELEASE
+ .jar spring-boot-starter-logging-2.1.9.RELEASE.jar spring-jdbc-5.1.10.R
+ ELEASE.jar shiro-config-core-1.4.0.jar shiro-web-1.4.0.jar jackson-data
+ type-jsr310-2.9.9.jar classmate-1.4.0.jar spring-boot-starter-2.1.9.REL
+ EASE.jar validation-api-2.0.1.Final.jar junit-jupiter-engine-5.3.2.jar 
+ springfox-spi-2.9.2.jar tomcat-embed-core-9.0.26.jar springfox-spring-w
+ eb-2.9.2.jar mysql-connector-java-5.1.47.jar javax.annotation-api-1.3.2
+ .jar shiro-crypto-core-1.4.0.jar shiro-core-1.4.0.jar stax-ex-1.8.jar s
+ pring-aspects-5.1.10.RELEASE.jar tomcat-embed-websocket-9.0.26.jar slf4
+ j-api-1.7.28.jar apiguardian-api-1.0.0.jar javax.transaction-api-1.3.ja
+ r mapstruct-1.2.0.Final.jar istack-commons-runtime-3.0.7.jar spring-web
+ -5.1.10.RELEASE.jar jul-to-slf4j-1.7.28.jar shiro-config-ogdl-1.4.0.jar
+  spring-boot-starter-aop-2.1.9.RELEASE.jar logback-classic-1.2.3.jar ju
+ nit-platform-commons-1.3.2.jar spring-boot-starter-jdbc-2.1.9.RELEASE.j
+ ar HikariCP-3.2.0.jar byte-buddy-1.9.16.jar jaxb-runtime-2.3.1.jar antl
+ r-2.7.7.jar
+

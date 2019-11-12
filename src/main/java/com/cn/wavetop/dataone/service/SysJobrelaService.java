@@ -17,11 +17,11 @@ public interface SysJobrelaService {
 
     Object deleteJobrela(Long id);
 
-    Object jobrelaCount();
+    Object jobrelaCount(Long deptId);
 
     Object queryJobrela(String job_name,Integer current ,Integer size);
 
-    Object someJobrela(String job_status,Integer current ,Integer size);
+    Object someJobrela(String job_status,Long deptId,Integer current ,Integer size);
 
     Object start(Long id);
 
@@ -44,4 +44,7 @@ public interface SysJobrelaService {
 
     Object findUserJob(Long userId);
     Object findUserJobNo(Long userId);
+
+    //首页根据部门查询任务分页
+    Object selJobrelaByDeptIdPage(Long deptId, Integer current, Integer size);
 }
