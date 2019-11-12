@@ -129,7 +129,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(sysJobrela.getJobName()).operate("添加").jobId(s.getId()).build();
                 userlogRespository.save(build);
                 //添加任务日志
-                logUtil.addJoblog(s,"com.cn.wavetop.dataone.service.impl.addJobrela","添加任务");
+                logUtil.addJoblog(s,"com.cn.wavetop.dataone.service.impl.SysJobrelaServiceImpl.addJobrela","添加任务");
                 map.put("status", 1);
                 map.put("message", "添加成功");
                 map.put("data", save);
@@ -220,7 +220,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     }
 
     @Override
-    public Object jobrelaCount() {
+    public Object jobrelaCount(Long deptId) {
         int[] num = new int[6];
         if(PermissionUtils.getSysUser()==null) {
             return ToDataMessage.builder().status("401").message("请先登录").build();
@@ -233,6 +233,20 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             num[3] = repository.countByJobStatusLike(5 + "%");//待完善
             num[4] = repository.countByJobStatusLike(0 + "%");//待激活
             num[5] = repository.countByJobStatusLike(3 + "%");//终止中
+            if(deptId!=0){
+              SysUser s= sysUserRepository.findUserByDeptId(deptId);
+              //如果s等于null说明该部门下没有管理员，那么该部门下也没有任务，状态也应该都为0
+              if(s!=null){
+                  num[0] = repository.countByJobStatus(s.getId(),1 + "%"); //运行中
+                  num[1] = repository.countByJobStatus(s.getId(),4 + "%");//异常
+                  num[2] = repository.countByJobStatus(s.getId(),2 + "%");//暂停中
+                  num[3] = repository.countByJobStatus(s.getId(),5 + "%");//待完善
+                  num[4] = repository.countByJobStatus(s.getId(),0 + "%");//待激活
+                  num[5] = repository.countByJobStatus(s.getId(),3 + "%");//终止中
+              }else{
+                  num[0]=0;num[1]=0;num[2]=0;num[3]=0;num[4]=0;num[5]=0;
+              }
+            }
         }else if(PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")){
             num[0] = repository.countByJobStatus(id,1 + "%"); //运行中
             num[1] = repository.countByJobStatus(id,4 + "%");//异常
@@ -240,6 +254,20 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             num[3] = repository.countByJobStatus(id,5 + "%");//待完善
             num[4] = repository.countByJobStatus(id,0 + "%");//待激活
             num[5] = repository.countByJobStatus(id,3 + "%");//终止中
+            if(deptId!=0){
+                List<SysJobrela> list= repository.findByUserId(deptId);
+                //如果s等于null说明该部门下没有管理员，那么该部门下也没有任务，状态也应该都为0
+                if(list!=null&&list.size()>0){
+                    num[0] = repository.countByJobStatus(deptId,1 + "%"); //运行中
+                    num[1] = repository.countByJobStatus(deptId,4 + "%");//异常
+                    num[2] = repository.countByJobStatus(deptId,2 + "%");//暂停中
+                    num[3] = repository.countByJobStatus(deptId,5 + "%");//待完善
+                    num[4] = repository.countByJobStatus(deptId,0 + "%");//待激活
+                    num[5] = repository.countByJobStatus(deptId,3 + "%");//终止中
+                }else{
+                    num[0]=0;num[1]=0;num[2]=0;num[3]=0;num[4]=0;num[5]=0;
+                }
+            }
         }else{
             return ToDataMessage.builder().status("0").message("权限不足").build();
         }
@@ -298,7 +326,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     }
 
     @Override
-    public Object someJobrela(String job_status, Integer current, Integer size) {
+    public Object someJobrela(String job_status,Long deptId, Integer current, Integer size) {
         Map<Object, Object> map = new HashMap<>();
         Long id=PermissionUtils.getSysUser().getId();//登录用户的id
         List<SysJobrela> list=new ArrayList<>();
@@ -310,12 +338,32 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             if(PermissionUtils.isPermitted("1")) {
                 list = repository.findByJobStatusLikeOrderByIdDesc(job_status + "%", page);
                 sysJobrelaList = repository.findByJobStatusLikeOrderByIdDesc(job_status + "%");
+               if(deptId!=0){
+                List<SysJobrela> data = repository.findByDeptId(deptId);
+                if(data!=null&&data.size()>0){
+                    list=repository. findByDeptIdAndJobStatus(job_status,deptId,page);
+                    sysJobrelaList=repository. findByDeptIdAndJobStatus(job_status,deptId);
+                }else{
+                    list=null;
+                    sysJobrelaList=null;
+                }
+               }
                 map.put("status", "1");
                 map.put("totalCount", sysJobrelaList.size());
                 map.put("data", list);
             }else if(PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")){
                 list = repository.findByUserIdJobStatus(id,job_status, page);
                 sysJobrelaList = repository.findByUserIdJobStatus(id,job_status);
+                if(deptId!=0){
+                   List<SysJobrela> data= repository.findByUserId(deptId);
+                   if(data!=null&&data.size()>0){
+                       list = repository.findByUserIdJobStatus(id,job_status, page);
+                       sysJobrelaList = repository.findByUserIdJobStatus(id,job_status);
+                   }else{
+                       list=null;
+                       sysJobrelaList=null;
+                   }
+                }
                 map.put("status", "1");
                 map.put("totalCount", sysJobrelaList.size());
                 map.put("data", list);
@@ -560,7 +608,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 sysUserlist = sysUserRepository.findById(Long.valueOf(name[i]));
                 sysUserJobrela = new SysUserJobrela();
                 sysUserJobrela.setUserId(sysUserlist.get().getId());
-                sysUserJobrela.setDeptId(sysUserlist.get().getDeptId());
+                //sysUserJobrela.setDeptId(sysUserlist.get().getDeptId());
                 sysUserJobrela.setJobrelaId(jobId);
                 sysUserJobrelaRepository.save(sysUserJobrela);
             }
@@ -621,7 +669,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             }
             return ToData.builder().status("1").data(sysUserJobVoList).build();
         }else{
-            return ToDataMessage.builder().status("0").message("权限不足");
+            return ToDataMessage.builder().status("0").message("权限不足").build();
         }
     }
 
@@ -667,4 +715,43 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             return ToDataMessage.builder().status("0").message("权限不足");
         }
     }
+
+
+    //首页根据部门查询任务
+    @Override
+    public Object selJobrelaByDeptIdPage(Long deptId, Integer current, Integer size) {
+        Pageable pageable = new PageRequest(current - 1, size);
+        Map<Object,Object> map=new HashMap<>();
+        List<SysJobrela> list=new ArrayList<>();
+        List<SysJobrela> data=new ArrayList<>();
+        if(PermissionUtils.isPermitted("1")) {
+            if(deptId!=0) {
+                list = repository.findByDeptId(deptId, pageable);
+                data = repository.findByDeptId(deptId);
+            }else{
+                Page<SysJobrela> page=repository.findAll(pageable);
+                map.put("status", "1");
+                map.put("data", page.getContent());
+                map.put("totalCount", page.getTotalElements());
+                return map;
+            }
+        }else if(PermissionUtils.isPermitted("2")) {
+            if(deptId!=0) {
+                list = repository.findByUserId(deptId, pageable);
+                data = repository.findByUserId(deptId);
+            }else{
+                list = repository.findByUserId(PermissionUtils.getSysUser().getId(), pageable);
+                data = repository.findByUserId((PermissionUtils.getSysUser().getId()));
+            }
+        }
+        map.put("status", "1");
+        map.put("data", list);
+        map.put("totalCount", data.size());
+        return map;
+//        }else{
+//          return ToDataMessage.builder().status("0").message("权限不足").build();
+//        }
+    }
+
+
 }

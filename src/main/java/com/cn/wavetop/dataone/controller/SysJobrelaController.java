@@ -60,9 +60,9 @@ public class SysJobrelaController {
     // 查询个任务状态接口
     @ApiImplicitParam
     @PostMapping("/jobrela_count")
-    public Object jobrela_count() {
+    public Object jobrela_count(Long deptId) {
 
-        return service.jobrelaCount();
+        return service.jobrelaCount(deptId);
     }
 
     //模糊查询
@@ -76,8 +76,8 @@ public class SysJobrelaController {
     //
     @ApiImplicitParam
     @PostMapping("/some_jobrela")
-    public Object some_jobrela(String job_status,Integer current,Integer size) {
-        return service.someJobrela(job_status,current,size);
+    public Object some_jobrela(String job_status,Long deptId,Integer current,Integer size) {
+        return service.someJobrela(job_status,deptId,current,size);
     }
 
     @ApiImplicitParam
@@ -112,7 +112,7 @@ public class SysJobrelaController {
     public Object addUserJobRela(Long userId,String jobrela_id) {
         return sysUserJobrelaService.addUserJobRela(userId,jobrela_id);
     }
-    @ApiOperation(value = "根据用户名或任务名分页查询任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为用户选任务")
+    @ApiOperation(value = "根据用户名或任务名查询任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为用户选任务")
     @PostMapping("/selJobrelaUser")
     public Object selJobrelaUser(String status ,String name ) {
         return service.selJobrelaUser(status,name);
@@ -153,6 +153,15 @@ public class SysJobrelaController {
     @ApiOperation(value = "查询用户没有参与的任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户参与的任务")
     @PostMapping("/findUserJobNo")
     public Object findUserJobNo(Long userId) {
+
         return service.findUserJobNo(userId);
+    }
+
+
+    @ApiOperation(value = "首页根据部门或者用户查询任务分页", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "首页根据部门查询任务分页")
+    @PostMapping("/selJobrelaByDeptIdPage")
+    public Object selJobrelaByDeptIdPage(Long deptId,Integer current,Integer size) {
+
+        return service.selJobrelaByDeptIdPage(deptId,current,size);
     }
 }

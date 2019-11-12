@@ -34,7 +34,7 @@ public class SysUserJobrelaServiceImpl implements SysUserJobrelaService {
                     sysUserJobrela.setUserId(userId);
                     sysUserJobrela.setRemark(sysUser.get().getLoginName());
                     sysUserJobrela.setPrems("3");
-                    sysUserJobrela.setDeptId(sysUser.get().getDeptId());
+                   //sysUserJobrela.setDeptId(sysUser.get().getDeptId());
                     sysUserJobrelaRepository.save(sysUserJobrela);
                 }
                 return ToDataMessage.builder().status("1").message("添加成功").build();

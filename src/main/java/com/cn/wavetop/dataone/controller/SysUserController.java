@@ -98,7 +98,6 @@ public class SysUserController {
 
         return sysUserService.selSysUser(userId);
     }
-    @MyLog(value = "移交团队")
     @ApiOperation(value = "移交团队id是管理员userid是编辑者",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "移交团队id是管理员userid是编辑者")
     @PostMapping("/HandedTeam")
     public Object HandedTeam(Long id,Long userId ){
@@ -142,6 +141,11 @@ public class SysUserController {
     public Object  bindEmail(String email, String emailPassword){
 
         return sysUserService.bindEmail(email,emailPassword);
+    }
+    @ApiOperation(value = "个人设置信息详情",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "个人设置信息详情")
+    @PostMapping("/personal")
+    public Object  Personal(){
+        return sysUserService.Personal();
     }
 
 }

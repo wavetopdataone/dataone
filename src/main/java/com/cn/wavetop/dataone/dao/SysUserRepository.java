@@ -3,6 +3,7 @@ package com.cn.wavetop.dataone.dao;
 import com.cn.wavetop.dataone.entity.SysRole;
 import com.cn.wavetop.dataone.entity.SysUser;
 import com.cn.wavetop.dataone.entity.vo.SysUserDept;
+import com.cn.wavetop.dataone.entity.vo.SysUserPersonalVo;
 import com.cn.wavetop.dataone.entity.vo.SysUserRoleVo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -66,4 +67,10 @@ public interface SysUserRepository extends JpaRepository<SysUser,Long> {
 
     @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserDept(u.id,u.deptId,u.loginName,u.password,u.email,d.deptName,r.roleName,u.status) from SysUser u,SysRole r,SysUserRole ur,SysDept d where u.id=ur.userId and ur.roleId=r.id and u.deptId=d.id and u.deptId=(select su.deptId from SysUser su where su.id=:userId) and r.roleKey=:perms order by u.id")
     List<SysUserDept> findUserByUserId(Long userId,String perms);
+
+    @Query("select u from SysUser u,SysRole r,SysUserRole ur where u.id=ur.userId and r.id=ur.roleId and r.roleKey='2' and u.deptId=:deptId")
+    SysUser findUserByDeptId(Long deptId);
+    //查询用户自身的权限，部门等信息
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserPersonalVo(u.id,u.loginName,d.deptName,u.email) from SysUser u,SysDept d where u.deptId=d.id and u.id=:userId")
+    SysUserPersonalVo findUserOneById(Long userId);
 }
