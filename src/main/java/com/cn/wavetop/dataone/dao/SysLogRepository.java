@@ -19,5 +19,7 @@ public interface SysLogRepository extends JpaRepository<SysLog,Long>,JpaSpecific
     List<SysLog> findByJobIdOrderByCreateDateDesc(Long jobId);
 
     List<SysLog> findByDeptName(String deptName, Pageable pageable);
+    List<SysLog> findByDeptName(String deptName);
+
     Integer countByDeptName(String deptName);
 }

@@ -234,7 +234,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Object addSysUser(SysUser sysUser,String id){
         Long ids=Long.valueOf(id);
-        if(PermissionUtils.flag(sysUser.getEmail())){
+        if(!PermissionUtils.flag(sysUser.getEmail())){
             return ToDataMessage.builder().status("0").message("邮箱不正确").build();
         }
         List<SysUser> list=sysUserRepository.findAllByLoginName(sysUser.getLoginName());
@@ -447,13 +447,13 @@ public class SysUserServiceImpl implements SysUserService {
                         map.put("message", "冻结成功");
                         operation="冻结用户";
                     } else {
-                        map.put("status", "2");
+                        map.put("status", "1");
                         map.put("message", "解冻成功");
                         operation="解冻用户";
                     }
                     sysUser.get().setStatus(status);
-                    logUtil.saveUserlog(sysUser.get(),null,"com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.updateStatus",operation);
                     sysUserRepository.save(sysUser.get());
+                   logUtil.saveUserlog(sysUser.get(),null,"com.cn.wavetop.dataone.service.impl.SysUserServiceImpl",operation);
                 } else {
                     map.put("status", "0");
                     map.put("message", "超级管理员不能冻结编辑者");

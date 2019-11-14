@@ -1,7 +1,6 @@
 package com.cn.wavetop.dataone.util;
 
 import com.alibaba.fastjson.JSON;
-import com.cn.wavetop.dataone.aop.MyLog;
 import com.cn.wavetop.dataone.dao.*;
 import com.cn.wavetop.dataone.entity.*;
 import org.apache.shiro.SecurityUtils;
@@ -77,8 +76,8 @@ public class LogUtil {
         }
         sysLog.setIp(SecurityUtils.getSubject().getSession().getHost());//ip
         sysLog.setMethod(method);//方法路径
-        String param=JSON.toJSONString(o);
-        sysLog.setParams(param); //参数
+//        String param=JSON.toJSONString(o);
+//        sysLog.setParams(param); //参数
         sysLog.setOperation(Operation);//操作
         sysLog.setUsername(PermissionUtils.getSysUser().getLoginName());//操作人
         return sysLog;
@@ -135,7 +134,7 @@ public class LogUtil {
         String deail=null;//操作详情
         SysDept  sysDept=(SysDept) o;
         SysDept sysDeptOld=(SysDept)o1;
-        StringBuffer stringBuffer=new StringBuffer(null);
+        StringBuffer stringBuffer=new StringBuffer("");
         String deptName=null;
         if("添加分组".equals(Operation)){
             deptName=sysDept.getDeptName();

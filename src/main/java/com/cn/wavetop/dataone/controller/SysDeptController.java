@@ -1,6 +1,6 @@
 package com.cn.wavetop.dataone.controller;
 
-import com.cn.wavetop.dataone.aop.MyLog;
+
 import com.cn.wavetop.dataone.entity.SysDbinfo;
 import com.cn.wavetop.dataone.entity.SysDept;
 import com.cn.wavetop.dataone.entity.SysFieldrule;
@@ -21,6 +21,7 @@ public class SysDeptController {
     @ApiOperation(value = "查看全部", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
     @PostMapping("/dept_all")
     public Object dept_all() {
+
         return sysDeptService.selDept();
     }
 

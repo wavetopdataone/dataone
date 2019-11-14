@@ -1,10 +1,24 @@
 package com.cn.wavetop.dataone.controller;
 
-import com.cn.wavetop.dataone.aop.MyLog;
+
+import com.cn.wavetop.dataone.entity.SysLoginlog;
 import com.cn.wavetop.dataone.service.SysLoginlogSerivece;
+import com.sun.deploy.net.HttpResponse;
 import io.swagger.annotations.ApiOperation;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 用户登录日志详情
@@ -22,8 +36,8 @@ public class SysLoginlogController {
      */
     @ApiOperation(value = "全部查询登录日志", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "初始数据")
     @PostMapping("/loginlog_dept")
-    public Object loginlogDept(@RequestParam Integer current, @RequestParam Integer size) {
-        return sysLoginlogSerivece.loginlogDept(current,size);
+    public Object loginlogDept() {
+        return sysLoginlogSerivece.loginlogDept();
 
     }
 
@@ -37,8 +51,20 @@ public class SysLoginlogController {
      */
     @ApiOperation(value = "根据操作对象查询登录日志", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "根据操作对象查询登录日志")
     @PostMapping("/loginlog_operation")
-    public Object findSysUserlogByOperation(@RequestParam Long deptId,@RequestParam String operation,@RequestParam String startTime,@RequestParam String endTime,@RequestParam Integer current,@RequestParam Integer size){
-        return sysLoginlogSerivece.findSysLoginlogByOperation(deptId,operation,startTime,endTime,current,size);
+    public Object findSysUserlogByOperation(@RequestParam Long deptId,@RequestParam String operation,@RequestParam String startTime,@RequestParam String endTime){
+        return sysLoginlogSerivece.findSysLoginlogByOperation(deptId,operation,startTime,endTime);
     }
+
+    /**
+     * 导出日志信息
+     * @param deptId
+     * @param operation
+     * @return
+     */
+//    @ApiOperation(value = "导出日志信息", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "导出日志信息")
+//    @PostMapping("/outLoginlog")
+//    public Object OutSysLoginlogByOperation(@RequestParam Long deptId,@RequestParam String operation,@RequestParam String startTime,@RequestParam String endTime){
+//        return sysLoginlogSerivece.OutSysLoginlogByOperation(deptId,operation,startTime,endTime);
+//    }
 
 }

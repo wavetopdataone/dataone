@@ -1,6 +1,5 @@
 package com.cn.wavetop.dataone.service.impl;
 
-import com.cn.wavetop.dataone.aop.MyLog;
 import com.cn.wavetop.dataone.aop.ServiceLogAspect;
 import com.cn.wavetop.dataone.dao.*;
 import com.cn.wavetop.dataone.entity.*;
@@ -357,8 +356,8 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 if(deptId!=0){
                    List<SysJobrela> data= repository.findByUserId(deptId);
                    if(data!=null&&data.size()>0){
-                       list = repository.findByUserIdJobStatus(id,job_status, page);
-                       sysJobrelaList = repository.findByUserIdJobStatus(id,job_status);
+                       list = repository.findByUserIdJobStatus(deptId,job_status, page);
+                       sysJobrelaList = repository.findByUserIdJobStatus(deptId,job_status);
                    }else{
                        list=null;
                        sysJobrelaList=null;
@@ -640,6 +639,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 
     //根据用户id查询参与的任务
     public Object findUserJob(Long userId) {
+        System.out.println(new Date()+"start");
         List<SysJobrela> list = repository.findByUserId(userId);
         StringBuffer stringBuffer = new StringBuffer("");
         SysUserJobVo sysUserJobVo = null;
@@ -657,7 +657,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 sysUserList = sysUserJobrelaRepository.selUserNameByJobId(sysJobrela.getId());
                 for (int i = 0; i < sysUserList.size(); i++) {
                     stringBuffer.append(sysUserList.get(i).getLoginName());
-                    if (i < sysUserList.size() - 1) {
+                    if (i < sysUserList.size () - 1) {
                         stringBuffer.append(",");
                     }
                 }
@@ -667,6 +667,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 stringBuffer.setLength(0);
                 sysUserJobVoList.add(sysUserJobVo);
             }
+            System.out.println(new Date()+"end");
             return ToData.builder().status("1").data(sysUserJobVoList).build();
         }else{
             return ToDataMessage.builder().status("0").message("权限不足").build();
@@ -735,7 +736,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 map.put("totalCount", page.getTotalElements());
                 return map;
             }
-        }else if(PermissionUtils.isPermitted("2")) {
+        }else if(PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")) {
             if(deptId!=0) {
                 list = repository.findByUserId(deptId, pageable);
                 data = repository.findByUserId(deptId);

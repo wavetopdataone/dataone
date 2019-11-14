@@ -1,6 +1,6 @@
 package com.cn.wavetop.dataone.controller;
 
-import com.cn.wavetop.dataone.aop.MyLog;
+
 import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.service.SysJobinfoService;
 import com.cn.wavetop.dataone.service.SysJobrelaService;
@@ -100,13 +100,8 @@ public class SysJobrelaController {
         return service.end(id);
     }
 
-//    @ApiOperation(value = "管理员编辑者查看任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "管理员编辑者查看任务")
-//    @PostMapping("/sel_jobrela")
-//    public Object selJobrela(Integer current,Integer size) {
-//        return service.selJobrela(current,size);
-//    }
 
-    @MyLog(value = "为用户选任务")
+    //@MyLog(value = "为用户选任务")
     @ApiOperation(value = "为用户选任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为用户选任务")
     @PostMapping("/addUserJob")
     public Object addUserJobRela(Long userId,String jobrela_id) {
@@ -127,6 +122,7 @@ public class SysJobrelaController {
     public Object selUserByJobId(Long jobId) {
         return service.selUserByJobId(jobId);
     }
+
     @ApiOperation(value = "为任务选择参与人", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "为任务选择参与人")
     @PostMapping("/addUserByJobId")
     public Object addUserByJobId(Long jobId,String userId) {

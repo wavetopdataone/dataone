@@ -6,6 +6,7 @@ import com.cn.wavetop.dataone.entity.SysLoginlog;
 import com.cn.wavetop.dataone.entity.SysUserlog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,14 @@ public interface SysLoginlogRepository extends JpaRepository<SysLoginlog,Long>, 
 
     List<SysLoginlog> findByDeptName(String deptName, Pageable pageable);
     Integer countByDeptName(String deptName);
+
+
+    List<SysLoginlog> findAll();
+
+    List<SysLoginlog> findByDeptName(String deptName);
+
+
+   // List<SysLoginlog> findAll(Specification<SysLoginlog> querySpecifi);
 
 
 }

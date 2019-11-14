@@ -16,8 +16,8 @@ public class ShiroExceptionHandler {
     @ExceptionHandler(value={AuthorizationException.class, UnauthorizedException.class})
     public Object unAuthorizationExceptionHandler(Exception e){
         HashMap<String,String> map=new HashMap<>();
-        map.put("stuts","112");
-        map.put("message","权限不足");
+        map.put("stuts","401");
+        map.put("message","请登录");
         return map;
     }
 

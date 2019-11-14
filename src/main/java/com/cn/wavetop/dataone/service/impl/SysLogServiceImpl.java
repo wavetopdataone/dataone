@@ -35,22 +35,22 @@ public class SysLogServiceImpl implements SysLogService {
     @Autowired
     private SysUserRepository sysUserRepository;
     @Override
-    public Object findAll(Integer current, Integer size) {
+    public Object findAll() {
         Map<Object, Object> map = new HashMap<>();
         List<SysLog> sysLogs=new ArrayList<>();
         List<SysLog> syslogList=new ArrayList<>();
         List<SysLog> data=new ArrayList<>();
 
-        Pageable page = PageRequest.of(current - 1, size, Sort.Direction.DESC, "id");
+        //Pageable page = PageRequest.of(current - 1, size, Sort.Direction.DESC, "id");
         Integer sum=0;
         if(PermissionUtils.isPermitted("1")){
-            Page<SysLog> list=sysLogRepository.findAll(page);
+            List<SysLog> list=sysLogRepository.findAll();
             map.put("status", "1");
-            map.put("totalCount", list.getTotalElements());
-            map.put("data", list.getContent());
+            map.put("totalCount", list.size());
+            map.put("data", list);
         }else if(PermissionUtils.isPermitted("2")){
             Optional<SysDept> sysDept= sysDeptRepository.findById(PermissionUtils.getSysUser().getDeptId());
-            syslogList= sysLogRepository.findByDeptName(sysDept.get().getDeptName(),page);
+            syslogList= sysLogRepository.findByDeptName(sysDept.get().getDeptName());
             sum= sysLogRepository.countByDeptName(sysDept.get().getDeptName());
             map.put("status", "1");
             map.put("totalCount", sum);
@@ -62,8 +62,8 @@ public class SysLogServiceImpl implements SysLogService {
     }
 
     @Override
-    public Object findLogByCondition(Long deptId, String operation, String startTime, String endTime, Integer current, Integer size) {
-        Pageable page = PageRequest.of(current - 1, size, Sort.Direction.DESC, "id");
+    public Object findLogByCondition(Long deptId, String operation, String startTime, String endTime) {
+       // Pageable page = PageRequest.of(current - 1, size, Sort.Direction.DESC, "id");
         List<SysUserlog> sysUserlogList=new ArrayList<>();
         Map<Object,Object> map=new HashMap<>();
         StringBuilder stringBuilder= new StringBuilder("");
@@ -117,10 +117,75 @@ public class SysLogServiceImpl implements SysLogService {
                     return cb.and(predicates.toArray(new Predicate[predicates.size()]));
                 }
             };
-            Page<SysLog> sysUserlogPage=sysLogRepository.findAll(querySpecifi,page);
+            List<SysLog> sysUserlogPage=sysLogRepository.findAll(querySpecifi);
             map.put("status","1");
-            map.put("data",sysUserlogPage.getContent());
-            map.put("totalCount",sysUserlogPage.getTotalElements());
+            map.put("data",sysUserlogPage);
+            map.put("totalCount",sysUserlogPage.size());
+        }else {
+            return ToDataMessage.builder().status("0").message("权限不足").build();
+        }
+        return map;
+    }
+
+    @Override
+    public Object OutSyslogByOperation(Long deptId, String operation, String startTime, String endTime) {
+        List<SysUserlog> sysUserlogList=new ArrayList<>();
+        Map<Object,Object> map=new HashMap<>();
+        StringBuilder stringBuilder= new StringBuilder("");
+        if(endTime!=null) {
+            stringBuilder = new StringBuilder(endTime);
+            Integer a = Integer.parseInt(stringBuilder.substring(8, 9));
+            Integer b = Integer.parseInt(stringBuilder.substring(9, 10));
+            if (b == 9) {
+                a += 1;
+                b = 0;
+            } else {
+                b += 1;
+            }
+            stringBuilder.replace(8, 9, String.valueOf(a));
+            stringBuilder.replace(9, 10, String.valueOf(b));
+            System.out.println(stringBuilder);
+        }
+        if(!PermissionUtils.isPermitted("3")){
+            StringBuilder finalStringBuilder = stringBuilder;
+            Specification<SysLog> querySpecifi = new Specification<SysLog>() {
+                @Override
+                public Predicate toPredicate(Root<SysLog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    //大于或等于传入时间
+                    if(startTime!=null) {
+                        predicates.add(cb.greaterThanOrEqualTo(root.get("createDate").as(String.class), startTime));
+                    }
+                    //小于或等于传入时间
+                    if(endTime!=null) {
+                        predicates.add(cb.lessThanOrEqualTo(root.get("createDate").as(String.class), String.valueOf(finalStringBuilder)));
+                    }
+                    if(deptId!=0) {
+                        if (PermissionUtils.isPermitted("1")) {
+                            Optional<SysDept> sysDept = sysDeptRepository.findById(deptId);
+                            predicates.add(cb.equal(root.get("deptName").as(String.class), sysDept.get().getDeptName()));
+                        }else if(PermissionUtils.isPermitted("2")){
+                            Optional<SysUser> sysUser=sysUserRepository.findById(deptId);
+                            predicates.add(cb.equal(root.get("username").as(String.class), sysUser.get().getLoginName()));
+                        }
+                    }
+                    if(!"所有".equals(operation)){
+                        predicates.add(cb.equal(root.get("operation").as(String.class), operation));
+                    }
+                    if(PermissionUtils.isPermitted("2")){
+                        Optional<SysDept> sysDept= sysDeptRepository.findById(PermissionUtils.getSysUser().getDeptId());
+                        predicates.add(cb.equal(root.get("deptName").as(String.class), sysDept.get().getDeptName()));
+
+                    }
+                    // and到一起的话所有条件就是且关系，or就是或关系
+                    return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+                }
+            };
+            List<SysLog> sysUserlogPage=sysLogRepository.findAll(querySpecifi);
+            map.put("status","1");
+            map.put("data",sysUserlogPage);
+            map.put("totalCount",sysUserlogPage.size());
         }else {
             return ToDataMessage.builder().status("0").message("权限不足").build();
         }

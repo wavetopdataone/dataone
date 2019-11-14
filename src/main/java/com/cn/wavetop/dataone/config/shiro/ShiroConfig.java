@@ -57,7 +57,7 @@ public class ShiroConfig {
 
 
 
-       // filterChainDefinitionMap.put("/**", "authc,kickout");
+      //filterChainDefinitionMap.put("/**", "authc,kickout");
               bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
