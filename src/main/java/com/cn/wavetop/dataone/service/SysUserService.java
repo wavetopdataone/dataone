@@ -28,4 +28,12 @@ public interface SysUserService  {
     Object bindEmail(String email,String emailPassword);
 //个人设置的个人详情
     Object Personal();
+        //查询分组和分组下面的人
+    Object findDeptAndUser();
+
+    Object updPassword(Long userId,String password,String newPassword);
+    //修改超级管理员邮箱
+    Object updSuperEmail(Long userId,String password,String newEmail,String emailPassword);
+    //修改用户邮箱
+    Object updUserEmail(Long userId, String password, String newEmail);
 }

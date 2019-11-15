@@ -92,7 +92,7 @@ public class SysDeptServiceImpl implements SysDeptService {
                 sysDept.setCreateUser(PermissionUtils.getSysUser().getLoginName());
                 SysDept sysDept1 = sysDeptRepository.save(sysDept);
                 if(sysDept1!=null){
-                    logUtil.saveUserlogDept(sysDept, null,null, "com.cn.wavetop.dataone.service.impl.SysDeptServiceImpl.addDept", "添加分组");
+                    logUtil.saveUserlogDept(sysDept, null,null, "com.cn.wavetop.dataone.service.impl.SysDeptServiceImpl.addDept", "添加小组");
                 }
                 return ToDataMessage.builder().status("1").message("添加成功").build();
             } else {
@@ -115,7 +115,7 @@ public class SysDeptServiceImpl implements SysDeptService {
             }else {
                 SysDept sysDept1 = sysDeptRepository.save(sysDept);
                 if(sysDept1!=null){
-                    logUtil.saveUserlogDept(sysDept, sysDeptOld,null, "com.cn.wavetop.dataone.service.impl.SysDeptServiceImpl.updatDept", "修改分组");
+                    logUtil.saveUserlogDept(sysDept, sysDeptOld,null, "com.cn.wavetop.dataone.service.impl.SysDeptServiceImpl.updatDept", "修改小组");
                 }
                 return ToDataMessage.builder().status("1").message("修改成功").build();
             }
@@ -144,7 +144,7 @@ public class SysDeptServiceImpl implements SysDeptService {
                sysUserRepository.deleteById(list.get(0).getId());
                sysUserRoleRepository.deleteByUserId(list.get(0).getId());
                sysDeptRepository.deleteByDeptName(deptName);
-               logUtil.saveUserlogDept(list.get(0), null,sysUserList, "com.cn.wavetop.dataone.service.impl.SysDeptServiceImpl.delDept", "删除分组");
+               logUtil.saveUserlogDept(list.get(0), null,sysUserList, "com.cn.wavetop.dataone.service.impl.SysDeptServiceImpl.delDept", "删除小组");
                return ToDataMessage.builder().status("1").message("删除成功").build();
            }
         }else{

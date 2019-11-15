@@ -23,9 +23,9 @@ public class SysLogController  {
 
     @ApiOperation(value = "条件查询操作日志",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "条件查询操作日志")
     @PostMapping("/findLogByCondition")
-    public Object findLogByCondition(Long deptId,String operation,String startTime,String endTime){
+    public Object findLogByCondition(Long deptId,Long userId,String operation,String startTime,String endTime){
 
-        return sysLogService.findLogByCondition(deptId,operation,startTime,endTime);
+        return sysLogService.findLogByCondition(deptId,userId,operation,startTime,endTime);
     }
 
     /**

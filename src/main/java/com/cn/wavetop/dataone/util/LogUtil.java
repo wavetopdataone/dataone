@@ -136,17 +136,17 @@ public class LogUtil {
         SysDept sysDeptOld=(SysDept)o1;
         StringBuffer stringBuffer=new StringBuffer("");
         String deptName=null;
-        if("添加分组".equals(Operation)){
+        if("添加小组".equals(Operation)){
             deptName=sysDept.getDeptName();
             deail="无";
-        }else if("修改分组".equals(Operation)){
+        }else if("修改小组".equals(Operation)){
             if(!sysDept.getDeptName().equals(sysDeptOld.getDeptName())){
                 deptName=sysDeptOld.getDeptName();
                 deail="将"+sysDeptOld.getDeptName()+"修改为："+sysDept.getDeptName();
             }else{
                 return;
             }
-        }else if("删除分组".equals(Operation)){
+        }else if("删除小组".equals(Operation)){
             deptName=sysDept.getDeptName();
             if(sysUsers!=null&&sysUsers.size()>0) {
                 for (int i = 0; i < sysUsers.size(); i++) {

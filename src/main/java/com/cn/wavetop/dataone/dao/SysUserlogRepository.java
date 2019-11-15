@@ -20,9 +20,8 @@ public interface SysUserlogRepository extends JpaRepository<SysUserlog,Long>, Jp
     //为了查询总数
     List<SysUserlog> findByUsername(String username);
 
-
     List<SysUserlog> findByDeptName(String deptName,Pageable pageable);
-    List<SysUserlog> findByDeptName(String deptName);
+    List<SysUserlog> findByDeptNameOrderByCreateDateDesc(String deptName);
 
 
 }

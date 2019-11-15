@@ -12,6 +12,7 @@ import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.ModularRealmAuthorizer;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -203,15 +204,24 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Object update(SysUser sysUser) {
         List<SysUser> list = sysUserRepository.findAllByLoginName(sysUser.getLoginName());
+        SysUser sysUserEmail=sysUserRepository.findByEmail(sysUser.getEmail());
         Optional<SysUser> sysUser1 = sysUserRepository.findById(sysUser.getId());
          SysUser sysUser2=sysUser1.get();
         if (list != null && list.size() > 0) {
-            return ToDataMessage.builder().status("0").message("用户已存在").build();
-        } else {
+            if(!list.get(0).getId().equals(sysUser.getId())){
+                return ToDataMessage.builder().status("0").message("用户已存在").build();
+            }
+        }
+        if(sysUserEmail!=null){
+            if(!sysUserEmail.getId().equals(sysUser.getId())){
+                return ToDataMessage.builder().status("0").message("邮箱已存在").build();
+            }
+        }
             sysUser1.get().setLoginName(sysUser.getLoginName());
             sysUser1.get().setEmail(sysUser.getEmail());
             sysUser1.get().setUserName(sysUser.getLoginName());
-            if(sysUser.getPassword()!=null&&sysUser.getPassword()!="") {
+            if(sysUser.getPassword()!=null&&!"".equals(sysUser.getPassword())){
+//            if(!sysUser1.get().getPassword().equals(sysUser.getPassword())){
                 String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
                 sysUser1.get().setSalt(saltAndCiphertext[0]);
                 sysUser1.get().setPassword(saltAndCiphertext[1]);
@@ -221,11 +231,9 @@ public class SysUserServiceImpl implements SysUserService {
             sysUser1.get().setUpdateTime(PermissionUtils.getSysUser().getCreateTime());
             sysUserRepository.save(sysUser1.get());
             //添加任务日志
-            logUtil.saveUserlog(sysUser1.get(),sysUser2,"com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.update","修改任务");
-
-
+            logUtil.saveUserlog(sysUser1.get(),sysUser2,"com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.update","修改用户");
             return ToDataMessage.builder().status("1").message("修改成功").build();
-        }
+
     }
 
 
@@ -515,7 +523,7 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserRoleRepository.deleteByUserId(userId);
                 sysUserJobrelaRepository.deleteByUserId(userId);
                 sysUserRepository.updataById(id, userId);
-                logUtil.saveUserlog(sysUser2.get(), null, "com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.HandedTeam", "移交团队");
+                logUtil.saveUserlog(sysUser2.get(), null, "com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.HandedTeam", "移交小组");
                 return ToDataMessage.builder().status("1").message("团队已移交").build();
             }else{
                 return ToDataMessage.builder().status("0").message("不存在用户").build();
@@ -608,9 +616,9 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public Object bindEmail(String email, String emailPassword) {
-        if(PermissionUtils.flag(email)){
-            return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
-        }
+            if(PermissionUtils.flag(email)){
+                return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
+            }
         Optional<SysUser> sysUser= sysUserRepository.findById(PermissionUtils.getSysUser().getId());
         if(PermissionUtils.isPermitted("1")){
            sysUser.get().setEmailPassword(emailPassword);
@@ -630,6 +638,7 @@ public class SysUserServiceImpl implements SysUserService {
             s.setUserId(PermissionUtils.getSysUser().getId());
             s.setUserName(PermissionUtils.getSysUser().getLoginName());
             s.setEmail(PermissionUtils.getSysUser().getEmail());
+            s.setPassword(PermissionUtils.getSysUser().getPassword());
         }
         s.setCountJob(list.size());
         HashMap<Object,Object> map=new HashMap<>();
@@ -637,4 +646,106 @@ public class SysUserServiceImpl implements SysUserService {
         map.put("data",s);
         return map;
     }
+
+    //查询分组和分组下面的人
+    public Object findDeptAndUser(){
+        List<SysDeptUsers> list=new ArrayList<>();
+        SysDeptUsers sysDeptUsers=null;
+        if(PermissionUtils.isPermitted("1")){
+            List<SysDept> sysDeptList=sysDeptRepository.findAll();
+            sysDeptUsers=new SysDeptUsers();
+
+            List<SysUserByDeptVo> sysUserRoleVos=new ArrayList<>();
+            SysUserByDeptVo s= SysUserByDeptVo.builder().userId(Long.valueOf(1)).roleName("超级管理员").loginName(PermissionUtils.getSysUser().getLoginName()).build();
+            sysUserRoleVos.add(s);
+            //添加超级管理员
+            sysDeptUsers.setSysUserList(sysUserRoleVos);
+            list.add(sysDeptUsers);
+            for(SysDept sysDept:sysDeptList){
+                sysDeptUsers=new SysDeptUsers();
+                sysDeptUsers.setDeptId(sysDept.getId());
+                sysDeptUsers.setDeptName(sysDept.getDeptName());
+              sysDeptUsers.setSysUserList(sysUserRepository.findUserRoleByDeptId(sysDept.getId()));
+              list.add(sysDeptUsers);
+            }
+         return ToData.builder().status("1").data(list).build();
+        }else if(PermissionUtils.isPermitted("2")){
+          Optional<SysDept> sysDept=sysDeptRepository.findById(PermissionUtils.getSysUser().getDeptId());
+            sysDeptUsers=new SysDeptUsers();
+           if(sysDept.get()!=null) {
+               sysDeptUsers.setDeptId(sysDept.get().getId());
+               sysDeptUsers.setDeptName(sysDept.get().getDeptName());
+               sysDeptUsers.setSysUserList(sysUserRepository.findUserRoleByDeptId(sysDept.get().getId()));
+             list.add(sysDeptUsers);
+           }
+            return ToData.builder().status("1").data(list).build();
+        }else{
+            return ToData.builder().status("1").message("权限不足").build();
+        }
+    }
+
+
+    public Object updPassword(Long userId,String password,String newPassword){
+       Optional<SysUser> sysUser=sysUserRepository.findById(userId);
+       SysUser sysUser2=sysUser.get();
+        String ciphertext = new Md5Hash(password,sysUser.get().getSalt(),3).toString(); //生成的密文
+        if(ciphertext.equals(sysUser.get().getPassword())){
+            String[] saltAndCiphertext = CredentialMatcher.encryptPassword(newPassword);
+            sysUser.get().setSalt(saltAndCiphertext[0]);
+            sysUser.get().setPassword(saltAndCiphertext[1]);
+            sysUserRepository.save(sysUser.get());
+            logUtil.saveUserlog(sysUser.get(),sysUser2,"com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.updPassword","修改用户");
+            Subject subject= SecurityUtils.getSubject();
+            subject.logout();
+            return ToData.builder().status("1").message("修改成功").build();
+        }else{
+            return ToDataMessage.builder().status("0").message("原密码不正确").build();
+        }
+
+    }
+
+    @Override
+    public Object updSuperEmail(Long userId, String password, String newEmail, String emailPassword) {
+        if(PermissionUtils.flag(newEmail)){
+            return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
+        }
+        Optional<SysUser> sysUser1 = sysUserRepository.findById(userId);
+        if(PermissionUtils.isPermitted("1")){
+            String ciphertext = new Md5Hash(password,sysUser1.get().getSalt(),3).toString(); //生成的密文
+         if(sysUser1.get().getPassword().equals(ciphertext)){
+             String emailType="smtp."+newEmail.split("@")[1];
+             sysUser1.get().setEmailType(emailType);
+             sysUser1.get().setEmail(newEmail);
+             sysUser1.get().setEmailPassword(emailPassword);
+             sysUserRepository.save(sysUser1.get());
+             return ToDataMessage.builder().status("1").message("邮箱修改成功").build();
+         }else{
+             return ToDataMessage.builder().status("0").message("登录密码不正确").build();
+         }
+        }else{
+            return ToDataMessage.builder().status("0").message("权限不足").build();
+        }
+
+    }
+    @Override
+    public Object updUserEmail(Long userId, String password, String newEmail) {
+        if(PermissionUtils.flag(newEmail)){
+            return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
+        }
+        Optional<SysUser> sysUser1 = sysUserRepository.findById(userId);
+
+            String ciphertext = new Md5Hash(password,sysUser1.get().getSalt(),3).toString(); //生成的密文
+            if(sysUser1.get().getPassword().equals(ciphertext)){
+//                String emailType="smtp."+newEmail.split("@")[1];
+//                sysUser1.get().setEmailType(emailType);
+                sysUser1.get().setEmail(newEmail);
+                sysUserRepository.save(sysUser1.get());
+                return ToDataMessage.builder().status("1").message("邮箱修改成功").build();
+            }else{
+                return ToDataMessage.builder().status("0").message("登录密码不正确").build();
+            }
+
+
+    }
+
 }

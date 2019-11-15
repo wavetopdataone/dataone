@@ -26,7 +26,7 @@ public interface SysLoginlogRepository extends JpaRepository<SysLoginlog,Long>, 
 
     List<SysLoginlog> findAll();
 
-    List<SysLoginlog> findByDeptName(String deptName);
+    List<SysLoginlog> findByDeptNameOrderByCreateDateDesc(String deptName);
 
 
    // List<SysLoginlog> findAll(Specification<SysLoginlog> querySpecifi);

@@ -8,12 +8,14 @@ public class SysUserPersonalVo {
     private String userName;
     private String deptName;
     private String email;
+    private String password;
     private Integer countJob;
 
-    public SysUserPersonalVo(Long userId, String userName, String deptName, String email) {
+    public SysUserPersonalVo(Long userId, String userName, String deptName, String email,String password) {
         this.userId = userId;
         this.userName = userName;
         this.deptName = deptName;
         this.email = email;
+        this.password=password;
     }
 }

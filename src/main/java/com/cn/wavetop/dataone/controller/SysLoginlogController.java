@@ -51,8 +51,8 @@ public class SysLoginlogController {
      */
     @ApiOperation(value = "根据操作对象查询登录日志", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "根据操作对象查询登录日志")
     @PostMapping("/loginlog_operation")
-    public Object findSysUserlogByOperation(@RequestParam Long deptId,@RequestParam String operation,@RequestParam String startTime,@RequestParam String endTime){
-        return sysLoginlogSerivece.findSysLoginlogByOperation(deptId,operation,startTime,endTime);
+    public Object findSysUserlogByOperation(@RequestParam Long deptId,@RequestParam Long userId,@RequestParam String operation,@RequestParam String startTime,@RequestParam String endTime){
+        return sysLoginlogSerivece.findSysLoginlogByOperation(deptId,userId,operation,startTime,endTime);
     }
 
     /**

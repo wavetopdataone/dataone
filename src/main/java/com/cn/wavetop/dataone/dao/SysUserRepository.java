@@ -2,6 +2,7 @@ package com.cn.wavetop.dataone.dao;
 
 import com.cn.wavetop.dataone.entity.SysRole;
 import com.cn.wavetop.dataone.entity.SysUser;
+import com.cn.wavetop.dataone.entity.vo.SysUserByDeptVo;
 import com.cn.wavetop.dataone.entity.vo.SysUserDept;
 import com.cn.wavetop.dataone.entity.vo.SysUserPersonalVo;
 import com.cn.wavetop.dataone.entity.vo.SysUserRoleVo;
@@ -15,8 +16,10 @@ import java.util.List;
 @Repository
 public interface SysUserRepository extends JpaRepository<SysUser,Long> {
 
-    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserRoleVo(s.id,r.id,s.loginName,r.roleName,r.roleKey,m.perms,r.remark) from SysUser as s,SysRole as r,SysUserRole as e,SysMenu as m,SysRoleMenu rm where s.id=e.userId and r.id=e.roleId and r.id=rm.roleId and rm.menuId=m.id and s.loginName=:loginName")
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserRoleVo(s.id,r.id,s.loginName,r.roleName,r.roleKey,m.perms,r.remark,s.deptId) from SysUser as s,SysRole as r,SysUserRole as e,SysMenu as m,SysRoleMenu rm where s.id=e.userId and r.id=e.roleId and r.id=rm.roleId and rm.menuId=m.id and s.loginName=:loginName")
     List<SysUserRoleVo> findByLoginName(String loginName);
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserByDeptVo(s.id,s.deptId,s.loginName,s.email,r.roleName) from SysUser as s,SysRole as r,SysUserRole as e where s.id=e.userId and r.id=e.roleId  and s.deptId=:deptId")
+    List<SysUserByDeptVo> findUserRoleByDeptId(Long deptId);
 
     SysUser findByUserNameAndPassword(String userName,String password);
     List<SysUser> findAllByLoginName(String loginName);
@@ -71,6 +74,6 @@ public interface SysUserRepository extends JpaRepository<SysUser,Long> {
     @Query("select u from SysUser u,SysRole r,SysUserRole ur where u.id=ur.userId and r.id=ur.roleId and r.roleKey='2' and u.deptId=:deptId")
     SysUser findUserByDeptId(Long deptId);
     //查询用户自身的权限，部门等信息
-    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserPersonalVo(u.id,u.loginName,d.deptName,u.email) from SysUser u,SysDept d where u.deptId=d.id and u.id=:userId")
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserPersonalVo(u.id,u.loginName,d.deptName,u.email,u.password) from SysUser u,SysDept d where u.deptId=d.id and u.id=:userId")
     SysUserPersonalVo findUserOneById(Long userId);
 }

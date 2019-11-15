@@ -22,9 +22,9 @@ public class SysUserlogController  {
 
     @ApiOperation(value = "条件查询管理日志",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "条件查询管理日志")
     @PostMapping("/findLog")
-    public Object findLog(Long deptId,String operation,String startTime,String endTime){
+    public Object findLog(Long deptId,Long userId,String operation,String startTime,String endTime){
 
-        return sysUserlogService.findLog(deptId,operation,startTime,endTime);
+        return sysUserlogService.findLog(deptId,userId,operation,startTime,endTime);
     }
 
     /**

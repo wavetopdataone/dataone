@@ -129,14 +129,14 @@ public class SysUserController {
 
         return sysUserService.codeEquals(authCode);
     }
-    @ApiOperation(value = "修改密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改密码")
+    @ApiOperation(value = "忘记密码时修改密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改密码")
     @PostMapping("/editPasswordByEmail")
     public Object editPasswordByEmail(String email,String password){
 
         return sysUserService.editPasswordByEmail(email,password);
     }
 
-    @ApiOperation(value = "绑定超管邮箱和密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "绑定超管邮箱和密码")
+    @ApiOperation(value = "初始化绑定超管邮箱和密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "绑定超管邮箱和密码")
     @PostMapping("/bindEmail")
     public Object  bindEmail(String email, String emailPassword){
 
@@ -148,4 +148,20 @@ public class SysUserController {
         return sysUserService.Personal();
     }
 
+    @ApiOperation(value = "查询分组和该分组下面的人",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "查询分组和该分组下面的人")
+    @PostMapping("/findDeptAndUser")
+    public Object  findDeptAndUser(){
+
+        return sysUserService.findDeptAndUser();
+    }
+    @ApiOperation(value = "修改超级管理员邮箱",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改超级管理员邮箱")
+    @PostMapping("/updSuperEmail")
+    public  Object updSuperEmail(Long userId,String password,String newEmail,String emailPassword){
+        return sysUserService.updSuperEmail(userId,password,newEmail,emailPassword);
+    }
+    @ApiOperation(value = "修改用户邮箱",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改用户邮箱")
+    @PostMapping("/updUserEmail")
+    public  Object updUserEmail(Long userId, String password, String newEmail){
+        return sysUserService.updUserEmail(userId,password,newEmail);
+    }
 }

@@ -9,6 +9,8 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class test {
@@ -52,11 +54,35 @@ public void s(){
 
     @Test
     public void show() {
-        String splits = "id,id,NUMBER,22,$,name,name,VARCHAR2,255,$";
-        String[]  splitss= splits.replace("$","@").split(",@,");
-     for(String s:splitss){
-         System.out.println(s);
-     }
+      String  dateStr="2019-10-31";
+
+            SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date dateMaxDate  = format.parse(dateStr);
+                Calendar calendar  =  new GregorianCalendar();
+                calendar.setTime(dateMaxDate);
+                calendar.add(calendar.DATE,1);//把日期往后增加一天.整数往后推,负数往前移动
+                dateStr=format.format(calendar.getTime());   //这个时间就是日期往后推一天的结果
+                System.out.println(dateStr);
+            } catch ( ParseException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+        //驗證密碼
+//        String ciphertext = new Md5Hash("88888","0ae975a6aeb859797f60e98c575ee12c",3).toString(); //生成的密文
+//       String password="a3be8ba9c44a062345e2a210661df3b8";
+//        System.out.println(ciphertext);
+//                if(ciphertext.equals(password)){
+//                    System.out.println(true);
+//                }
+//        String splits = "id,id,NUMBER,22,$,name,name,VARCHAR2,255,$";
+//        String[]  splitss= splits.replace("$","@").split(",@,");
+//     for(String s:splitss){
+//         System.out.println(s);
+//     }
 //        List<SysFieldrule> list = new ArrayList<>();
 ////        String[] a="aa,bb,cc,".split(",");
 ////        for(int b=0;b<a.length;b++){
