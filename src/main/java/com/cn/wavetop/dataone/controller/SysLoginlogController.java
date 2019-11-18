@@ -55,16 +55,6 @@ public class SysLoginlogController {
         return sysLoginlogSerivece.findSysLoginlogByOperation(deptId,userId,operation,startTime,endTime);
     }
 
-    /**
-     * 导出日志信息
-     * @param deptId
-     * @param operation
-     * @return
-     */
-//    @ApiOperation(value = "导出日志信息", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "导出日志信息")
-//    @PostMapping("/outLoginlog")
-//    public Object OutSysLoginlogByOperation(@RequestParam Long deptId,@RequestParam String operation,@RequestParam String startTime,@RequestParam String endTime){
-//        return sysLoginlogSerivece.OutSysLoginlogByOperation(deptId,operation,startTime,endTime);
-//    }
+
 
 }

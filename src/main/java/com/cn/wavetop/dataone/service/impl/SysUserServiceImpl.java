@@ -635,12 +635,15 @@ public class SysUserServiceImpl implements SysUserService {
         List<SysJobrela> list = sysJobrelaRespository.findByUserId(PermissionUtils.getSysUser().getId());
         SysUserPersonalVo s= sysUserRepository.findUserOneById(PermissionUtils.getSysUser().getId());
         if(PermissionUtils.isPermitted("1")){
-            s.setUserId(PermissionUtils.getSysUser().getId());
-            s.setUserName(PermissionUtils.getSysUser().getLoginName());
-            s.setEmail(PermissionUtils.getSysUser().getEmail());
-            s.setPassword(PermissionUtils.getSysUser().getPassword());
+            s=new SysUserPersonalVo(PermissionUtils.getSysUser().getId(),PermissionUtils.getSysUser().getLoginName(),"",PermissionUtils.getSysUser().getEmail(),PermissionUtils.getSysUser().getPassword());
+            s.setCountJob(0);
         }
-        s.setCountJob(list.size());
+        if(list!=null&&list.size()>0) {
+            s.setCountJob(list.size());
+        }else if(PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")){
+            s.setCountJob(0);
+        }
+
         HashMap<Object,Object> map=new HashMap<>();
         map.put("status","1");
         map.put("data",s);
@@ -706,7 +709,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public Object updSuperEmail(Long userId, String password, String newEmail, String emailPassword) {
-        if(PermissionUtils.flag(newEmail)){
+        if(!PermissionUtils.flag(newEmail)){
             return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
         }
         Optional<SysUser> sysUser1 = sysUserRepository.findById(userId);
@@ -729,7 +732,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
     @Override
     public Object updUserEmail(Long userId, String password, String newEmail) {
-        if(PermissionUtils.flag(newEmail)){
+        if(!PermissionUtils.flag(newEmail)){
             return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
         }
         Optional<SysUser> sysUser1 = sysUserRepository.findById(userId);

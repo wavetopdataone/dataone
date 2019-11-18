@@ -154,6 +154,12 @@ public class SysUserController {
 
         return sysUserService.findDeptAndUser();
     }
+    ;
+    @ApiOperation(value = "修改个人密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改个人密码")
+    @PostMapping("/updPassword")
+    public  Object updPassword(Long userId,String password,String newPassword){
+        return sysUserService.updPassword(userId,password,newPassword);
+    }
     @ApiOperation(value = "修改超级管理员邮箱",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改超级管理员邮箱")
     @PostMapping("/updSuperEmail")
     public  Object updSuperEmail(Long userId,String password,String newEmail,String emailPassword){

@@ -11,7 +11,9 @@ public class SysUserPersonalVo {
     private String password;
     private Integer countJob;
 
-    public SysUserPersonalVo(Long userId, String userName, String deptName, String email,String password) {
+
+
+    public SysUserPersonalVo(Long userId, String userName, String deptName, String email, String password) {
         this.userId = userId;
         this.userName = userName;
         this.deptName = deptName;
