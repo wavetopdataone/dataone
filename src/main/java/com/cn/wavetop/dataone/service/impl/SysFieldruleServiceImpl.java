@@ -2,10 +2,7 @@ package com.cn.wavetop.dataone.service.impl;
 
 import com.alibaba.druid.sql.ast.expr.SQLCaseExpr;
 import com.cn.wavetop.dataone.dao.*;
-import com.cn.wavetop.dataone.entity.SysDbinfo;
-import com.cn.wavetop.dataone.entity.SysFieldrule;
-import com.cn.wavetop.dataone.entity.SysJobrela;
-import com.cn.wavetop.dataone.entity.SysTablerule;
+import com.cn.wavetop.dataone.entity.*;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysFieldruleService;
@@ -39,6 +36,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     private SysDbinfoRespository sysDbinfoRespository;
     @Autowired
     private SysFieldruleRepository sysFieldruleRepository;
+    @Autowired
+    private SysFilterTableRepository sysFilterTableRepository;
 
     @Override
     public Object getFieldruleAll() {
@@ -105,21 +104,25 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                             .jobId(job_id)
                             .type(ziduan[2])
                             .scale(ziduan[3])
+                            .notNull(Long.valueOf(ziduan[4]))
+                            .accuracy(ziduan[5])
                             .sourceName(source_name)
                             .destName(dest_name).varFlag(Long.valueOf(2)).build();
                     sysFieldrules.add(repository.save(build));
                 }
             }
             if (sysDbinfo.getType() == 2) {
-                sql = "select column_name,data_type,CHARACTER_MAXIMUM_LENGTH from information_schema.columns where table_name='" + source_name + "'";
-
+                sql = "select Column_Name as ColumnName,data_type as TypeName, (case when data_type = 'float' or data_type = 'int' or data_type = 'datetime' or data_type = 'bigint' or data_type = 'double' or data_type = 'decimal' then NUMERIC_PRECISION else CHARACTER_MAXIMUM_LENGTH end ) as length, NUMERIC_SCALE as Scale,(case when IS_NULLABLE = 'YES' then 0 else 1 end) as CanNull  from information_schema.columns where table_schema ='"+sysDbinfo.getDbname()+"' and table_name='" + source_name + "'";
             } else if (sysDbinfo.getType() == 1) {
                 sql = "SELECT COLUMN_NAME, DATA_TYPE, NVL(DATA_LENGTH,0), NVL(DATA_PRECISION,0), NVL(DATA_SCALE,0), NULLABLE, COLUMN_ID ,DATA_TYPE_OWNER FROM DBA_TAB_COLUMNS WHERE TABLE_NAME='" + source_name
                         + "' AND OWNER='" + sysDbinfo.getSchema() + "'";
             }
             list = DBConns.getResult(sysDbinfo, sql, list_data);
+            SysFilterTable sysFilterTable=null;
+            sysFilterTableRepository.deleteByJobIdAndFilterTable(job_id,source_name);
             for (SysFieldrule sysFieldrule : list) {
                 sysFieldrule1 = new SysFieldrule();
+                sysFilterTable=new SysFilterTable();
                 sysFieldrule1.setFieldName(sysFieldrule.getFieldName());
                 sysFieldrule1.setScale(sysFieldrule.getScale());
                 sysFieldrule1.setType(sysFieldrule.getType());
@@ -129,6 +132,10 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 sysFieldrule1.setDestName(dest_name);
                 sysFieldrule1.setVarFlag(Long.valueOf(1));
                 SysFieldrule sysFieldrule2 = sysFieldruleRepository.save(sysFieldrule1);
+                sysFilterTable.setFilterTable(source_name);
+                sysFilterTable.setJobId(job_id);
+                sysFilterTable.setFilterField(sysFieldrule.getFieldName());
+                sysFilterTableRepository.save(sysFilterTable);
             }
 
 
@@ -162,33 +169,46 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     }
 
     @Override
-    public Object linkTableDetails(SysDbinfo sysDbinfo, String tablename) {
+    public Object linkTableDetails(SysDbinfo sysDbinfo, String tablename,Long job_id) {
+       HashMap<Object,Object> map=new HashMap<>();
         Long type = sysDbinfo.getType();
         String sql = "";
         ArrayList<Object> data = new ArrayList<>();
-        ArrayList<Object> list;
+        ArrayList<SysFieldrule> list=new ArrayList<>();
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
+        SysFieldrule sysFieldrule=null;
         if (type == 2) {
-            sql = "select column_name,data_type,CHARACTER_MAXIMUM_LENGTH from information_schema.columns where table_name='" + tablename + "'";
+            sql = "select Column_Name as ColumnName,data_type as TypeName,\n" +
+                    "(case when data_type = 'float' or data_type = 'double' or data_type = 'int' or data_type = 'datetime' or data_type = 'bigint' or  data_type = 'decimal' then NUMERIC_PRECISION else CHARACTER_MAXIMUM_LENGTH end ) as length,\n" +
+                    "NUMERIC_SCALE as Scale,\n" +
+                    "(case when IS_NULLABLE = 'YES' then 0 else 1 end) as CanNull from information_schema.columns where table_name='" + tablename + "'";
             try {
                 conn = DBConns.getMySQLConn(sysDbinfo);
                 stmt = conn.prepareStatement(sql);
                 rs = stmt.executeQuery(sql);
                 while (rs.next()) {
-                    list = new ArrayList<>();
-                    list.add(rs.getString("column_name"));
-                    list.add(rs.getString("data_type"));
-                    list.add(rs.getString("CHARACTER_MAXIMUM_LENGTH"));
-                    data.add(list);
+                    sysFieldrule=new SysFieldrule();
+                    sysFieldrule.setFieldName(rs.getString("ColumnName"));
+                    sysFieldrule.setType(rs.getString("TypeName"));
+                    if(rs.getString("length")!=null||!"".equals(rs.getString("length"))) {
+                        sysFieldrule.setScale(rs.getString("length"));
+                    }else{
+                        sysFieldrule.setScale(rs.getString("0"));
+                    }
+                    sysFieldrule.setNotNull(Long.valueOf(rs.getString("CanNull")));
+                    sysFieldrule.setAccuracy(rs.getString("Scale"));
+                    System.out.println(sysFieldrule+"aaaaaaaaaaassssssss");
+
+                    list.add(sysFieldrule);
                 }
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
                 return "连接异常@！";
             }
         }
-        if (type == 1) {
+        else if (type == 1) {
             sql = "SELECT COLUMN_NAME, DATA_TYPE, NVL(DATA_LENGTH,0), NVL(DATA_PRECISION,0), NVL(DATA_SCALE,0), NULLABLE, COLUMN_ID ,DATA_TYPE_OWNER FROM DBA_TAB_COLUMNS WHERE TABLE_NAME='" + tablename + "' AND OWNER='" + sysDbinfo.getSchema() + "'";
             System.out.println(sql);
             try {
@@ -196,17 +216,22 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 stmt = conn.prepareStatement(sql);
                 rs = stmt.executeQuery(sql);
                 while (rs.next()) {
-//                    list.clear();
-                    list = new ArrayList<>();
-                    list.add(rs.getString("COLUMN_NAME"));
-                    list.add(rs.getString("DATA_TYPE"));
-                    list.add(rs.getString("NVL(DATA_LENGTH,0)"));
-                    list.add(rs.getString("NVL(DATA_PRECISION,0)"));
-                    list.add(rs.getString("NVL(DATA_SCALE,0)"));
-                    list.add(rs.getString("NULLABLE"));
-                    list.add(rs.getString("COLUMN_ID"));
-                    list.add(rs.getString("DATA_TYPE_OWNER"));
-                    data.add(list);
+                    sysFieldrule=new SysFieldrule();
+                    sysFieldrule.setFieldName(rs.getString("COLUMN_NAME"));
+                    sysFieldrule.setType(rs.getString("DATA_TYPE"));
+                    if(rs.getString("NVL(DATA_LENGTH,0)")!=null||!"".equals(rs.getString("NVL(DATA_LENGTH,0)"))) {
+                        sysFieldrule.setScale(rs.getString("NVL(DATA_LENGTH,0)"));
+                    }else{
+                        sysFieldrule.setScale(rs.getString("0"));
+                    }
+                    if(rs.getString("NULLABLE").equals("Y")){
+                        sysFieldrule.setNotNull(Long.valueOf(0));
+                    }else{
+                        sysFieldrule.setNotNull(Long.valueOf(1));
+                    }
+                    sysFieldrule.setAccuracy(rs.getString("NVL(DATA_SCALE,0)"));
+                    System.out.println(sysFieldrule+"eeeeeeeeeeeeeeeee");
+                    list.add(sysFieldrule);
                 }
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
@@ -218,7 +243,23 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println(list+"---d");
         System.out.println(data);
-        return data;
+      // List<SysFieldrule> sysFieldruleList= sysFieldruleRepository.findByJobIdAndSourceName(job_id,tablename);
+      map.put("status","1");
+      map.put("data",list);
+        return map;
+    }
+    @Override
+    public Object DestlinkTableDetails(SysDbinfo sysDbinfo, String tablename,Long job_id) {
+      HashMap<Object,Object> map=new HashMap<>();
+
+        ArrayList<Object> data = new ArrayList<>();
+        List<SysFieldrule> sysFieldruleList= sysFieldruleRepository.findByJobIdAndSourceName(job_id,tablename);
+        List<SysFieldrule> list=sysFieldruleRepository.findByJobIdAndSourceNameAndVarFlag(job_id,tablename,Long.valueOf(2));
+        map.put("status","1");
+        map.put("data",list);
+        map.put("destName",sysFieldruleList.get(0).getDestName());
+        return map;
     }
 }

@@ -158,7 +158,7 @@ public class SysLogController  {
 //            response.setHeader("Content-Disposition", "attachment;filename="+new String(fileName.getBytes("utf-8"), "iso8859-1"));
 //
             response.setContentType("application/vnd.ms-excel");
-                      response.setHeader("Content-Disposition",
+            response.setHeader("Content-Disposition",
                                         "attachment;fileName=" + finalFileName);
             ServletOutputStream out = null;
             try {

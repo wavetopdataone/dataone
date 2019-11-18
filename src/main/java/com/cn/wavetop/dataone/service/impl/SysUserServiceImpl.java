@@ -616,13 +616,15 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public Object bindEmail(String email, String emailPassword) {
-            if(PermissionUtils.flag(email)){
+        System.out.println(PermissionUtils.getSysUser()+"weishenme");
+        System.out.println(PermissionUtils.isPermitted("1")+"quanxiancaozuo");
+            if(!PermissionUtils.flag(email)){
                 return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
             }
         Optional<SysUser> sysUser= sysUserRepository.findById(PermissionUtils.getSysUser().getId());
         if(PermissionUtils.isPermitted("1")){
            sysUser.get().setEmailPassword(emailPassword);
-        }
+       }
         String emailType="smtp."+email.split("@")[1];
         sysUser.get().setEmail(email);
         sysUser.get().setEmailType(emailType);
@@ -634,9 +636,13 @@ public class SysUserServiceImpl implements SysUserService {
     public Object Personal(){
         List<SysJobrela> list = sysJobrelaRespository.findByUserId(PermissionUtils.getSysUser().getId());
         SysUserPersonalVo s= sysUserRepository.findUserOneById(PermissionUtils.getSysUser().getId());
+        HashMap<Object,Object> map=new HashMap<>();
         if(PermissionUtils.isPermitted("1")){
-            s=new SysUserPersonalVo(PermissionUtils.getSysUser().getId(),PermissionUtils.getSysUser().getLoginName(),"",PermissionUtils.getSysUser().getEmail(),PermissionUtils.getSysUser().getPassword());
-            s.setCountJob(0);
+            SysUserPersonalVo ss=  sysUserRepository.findUserId(PermissionUtils.getSysUser().getId());
+            ss.setCountJob(0);
+            map.put("status","1");
+            map.put("data",ss);
+            return map;
         }
         if(list!=null&&list.size()>0) {
             s.setCountJob(list.size());
@@ -644,7 +650,7 @@ public class SysUserServiceImpl implements SysUserService {
             s.setCountJob(0);
         }
 
-        HashMap<Object,Object> map=new HashMap<>();
+
         map.put("status","1");
         map.put("data",s);
         return map;

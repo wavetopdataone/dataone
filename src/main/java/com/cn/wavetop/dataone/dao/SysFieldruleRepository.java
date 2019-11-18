@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface SysFieldruleRepository extends JpaRepository<SysFieldrule,Long> {
      List<SysFieldrule> findByJobId(long job_id);
-
-
+    List<SysFieldrule> findByJobIdAndSourceName(long job_id,String sourceName);
+    List<SysFieldrule> findByJobIdAndSourceNameAndVarFlag(long job_id,String sourceName,Long varFlag);
     @Modifying
     @Query("delete from SysFieldrule where jobId = :job_id")
     int deleteByJobId(long job_id);
@@ -20,4 +20,7 @@ public interface SysFieldruleRepository extends JpaRepository<SysFieldrule,Long>
     @Modifying
     @Query("delete from SysFieldrule where jobId = :job_id and sourceName=:source_name")
     int deleteByJobIdAndSourceName(long job_id,String source_name);
+
+
+
 }

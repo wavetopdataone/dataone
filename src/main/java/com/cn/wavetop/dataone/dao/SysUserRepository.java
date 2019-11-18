@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.dao;
 
+import com.cn.wavetop.dataone.entity.SysDept;
 import com.cn.wavetop.dataone.entity.SysRole;
 import com.cn.wavetop.dataone.entity.SysUser;
 import com.cn.wavetop.dataone.entity.vo.SysUserByDeptVo;
@@ -76,4 +77,7 @@ public interface SysUserRepository extends JpaRepository<SysUser,Long> {
     //查询用户自身的权限，部门等信息
     @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserPersonalVo(u.id,u.loginName,d.deptName,u.email,u.password) from SysUser u,SysDept d where u.deptId=d.id and u.id=:userId")
     SysUserPersonalVo findUserOneById(Long userId);
+    //查询超管
+    @Query("select new com.cn.wavetop.dataone.entity.vo.SysUserPersonalVo(u.id,u.loginName,'',u.email,u.password) from SysUser u where u.id=:userId")
+    SysUserPersonalVo findUserId(Long userId);
 }

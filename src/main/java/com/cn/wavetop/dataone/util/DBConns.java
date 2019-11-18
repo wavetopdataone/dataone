@@ -151,7 +151,9 @@ public class DBConns {
               String[] b = s.split(",");
               sysFieldrule.setFieldName(b[0]);
               sysFieldrule.setType(b[2]);
-              sysFieldrule.setScale(b[3]);
+              if(!"".equals(b[3])) {
+                  sysFieldrule.setScale(b[3]);
+              }
               set.add(sysFieldrule);
           }
       }
@@ -162,9 +164,11 @@ public class DBConns {
               rs = stmt.executeQuery(sql);
               while (rs.next()) {
                   sysFieldrule=new SysFieldrule();
-                  sysFieldrule.setFieldName(rs.getString("column_name"));
-                  sysFieldrule.setType(rs.getString("data_type"));
-                  sysFieldrule.setScale(rs.getString("CHARACTER_MAXIMUM_LENGTH"));
+                  sysFieldrule.setFieldName(rs.getString("ColumnName"));
+                  sysFieldrule.setType(rs.getString("TypeName"));
+                sysFieldrule.setScale(rs.getString("length"));
+//                  sysFieldrule.setAccuracy(rs.getString("Scale"));
+//                  sysFieldrule.setNotNull(rs.getLong("CanNull"));
                   stringList.add(sysFieldrule);
               }
           } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -182,7 +186,9 @@ public class DBConns {
                   sysFieldrule=new SysFieldrule();
                   sysFieldrule.setFieldName(rs.getString("COLUMN_NAME"));
                   sysFieldrule.setType(rs.getString("DATA_TYPE"));
-                  sysFieldrule.setScale(rs.getString("NVL(DATA_LENGTH,0)"));
+                sysFieldrule.setScale(rs.getString("NVL(DATA_LENGTH,0)"));
+                 // sysFieldrule.setAccuracy(rs.getString("NVL(DATA_SCALE,0)"));
+                //  sysFieldrule.setNotNull(rs.getLong("NULLABLE"));
                   stringList.add(sysFieldrule);
                   //stringList.add(rs.getString("COLUMN_NAME"));
 //                  stringList.add(rs.getString("DATA_TYPE"));

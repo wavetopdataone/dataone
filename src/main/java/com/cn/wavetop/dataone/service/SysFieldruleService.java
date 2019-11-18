@@ -20,6 +20,8 @@ public interface SysFieldruleService {
 
     Object deleteFieldrule(String source_name);
 
-    Object linkTableDetails(SysDbinfo sysDbinfo,String tablename) ;
+    Object linkTableDetails(SysDbinfo sysDbinfo,String tablename,Long job_id) ;
+    //查询修改过后的表字段
+    Object DestlinkTableDetails(SysDbinfo sysDbinfo, String tablename,Long job_id);
 
 }

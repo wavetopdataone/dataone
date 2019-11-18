@@ -124,7 +124,8 @@ public class SysUserlogServiceImpl implements SysUserlogService {
             map.put("data",sysUserlogPage);
             map.put("totalCount",sysUserlogPage.size());
         }else {
-            return ToDataMessage.builder().status("0").message("权限不足").build();
+            map.put("status","0");
+            map.put("message","权限不足");
         }
         return map;
     }

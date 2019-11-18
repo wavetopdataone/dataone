@@ -1,9 +1,6 @@
 package com.cn.wavetop.dataone.service.impl;
 
-import com.cn.wavetop.dataone.dao.SysDbinfoRespository;
-import com.cn.wavetop.dataone.dao.SysFieldruleRepository;
-import com.cn.wavetop.dataone.dao.SysJobrelaRepository;
-import com.cn.wavetop.dataone.dao.SysTableruleRepository;
+import com.cn.wavetop.dataone.dao.*;
 import com.cn.wavetop.dataone.entity.*;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
@@ -31,7 +28,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
     private SysFieldruleRepository sysFieldruleRepository;
     @Autowired
     private SysDbinfoRespository sysDbinfoRespository;
-
+    @Autowired
+    private SysFilterTableRepository sysFilterTableRepository;
     @Override
     public Object tableruleAll() {
         List<SysTablerule> sysUserList=sysTableruleRepository.findAll();
@@ -151,14 +149,20 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             }
             if(sysTableruleList!=null&&sysTableruleList.size()>0){
                 int a= sysTableruleRepository.deleteByJobId(sysTablerule.getJobId());
+                sysFilterTableRepository.deleteByJobId(sysTablerule.getJobId());
                 System.out.println(a);
                 SysTablerule sysTablerule1=null;
+                SysFilterTable sysFilterTable=null;
                 for(int i=0;i<stringList.size();i++){
                     sysTablerule2=new SysTablerule();
+                    sysFilterTable=new SysFilterTable();
                     sysTablerule2.setJobId(sysTablerule.getJobId());
                     sysTablerule2.setSourceTable(stringList.get(i));
                     sysTablerule2.setVarFlag(Long.valueOf(1));
                     sysTablerule1= sysTableruleRepository.save(sysTablerule2);
+                    sysFilterTable.setJobId(sysTablerule.getJobId());
+                    sysFilterTable.setFilterTable(stringList.get(i));
+                    sysFilterTableRepository.save(sysFilterTable);
                     list.add(sysTablerule1);
                 }
 
