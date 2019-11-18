@@ -47,7 +47,7 @@ public class SysLogController  {
 
     @ApiOperation(value = "导出操作日志表", httpMethod = "GET", protocols = "HTTP",produces="application/octet-stream", notes = "导出操作日志表")
     @GetMapping("/OutPutExcel")
-    public void outPutExcel(HttpServletRequest request,HttpServletResponse response, @RequestParam Long deptId, @RequestParam Long userId, @RequestParam String operation, @RequestParam String startTime, @RequestParam String endTime) throws UnsupportedEncodingException {
+    public void outPutExcel(HttpServletRequest request,HttpServletResponse response, @RequestParam Long deptId, @RequestParam Long userId, @RequestParam String operation, @RequestParam String startTime, @RequestParam String endTime, @RequestParam String loginName, @RequestParam String roleKey, @RequestParam Long dept) throws UnsupportedEncodingException {
         response.setCharacterEncoding("utf-8");
         DateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -57,7 +57,7 @@ public class SysLogController  {
         HashMap<String, Object> map = new HashMap<>();
 
         //一、从数据库拿数据
-        map = (HashMap<String, Object>) sysLogService.findLogByCondition(deptId,userId,operation,startTime,endTime);
+        map = (HashMap<String, Object>) sysLogService.OutSyslogByOperation(deptId,userId,operation,startTime,endTime,loginName,roleKey,dept);
         list = (List) map.get("data");
 
         //设置表格

@@ -38,7 +38,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     private SysFieldruleRepository sysFieldruleRepository;
     @Autowired
     private SysFilterTableRepository sysFilterTableRepository;
-
+    @Autowired
+    private SysJobrelaRelatedRespository sysJobrelaRelatedRespository;
     @Override
     public Object getFieldruleAll() {
         return ToData.builder().status("1").data(repository.findAll()).build();
@@ -88,6 +89,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             }
             int a = sysTableruleRespository.deleteByJobIdAndSourceTable(job_id, source_name);
             if (!source_name.equals(dest_name)) {
+              sysJobrelaRelatedRespository.findByMasterJobId(job_id);
                 byJobIdAndSourceTable.setDestTable(dest_name);
                 byJobIdAndSourceTable.setJobId(job_id);
                 byJobIdAndSourceTable.setSourceTable(source_name);

@@ -14,15 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.awt.print.Book;
 import java.util.*;
 
 
@@ -111,16 +105,18 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 return ToData.builder().status("0").message("任务已存在").build();
             } else {
                 String[] name = sysJobrela.getDestName().split(",");
+                String jobName=sysJobrela.getJobName();
                  for(int i=0;i<name.length;i++) {
                      sysJobrela1=new SysJobrela();
-                     sysJobrela1=sysJobrela;
                      // 查看端
                      SysDbinfo source = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getSourceName(), 0);
                      //目标端
                      SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDest(name[i], 1);
-                     sysJobrela1.setJobName(sysJobrela.getJobName()+"_"+(i+1));
+                     sysJobrela1.setJobName(jobName+"_"+(i+1));
                      sysJobrela1.setSourceId(source.getId());
                      sysJobrela1.setSourceType(source.getType());
+                     sysJobrela1.setSourceName(source.getName());
+                     sysJobrela1.setDestName(name[i]);
                      sysJobrela1.setDestId(dest.getId());
                      sysJobrela1.setDestType(dest.getType());
                      sysJobrela1.setJobStatus("5");
@@ -131,20 +127,27 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                      sysUserJobrela.setDeptId(PermissionUtils.getSysUser().getDeptId());
                      sysUserJobrela.setJobrelaId(save.getId());
                      sysUserJobrelaRepository.save(sysUserJobrela);
+                     Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(jobName+"_"+(i+1)).operate("添加").jobId(save.getId()).build();
+                     userlogRespository.save(build);
+
 
                  }
+                 SysJobrelaRelated sysJobrelaRelated=null;
+                 Long jobId=jobIds.get(0);
+                jobIds.remove(0);
                  for(Long id:jobIds){
-
+                     sysJobrelaRelated=new SysJobrelaRelated();
+                     sysJobrelaRelated.setMasterJobId(jobId);
+                     sysJobrelaRelated.setSlaveJobId(id);
+                     sysJobrelaRelatedRespository.save(sysJobrelaRelated);
                  }
-                SysJobrela s  =repository.findByJobName(sysJobrela.getJobName());
-                Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(sysJobrela.getJobName()).operate("添加").jobId(s.getId()).build();
-                userlogRespository.save(build);
+                SysJobrela s  =repository.findByJobName(sysJobrela.getJobName()+"_1");
                 //添加任务日志
                 logUtil.addJoblog(s,"com.cn.wavetop.dataone.service.impl.SysJobrelaServiceImpl.addJobrela","添加任务");
-                SysJobrela ss=repository.findByJobName(sysJobrela.getJobName()+"_1");
+                Optional<SysJobrela> ss=repository.findById(jobId);
                 map.put("status", 1);
                 map.put("message", "添加成功");
-                map.put("data", ss);
+                map.put("data", ss.get());
             }
         } else {
             map.put("status", "2");
