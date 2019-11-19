@@ -40,6 +40,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     private SysFilterTableRepository sysFilterTableRepository;
     @Autowired
     private SysJobrelaRelatedRespository sysJobrelaRelatedRespository;
+
     @Override
     public Object getFieldruleAll() {
         return ToData.builder().status("1").data(repository.findAll()).build();
@@ -162,6 +163,15 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 sysFilterTable.setJobId(job_id);
                 sysFilterTable.setFilterField(sysFieldrule.getFieldName());
                 sysFilterTableRepository.save(sysFilterTable);
+                if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                    for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                        sysFilterTable.setFilterTable(source_name);
+                        sysFilterTable.setJobId(sysJobrelaRelated.getSlaveJobId());
+                        sysFilterTable.setFilterField(sysFieldrule.getFieldName());
+                        sysFilterTableRepository.save(sysFilterTable);
+
+                    }
+                }
             }
 
 
@@ -279,12 +289,11 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     @Override
     public Object DestlinkTableDetails(SysDbinfo sysDbinfo, String tablename,Long job_id) {
       HashMap<Object,Object> map=new HashMap<>();
-
         ArrayList<Object> data = new ArrayList<>();
         List<SysFieldrule> sysFieldruleList= sysFieldruleRepository.findByJobIdAndSourceName(job_id,tablename);
         List<SysFieldrule> list=sysFieldruleRepository.findByJobIdAndSourceNameAndVarFlag(job_id,tablename,Long.valueOf(2));
-        map.put("status","1");
-        map.put("data",list);
+            map.put("status","1");
+            map.put("data", list);
         if(sysFieldruleList!=null&&sysFieldruleList.size()>0) {
             map.put("destName", sysFieldruleList.get(0).getDestName());
         }else{

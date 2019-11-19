@@ -160,7 +160,7 @@ public class SysLogServiceImpl implements SysLogService {
                             predicates.add(cb.equal(root.get("deptName").as(String.class), sysDept.get().getDeptName()));
                         }
                     }else{
-                        if(PermissionUtils.isPermitted("1")&&userId!=0){
+                        if("1".equals(roleKey)&&userId!=0){
                             predicates.add(cb.equal(root.get("username").as(String.class), loginName));
                         }
                     }
