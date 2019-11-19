@@ -166,32 +166,36 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Override
     public Object editJobrela(SysJobrela sysJobrela) {
         HashMap<Object, Object> map = new HashMap();
+        SysJobrela data=null;
+
         if (!PermissionUtils.isPermitted("1")) {
             long id = sysJobrela.getId();
             // 查看该任务是新建否存在，存在修改更新任务，不存在任务
             if (repository.existsByJobName(sysJobrela.getJobName())) {
 
-                // 查看端
-                SysDbinfo source = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getSourceName(), 0);
-                //目标端
-                SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getDestName(), 1);
+                    // 查看端
+                    SysDbinfo source = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getSourceName(), 0);
+                    //目标端
+                    SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getDestName(), 1);
+                     data = repository.findByJobName(sysJobrela.getJobName());
+                    data.setJobName(sysJobrela.getJobName());
+                    data.setSourceType(source.getType());
+                    data.setSourceId(source.getId());
+                    data.setDestId(dest.getId());
+                    data.setDestType(dest.getType());
+                    data.setUserId(sysJobrela.getUserId());
+                    data.setSyncRange(sysJobrela.getSyncRange());
+                    data.setSourceName(sysJobrela.getSourceName());
+                    data.setDestName(sysJobrela.getDestName());
+                    repository.save(data);
 
-                SysJobrela data = repository.findByJobName(sysJobrela.getJobName());
-                data.setJobName(sysJobrela.getJobName());
-                data.setSourceType(source.getType());
-                data.setSourceId(source.getId());
-                data.setDestId(dest.getId());
-                data.setDestType(dest.getType());
-                data.setUserId(sysJobrela.getUserId());
-                data.setSyncRange(sysJobrela.getSyncRange());
-                data.setSourceName(sysJobrela.getSourceName());
-                data.setDestName(sysJobrela.getDestName());
-                repository.save(data);
+                    Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(sysJobrela.getJobName()).operate("修改").jobId(data.getId()).build();
+                    userlogRespository.save(build);
 
-                Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(sysJobrela.getJobName()).operate("修改").jobId(data.getId()).build();
-                userlogRespository.save(build);
-                //添加任务日志
-                logUtil.addJoblog(data,"com.cn.wavetop.dataone.service.impl.editJobrela","修改任务");
+                    //添加任务日志
+                    logUtil.addJoblog(data, "com.cn.wavetop.dataone.service.impl.editJobrela", "修改任务");
+
+
                 map.put("status", 1);
                 map.put("message", "修改成功");
                 map.put("data", data);

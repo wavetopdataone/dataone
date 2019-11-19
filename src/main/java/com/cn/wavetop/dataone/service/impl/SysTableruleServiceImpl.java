@@ -30,6 +30,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
     private SysDbinfoRespository sysDbinfoRespository;
     @Autowired
     private SysFilterTableRepository sysFilterTableRepository;
+    @Autowired
+    private SysJobrelaRelatedRespository sysJobrelaRelatedRespository;
     @Override
     public Object tableruleAll() {
         List<SysTablerule> sysUserList=sysTableruleRepository.findAll();
@@ -147,6 +149,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             }else{
                 return ToData.builder().status("0").message("该连接是目标端").build();
             }
+           List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(sysTablerule.getJobId());
             if(sysTableruleList!=null&&sysTableruleList.size()>0){
                 int a= sysTableruleRepository.deleteByJobId(sysTablerule.getJobId());
                 sysFilterTableRepository.deleteByJobId(sysTablerule.getJobId());
@@ -163,6 +166,19 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     sysFilterTable.setJobId(sysTablerule.getJobId());
                     sysFilterTable.setFilterTable(stringList.get(i));
                     sysFilterTableRepository.save(sysFilterTable);
+                    if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                           //判断是第一次添加还是修改
+                            SysFilterTable sysFilterTable1= sysFilterTableRepository.findByJobId(sysJobrelaRelated.getSlaveJobId());
+                            if(sysFilterTable1!=null){
+                                continue;
+                            }else {
+                                sysFilterTable.setJobId(sysJobrelaRelated.getSlaveJobId());
+                                sysFilterTable.setFilterTable(stringList.get(i));
+                                sysFilterTableRepository.save(sysFilterTable);
+                            }
+                        }
+                    }
                     list.add(sysTablerule1);
                 }
 
@@ -170,12 +186,29 @@ public class SysTableruleServiceImpl implements SysTableruleService {
 
             }else{
                 SysTablerule sysTablerule1=null;
+                SysFilterTable sysFilterTable=null;
                 for(int i=0;i<stringList.size();i++){
                     sysTablerule2=new SysTablerule();
+                    sysFilterTable=new SysFilterTable();
                     sysTablerule2.setJobId(sysTablerule.getJobId());
                     sysTablerule2.setSourceTable(stringList.get(i));
                     sysTablerule2.setVarFlag(Long.valueOf(1));
                     sysTablerule1= sysTableruleRepository.save(sysTablerule2);
+                    sysFilterTable.setJobId(sysTablerule.getJobId());
+                    sysFilterTable.setFilterTable(stringList.get(i));
+                    sysFilterTableRepository.save(sysFilterTable);
+                    if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                            SysFilterTable sysFilterTable1= sysFilterTableRepository.findByJobId(sysJobrelaRelated.getSlaveJobId());
+                            if(sysFilterTable1!=null){
+                                continue;
+                            }else {
+                                sysFilterTable.setJobId(sysJobrelaRelated.getSlaveJobId());
+                                sysFilterTable.setFilterTable(stringList.get(i));
+                                sysFilterTableRepository.save(sysFilterTable);
+                            }
+                        }
+                    }
                     list.add(sysTablerule1);
                 }
 
