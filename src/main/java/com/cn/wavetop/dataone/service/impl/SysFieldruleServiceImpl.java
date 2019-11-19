@@ -88,13 +88,23 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 return ToDataMessage.builder().status("0").message("该任务没有连接").build();
             }
             int a = sysTableruleRespository.deleteByJobIdAndSourceTable(job_id, source_name);
+            List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(job_id);
             if (!source_name.equals(dest_name)) {
-              sysJobrelaRelatedRespository.findByMasterJobId(job_id);
                 byJobIdAndSourceTable.setDestTable(dest_name);
                 byJobIdAndSourceTable.setJobId(job_id);
                 byJobIdAndSourceTable.setSourceTable(source_name);
                 byJobIdAndSourceTable.setVarFlag(Long.valueOf(2));
                 sysTableruleRespository.save(byJobIdAndSourceTable);
+                //查询多任务
+                if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                        byJobIdAndSourceTable.setDestTable(dest_name);
+                        byJobIdAndSourceTable.setJobId(sysJobrelaRelated.getSlaveJobId());
+                        byJobIdAndSourceTable.setSourceTable(source_name);
+                        byJobIdAndSourceTable.setVarFlag(Long.valueOf(2));
+                        sysTableruleRespository.save(byJobIdAndSourceTable);
+                    }
+                }
             }
             sysFieldruleRepository.deleteByJobIdAndSourceName(job_id, source_name);
 
@@ -111,6 +121,20 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                             .sourceName(source_name)
                             .destName(dest_name).varFlag(Long.valueOf(2)).build();
                     sysFieldrules.add(repository.save(build));
+                    if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                        for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                            SysFieldrule builds = SysFieldrule.builder().fieldName(ziduan[0])
+                                    .destFieldName(ziduan[1])
+                                    .jobId(sysJobrelaRelated.getSlaveJobId())
+                                    .type(ziduan[2])
+                                    .scale(ziduan[3])
+                                    .notNull(Long.valueOf(ziduan[4]))
+                                    .accuracy(ziduan[5])
+                                    .sourceName(source_name)
+                                    .destName(dest_name).varFlag(Long.valueOf(2)).build();
+                            sysFieldrules.add(repository.save(builds));
+                        }
+                    }
                 }
             }
             if (sysDbinfo.getType() == 2) {
@@ -261,7 +285,11 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         List<SysFieldrule> list=sysFieldruleRepository.findByJobIdAndSourceNameAndVarFlag(job_id,tablename,Long.valueOf(2));
         map.put("status","1");
         map.put("data",list);
-        map.put("destName",sysFieldruleList.get(0).getDestName());
+        if(sysFieldruleList!=null&&sysFieldruleList.size()>0) {
+            map.put("destName", sysFieldruleList.get(0).getDestName());
+        }else{
+            map.put("destName",null);
+        }
         return map;
     }
 }

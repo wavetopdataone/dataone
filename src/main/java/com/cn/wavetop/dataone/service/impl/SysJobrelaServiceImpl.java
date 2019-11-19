@@ -112,7 +112,13 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                      SysDbinfo source = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getSourceName(), 0);
                      //目标端
                      SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDest(name[i], 1);
-                     sysJobrela1.setJobName(jobName+"_"+(i+1));
+                     if(i==0){
+                         sysJobrela1.setJobName(jobName);
+                     }else{
+                         jobName=null;
+                         jobName=sysJobrela.getJobName()+"_"+i;
+                         sysJobrela1.setJobName(jobName);
+                     }
                      sysJobrela1.setSourceId(source.getId());
                      sysJobrela1.setSourceType(source.getType());
                      sysJobrela1.setSourceName(source.getName());
@@ -127,9 +133,11 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                      sysUserJobrela.setDeptId(PermissionUtils.getSysUser().getDeptId());
                      sysUserJobrela.setJobrelaId(save.getId());
                      sysUserJobrelaRepository.save(sysUserJobrela);
-                     Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(jobName+"_"+(i+1)).operate("添加").jobId(save.getId()).build();
+                     Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(jobName).operate("添加").jobId(save.getId()).build();
                      userlogRespository.save(build);
-
+                     SysJobrela s  =repository.findByJobName(jobName);
+                     //添加任务日志
+                     logUtil.addJoblog(s,"com.cn.wavetop.dataone.service.impl.SysJobrelaServiceImpl.addJobrela","添加任务");
 
                  }
                  SysJobrelaRelated sysJobrelaRelated=null;
@@ -141,9 +149,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                      sysJobrelaRelated.setSlaveJobId(id);
                      sysJobrelaRelatedRespository.save(sysJobrelaRelated);
                  }
-                SysJobrela s  =repository.findByJobName(sysJobrela.getJobName()+"_1");
-                //添加任务日志
-                logUtil.addJoblog(s,"com.cn.wavetop.dataone.service.impl.SysJobrelaServiceImpl.addJobrela","添加任务");
+
                 Optional<SysJobrela> ss=repository.findById(jobId);
                 map.put("status", 1);
                 map.put("message", "添加成功");
