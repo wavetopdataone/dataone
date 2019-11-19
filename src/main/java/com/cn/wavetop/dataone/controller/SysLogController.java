@@ -62,7 +62,7 @@ public class SysLogController  {
         list = (List) map.get("data");
 
         //设置表格
-        if (list != null&&list.size()>0){
+
             //定义excel的文件的名字
             String fileName = "操作日志" + ft.format(new Date()) + ".xlsx";
             /*fileName = URLEncoder.encode(fileName, "UTF-8");*/
@@ -107,12 +107,13 @@ public class SysLogController  {
             XSSFRow rows;
             XSSFCell cells;
             //循环后台拿到的数据给所有行每一列设置对应的值
+        if (list != null&&list.size()>0) {
             for (int i = 0; i < list.size(); i++) {
                 // 在这个sheet页里创建一行
                 rows = sheet.createRow(i + 1);
                 // 该行创建一个单元格,在该单元格里设置值
                 cells = rows.createCell(0);
-                cells.setCellValue(i+1);
+                cells.setCellValue(i + 1);
                 cells = rows.createCell(1);
                 cells.setCellValue(ft.format(list.get(i).getCreateDate()));
                 cells = rows.createCell(2);
@@ -124,6 +125,7 @@ public class SysLogController  {
                 cells = rows.createCell(5);
                 cells.setCellValue(list.get(i).getIp());
             }
+        }
 
             try {
                 String fileNames = "操作日志"+df.format(new Date())+".xlsx";
@@ -137,7 +139,7 @@ public class SysLogController  {
                     e.printStackTrace();
                 }
             }
-        }
+
     }
 
 
