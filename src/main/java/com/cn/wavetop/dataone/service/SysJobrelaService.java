@@ -47,4 +47,6 @@ public interface SysJobrelaService {
 
     //首页根据部门查询任务分页
     Object selJobrelaByDeptIdPage(Long deptId, Integer current, Integer size);
+
+    Object findDbinfoById(Long jobId);
 }

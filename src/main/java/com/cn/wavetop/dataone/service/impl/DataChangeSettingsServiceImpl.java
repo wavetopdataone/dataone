@@ -1,7 +1,10 @@
 package com.cn.wavetop.dataone.service.impl;
 
 import com.cn.wavetop.dataone.dao.DataChangeSettingsRespository;
+import com.cn.wavetop.dataone.dao.SysJobrelaRelatedRespository;
 import com.cn.wavetop.dataone.entity.DataChangeSettings;
+import com.cn.wavetop.dataone.entity.SysJobinfo;
+import com.cn.wavetop.dataone.entity.SysJobrelaRelated;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.DataChangeSettingsService;
@@ -23,7 +26,8 @@ import java.util.List;
 public class DataChangeSettingsServiceImpl implements DataChangeSettingsService {
     @Autowired
     private DataChangeSettingsRespository repository;
-
+    @Autowired
+    private SysJobrelaRelatedRespository sysJobrelaRelatedRespository;
     @Override
     public Object getDataChangeSettingsAll() {
         return ToData.builder().status("1").data(repository.findAll()).build();
@@ -61,18 +65,49 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
     @Override
     public Object editDataChange(DataChangeSettings dataChangeSettings) {
         HashMap<Object, Object> map = new HashMap();
-        DataChangeSettings data;
 
-
+        List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(dataChangeSettings.getJobId());
+        List<DataChangeSettings> list=new ArrayList<>();
         // 查看该任务是否存在，存在修改更新任务，不存在新建任务
+        DataChangeSettings dataChangeSettings1=null;
         if (repository.existsByJobId(dataChangeSettings.getJobId())) {
             repository.updateByJobId(dataChangeSettings.getJobId(), dataChangeSettings.getDeleteSyncingSource(), dataChangeSettings.getDeleteSync(), dataChangeSettings.getNewSync(), dataChangeSettings.getNewtableSource());
-            data = repository.findByJobId(dataChangeSettings.getJobId()).get(0);
+            if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                 list=repository.findByJobId(sysJobrelaRelated.getSlaveJobId());
+                 if(list!=null&&list.size()>0){
+                     dataChangeSettings1=list.get(0);
+                     dataChangeSettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
+                     dataChangeSettings1.setDeleteSync(dataChangeSettings.getDeleteSync());
+                     dataChangeSettings1.setDeleteSyncingSource(dataChangeSettings.getDeleteSyncingSource());
+                     dataChangeSettings1.setNewSync(dataChangeSettings.getNewSync());
+                     dataChangeSettings1.setNewtableSource(dataChangeSettings.getNewtableSource());
+
+
+                 }
+                }
+            }
+
+            DataChangeSettings data = repository.findByJobId(dataChangeSettings.getJobId()).get(0);
             map.put("status", 1);
             map.put("message", "修改成功");
             map.put("data", data);
         } else {
-            data = repository.save(dataChangeSettings);
+            DataChangeSettings dataChangeSettings2=null;
+            DataChangeSettings  data = repository.save(dataChangeSettings);
+            if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                    //判断是第一次添加还是修改
+                    dataChangeSettings2=new DataChangeSettings();
+                    dataChangeSettings2.setJobId(sysJobrelaRelated.getSlaveJobId());
+                    dataChangeSettings2.setDeleteSync(dataChangeSettings.getDeleteSync());
+                    dataChangeSettings2.setDeleteSyncingSource(dataChangeSettings.getDeleteSyncingSource());
+                    dataChangeSettings2.setNewSync(dataChangeSettings.getNewSync());
+                    dataChangeSettings2.setNewtableSource(dataChangeSettings.getNewtableSource());
+                    repository.save(dataChangeSettings2);
+                    }
+                }
+
             map.put("status", 2);
             map.put("message", "添加成功");
             map.put("data", data);

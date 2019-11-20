@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.dao;
 
+import com.cn.wavetop.dataone.entity.SysDbinfo;
 import com.cn.wavetop.dataone.entity.SysFieldrule;
 import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.entity.vo.SysJobrelaUser;
@@ -90,5 +91,8 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
     List<SysJobrela>  findByDeptIdAndJobStatus(String status,Long deptId,Pageable pageable);
     @Query(value = "select j from SysJobrela j,SysUserJobrela uj where  uj.jobrelaId=j.id and uj.deptId=:deptId and j.jobStatus like CONCAT(:status,'%') order by uj.id desc")
     List<SysJobrela> findByDeptIdAndJobStatus(String status,Long deptId);
+
+    @Query(value = "select sd from SysDbinfo sd,SysJobrela sj where  sj.destId=sd.id and sj.id=:id ")
+    SysDbinfo findDbinfoById(Long id);
 
 }

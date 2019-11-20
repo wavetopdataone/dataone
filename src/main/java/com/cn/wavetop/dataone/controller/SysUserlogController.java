@@ -45,9 +45,15 @@ public class SysUserlogController  {
      * @param operation
      * @return
      */
+    /**
+     * 导出管理日志信息
+     * @param deptId
+     * @param operation
+     * @return
+     */
     @ApiOperation(value = "导出管理日志表", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "导出管理日志表")
     @GetMapping("/OutPutUserExcel")
-    public void outPutExcel(@RequestParam Long deptId, @RequestParam Long userId, @RequestParam String operation, @RequestParam String startTime, @RequestParam String endTime, HttpServletResponse response, HttpServletRequest request) throws UnsupportedEncodingException {
+    public void outPutExcel(HttpServletRequest request,HttpServletResponse response, @RequestParam Long deptId, @RequestParam Long userId, @RequestParam String operation, @RequestParam String startTime, @RequestParam String endTime, @RequestParam String loginName, @RequestParam String roleKey, @RequestParam Long dept) throws UnsupportedEncodingException {
 
         DateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH：mm：ss");//设置日期格式
@@ -57,13 +63,13 @@ public class SysUserlogController  {
         HashMap<String, Object> map = new HashMap<>();
 
         //一、从数据库拿数据
-        map = (HashMap<String, Object>) sysUserlogService.findLog(deptId,userId,operation,startTime,endTime);
+        map = (HashMap<String, Object>) sysUserlogService.OutSysUserlogByOperation(deptId,userId,operation,startTime,endTime,loginName,roleKey,dept);
         list = (List) map.get("data");
 
         //设置表格
         if (list != null){
             //定义excel的文件的名字
-            String fileName = "登录日志" + df.format(new Date()) + ".xlsx";
+            String fileName = "管理日志" + df.format(new Date()) + ".xlsx";
             /*fileName = URLEncoder.encode(fileName, "UTF-8");*/
 
             // 定义一个新的工作簿
@@ -119,7 +125,7 @@ public class SysUserlogController  {
                 cells = rows.createCell(3);
                 cells.setCellValue(list.get(i).getOperation());
                 cells = rows.createCell(4);
-                cells.setCellValue(list.get(i).getDeptName());
+                cells.setCellValue(list.get(i).getUserdept());
                 cells = rows.createCell(5);
                 cells.setCellValue(list.get(i).getDetail());
 

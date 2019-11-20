@@ -130,11 +130,12 @@ public class SysJobrelaController {
         return service.addUserByJobId(jobId,userId);
     }
 
+
     @ApiOperation(value = "后台查询", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "后台查询")
     @GetMapping("/findById")
-    public Object findById(Long jobId) {
+    public Object findDbinfoById(Long jobId) {
 
-        return service.findById(jobId);
+        return service.findDbinfoById(jobId);
     }
     @ApiOperation(value = "删除该用户绑定的任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "删除该用户绑定的任务")
     @PostMapping("/deleteUserJobRela")

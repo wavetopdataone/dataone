@@ -12,5 +12,10 @@ public interface SysJobrelaRelatedRespository extends JpaRepository<SysJobrelaRe
     List<SysJobrelaRelated> findByMasterJobId(Long masterJobId);
     @Modifying
     @Query("delete from SysJobrelaRelated where masterJobId = :jobId")
-    Integer deleteByMasterJobId(Long jobId);
+    Integer delete(Long jobId);
+
+    @Modifying
+    @Query("delete from SysJobrelaRelated where slaveJobId = :jobId")
+    Integer deleteBySlaveJobId(Long jobId);
+    boolean existsBySlaveJobId(Long jobId);
 }

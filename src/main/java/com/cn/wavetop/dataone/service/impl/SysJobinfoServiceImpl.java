@@ -1,10 +1,10 @@
 package com.cn.wavetop.dataone.service.impl;
 
-import com.cn.wavetop.dataone.dao.DataChangeSettingsRespository;
-import com.cn.wavetop.dataone.dao.ErrorLogRespository;
-import com.cn.wavetop.dataone.dao.MailnotifySettingsRespository;
-import com.cn.wavetop.dataone.dao.SysJobinfoRespository;
+import com.cn.wavetop.dataone.dao.*;
+import com.cn.wavetop.dataone.entity.SysFilterTable;
 import com.cn.wavetop.dataone.entity.SysJobinfo;
+import com.cn.wavetop.dataone.entity.SysJobrela;
+import com.cn.wavetop.dataone.entity.SysJobrelaRelated;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.SysJobinfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 
@@ -25,7 +26,10 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
     private ErrorLogRespository errorLogRespository;
     @Autowired
     private MailnotifySettingsRespository mailnotifySettingsRespository;
-
+    @Autowired
+    private SysJobrelaRelatedRespository sysJobrelaRelatedRespository;
+    @Autowired
+    private SysJobrelaRespository sysJobrelaRespository;
     @Override
     public Object getJobinfoAll() {
         return ToData.builder().status("1").data(repository.findAll()).build();
@@ -67,6 +71,8 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
         if (syncRange == 0) {
             jobinfo.setSyncRange(Long.valueOf(1));
         }
+        List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(jobinfo.getJobId());
+
         // 查看该任务是否存在，存在修改更新任务，不存在新建任务
         if (repository.existsByJobId(jobinfo.getJobId())) {
             SysJobinfo data = repository.findByJobId(Long.valueOf(jobinfo.getJobId()));
@@ -88,15 +94,64 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
             data.setSyncWay(jobinfo.getSyncWay());
             data.setReadFrequency(jobinfo.getReadFrequency());
             repository.save(data);
+                if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                    for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                        SysJobinfo datas = repository.findByJobId(Long.valueOf(sysJobrelaRelated.getSlaveJobId()));
+                        datas.setSyncRange(jobinfo.getSyncRange());
+                        //data.setId(jobinfo.getId());
+                        datas.setJobId(sysJobrelaRelated.getSlaveJobId());
+                        datas.setBeginTime(jobinfo.getBeginTime());
+                        datas.setDataEnc(jobinfo.getDataEnc());
+
+                        datas.setDestCaseSensitive(jobinfo.getDestCaseSensitive());
+                        datas.setDestWriteConcurrentNum(jobinfo.getDestWriteConcurrentNum());
+                        datas.setEndTime(jobinfo.getEndTime());
+                        datas.setMaxDestWrite(jobinfo.getMaxDestWrite());
+                        datas.setMaxSourceRead(jobinfo.getMaxSourceRead());
+
+                        datas.setPlayers(jobinfo.getPlayers());
+                        datas.setReadBegin(jobinfo.getReadBegin());
+                        datas.setReadWay(jobinfo.getReadWay());
+                        datas.setSyncWay(jobinfo.getSyncWay());
+                        datas.setReadFrequency(jobinfo.getReadFrequency());
+                        repository.save(datas);
+                    }
+                }
             map.put("status", 1);
             map.put("message", "修改成功");
             map.put("data", data);
         } else {
+            SysJobinfo sysJobinfo1=null;
             SysJobinfo data = repository.save(jobinfo);
+            if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                    //判断是第一次添加还是修改
+                    SysJobinfo sysJobinfo= repository.findByJobId(sysJobrelaRelated.getSlaveJobId());
+                    if(sysJobinfo!=null){
+                        continue;
+                    }else {
+                        sysJobinfo1=new SysJobinfo();
+                        sysJobinfo1.setJobId(sysJobrelaRelated.getSlaveJobId());
+                        sysJobinfo1.setBeginTime(jobinfo.getBeginTime());
+                        sysJobinfo1.setEndTime(jobinfo.getEndTime());
+                        sysJobinfo1.setDataEnc(jobinfo.getDataEnc());
+                        sysJobinfo1.setPlayers(jobinfo.getPlayers());
+                        sysJobinfo1.setReadBegin(jobinfo.getReadBegin());
+                        sysJobinfo1.setReadFrequency(jobinfo.getReadFrequency());
+                        sysJobinfo1.setSyncRange(jobinfo.getSyncRange());
+                        sysJobinfo1.setSyncWay(jobinfo.getSyncWay());
+                        System.out.println(sysJobrelaRelated.getSlaveJobId()+"renwu");
+                        repository.save(sysJobinfo1);
+                    }
+                }
+            }
             map.put("status", 2);
             map.put("message", "添加成功");
             map.put("data", data);
         }
+       Optional<SysJobrela> sysJobrela= sysJobrelaRespository.findById(jobinfo.getJobId());
+        sysJobrela.get().setSyncRange(jobinfo.getSyncRange());
+        sysJobrelaRespository.save(sysJobrela.get());
         return map;
     }
 

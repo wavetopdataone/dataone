@@ -45,6 +45,16 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Autowired
     private SysJobrelaRelatedRespository sysJobrelaRelatedRespository;
     @Autowired
+    private DataChangeSettingsRespository dataChangeSettingsRespository;
+    @Autowired
+    private SysTableruleRepository sysTableruleRepository;
+    @Autowired
+    private SysFilterTableRepository sysFilterTableRepository;
+    @Autowired
+    private SysFieldruleRepository sysFieldruleRepository;
+    @Autowired
+    private SysJorelaUserextraRepository sysJorelaUserextraRepository;
+    @Autowired
     private  LogUtil logUtil;
 
     @Override
@@ -122,17 +132,27 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                      sysJobrela1.setSourceId(source.getId());
                      sysJobrela1.setSourceType(source.getType());
                      sysJobrela1.setSourceName(source.getName());
-                     sysJobrela1.setDestName(name[i]);
+
+                     //第一个主任务目的端先用，拼接上，等配置完成后改回来
+                     if(i==0) {
+                         sysJobrela1.setDestName(sysJobrela.getDestName());
+                     }else{
+                         sysJobrela1.setDestName(name[i]);
+                     }
                      sysJobrela1.setDestId(dest.getId());
                      sysJobrela1.setDestType(dest.getType());
                      sysJobrela1.setJobStatus("5");
                       save = repository.save(sysJobrela1);
                      jobIds.add(save.getId());
-                     sysUserJobrela = new SysUserJobrela();
-                     sysUserJobrela.setUserId(PermissionUtils.getSysUser().getId());
-                     sysUserJobrela.setDeptId(PermissionUtils.getSysUser().getDeptId());
-                     sysUserJobrela.setJobrelaId(save.getId());
-                     sysUserJobrelaRepository.save(sysUserJobrela);
+                     //主任务添加到用户任务中，子任务在配置完成后添加
+                     if(jobName.equals(sysJobrela.getJobName())) {
+                         sysUserJobrela = new SysUserJobrela();
+                         sysUserJobrela.setUserId(PermissionUtils.getSysUser().getId());
+                         sysUserJobrela.setDeptId(PermissionUtils.getSysUser().getDeptId());
+                         sysUserJobrela.setJobrelaId(save.getId());
+                         sysUserJobrelaRepository.save(sysUserJobrela);
+                     }
+
                      Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(jobName).operate("添加").jobId(save.getId()).build();
                      userlogRespository.save(build);
                      SysJobrela s  =repository.findByJobName(jobName);
@@ -142,8 +162,17 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                  }
                  SysJobrelaRelated sysJobrelaRelated=null;
                  Long jobId=jobIds.get(0);
+                 //给主任务一个表示
+//                Optional<SysJobrela> sysJobrela2=repository.findById(jobId);
+//                sysJobrela2.get().setRelevence("1");
+//                repository.save(sysJobrela2.get());
                 jobIds.remove(0);
+                //添加与主任务对应的子任务
                  for(Long id:jobIds){
+                     //给子任务一个表示
+//                     Optional<SysJobrela> sysJobrela3=repository.findById(id);
+//                     sysJobrela3.get().setRelevence("0");
+//                     repository.save(sysJobrela3.get());
                      sysJobrelaRelated=new SysJobrelaRelated();
                      sysJobrelaRelated.setMasterJobId(jobId);
                      sysJobrelaRelated.setSlaveJobId(id);
@@ -168,30 +197,52 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         HashMap<Object, Object> map = new HashMap();
         SysJobrela data=null;
 
-        if (!PermissionUtils.isPermitted("1")) {
+        if (PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")) {
             long id = sysJobrela.getId();
             // 查看该任务是新建否存在，存在修改更新任务，不存在任务
             if (repository.existsByJobName(sysJobrela.getJobName())) {
+
+                //没有配置完成并且是主任务修改的话直接把子任务删除
+//                List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(sysJobrela.getId());
+//                if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+//                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+//                        repository.deleteById(sysJobrelaRelated.getSlaveJobId());
+//                        sysJobinfoRespository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+//                        sysUserJobrelaRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId());
+//                        dataChangeSettingsRespository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+//                        sysTableruleRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+//                        sysFieldruleRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+//                        sysFilterTableRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+//                        if(sysJobrelaRelatedRespository.existsBySlaveJobId(sysJobrelaRelated.getSlaveJobId())) {
+//                            sysJobrelaRelatedRespository.deleteBySlaveJobId(sysJobrelaRelated.getSlaveJobId());
+//                        }
+//                    }
+//                }
+
+
+//                String[] name = sysJobrela.getDestName().split(",");
+//                String jobName=sysJobrela.getJobName();
+               data = repository.findByJobName(sysJobrela.getJobName());
+//                for(int i=0;i<name.length;i++) {
 
                     // 查看端
                     SysDbinfo source = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getSourceName(), 0);
                     //目标端
                     SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getDestName(), 1);
-                     data = repository.findByJobName(sysJobrela.getJobName());
                     data.setJobName(sysJobrela.getJobName());
                     data.setSourceType(source.getType());
                     data.setSourceId(source.getId());
                     data.setDestId(dest.getId());
                     data.setDestType(dest.getType());
                     data.setUserId(sysJobrela.getUserId());
-                    data.setSyncRange(sysJobrela.getSyncRange());
+                  //  data.setSyncRange(sysJobrela.getSyncRange());
                     data.setSourceName(sysJobrela.getSourceName());
                     data.setDestName(sysJobrela.getDestName());
                     repository.save(data);
 
                     Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(sysJobrela.getJobName()).operate("修改").jobId(data.getId()).build();
                     userlogRespository.save(build);
-
+//                }
                     //添加任务日志
                     logUtil.addJoblog(data, "com.cn.wavetop.dataone.service.impl.editJobrela", "修改任务");
 
@@ -225,6 +276,28 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                     repository.deleteById(id);
                     sysJobinfoRespository.deleteByJobId(id);
                     sysUserJobrelaRepository.deleteByJobrelaId(id);
+                    dataChangeSettingsRespository.deleteByJobId(id);
+                    sysTableruleRepository.deleteByJobId(id);
+                    sysFieldruleRepository.deleteByJobId(id);
+                    sysFilterTableRepository.deleteByJobId(id);
+                    if(sysJobrelaRelatedRespository.existsBySlaveJobId(id)) {
+                        sysJobrelaRelatedRespository.deleteBySlaveJobId(id);
+                    }
+                    List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(id);
+                    if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                        sysJobrelaRelatedRespository.delete(id);
+
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+
+                            repository.deleteById(sysJobrelaRelated.getSlaveJobId());
+                            sysJobinfoRespository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                            sysUserJobrelaRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId());
+                            dataChangeSettingsRespository.deleteByJobId(id);
+                            sysTableruleRepository.deleteByJobId(id);
+                            sysFieldruleRepository.deleteByJobId(id);
+                            sysFilterTableRepository.deleteByJobId(id);
+                        }
+                    }
                     map.put("status", 1);
                     map.put("message", "删除成功");
                     //添加任务日志
@@ -617,11 +690,14 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     //为任务添加参与人
     public Object addUserByJobId(Long jobId,String userId){
         SysUserJobrela sysUserJobrela=null;
+        SysUserJobrela sysUserJobrela2=null;
+        SysJorelaUserextra sysJorelaUserextra=null;
         boolean flag=false;
         Optional<SysUser> sysUserlist=null;
         List<Long> list=new ArrayList<>();
         List<Long> userlist=new ArrayList<>();
         userlist = sysUserJobrelaRepository.selUserIdByJobId(jobId);
+        List<SysJobrelaRelated> lists= sysJobrelaRelatedRespository.findByMasterJobId(jobId);
         if(userId!=null&&!"".equals(userId)&&!"undefined".equals(userId)) {
             String[] name = userId.split(",");
             for (int i = 0; i < name.length; i++) {
@@ -636,6 +712,19 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 //sysUserJobrela.setDeptId(sysUserlist.get().getDeptId());
                 sysUserJobrela.setJobrelaId(jobId);
                 sysUserJobrelaRepository.save(sysUserJobrela);
+                if (lists != null && lists.size() > 0) {
+                    for (SysJobrelaRelated sysJobrelaRelated : lists) {
+                        sysJorelaUserextra=new SysJorelaUserextra();
+                        sysJorelaUserextra.setUserId(Long.valueOf(name[i]));
+                        sysJorelaUserextra.setJobId(sysJobrelaRelated.getSlaveJobId());
+                        sysJorelaUserextraRepository.save(sysJorelaUserextra);
+//                        sysUserJobrela2 = new SysUserJobrela();
+//                        sysUserJobrela2.setUserId(Long.valueOf(name[i]));
+//                        //sysUserJobrela.setDeptId(sysUserlist.get().getDeptId());
+//                        sysUserJobrela2.setJobrelaId(sysJobrelaRelated.getSlaveJobId());
+//                        sysUserJobrelaRepository.save(sysUserJobrela2);
+                    }
+                }
             }
         }
             if (userlist != null && userlist.size() > 0) {
@@ -780,5 +869,8 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 //        }
     }
 
-
+    public Object findDbinfoById(Long id){
+        SysDbinfo s=repository.findDbinfoById(id);
+        return s;
+    }
 }

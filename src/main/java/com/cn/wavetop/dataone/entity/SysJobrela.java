@@ -39,5 +39,5 @@ public class SysJobrela {
   @Column(name="job_status", columnDefinition="VARCHAR(128) default '5'")
   private String jobStatus;
 
-
+  private String relevence;
 }

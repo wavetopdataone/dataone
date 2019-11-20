@@ -141,64 +141,65 @@ public class SysLoginlogSeriveceImpl implements SysLoginlogSerivece {
     }
 
     @Override
-    public Object OutSysLoginlogByOperation(Long deptId, String operation, String startTime, String endTime) {
+    public Object OutSysLoginlogByOperation(Long deptId,Long userId, String operation, String startTime, String endTime,String loginName,String roleKey,Long dept) {
+        List<SysLoginlog> sysUserLoginlogList=new ArrayList<>();
         Map<Object,Object> map=new HashMap<>();
-        StringBuilder stringBuilder= new StringBuilder("");
-        if(endTime!=null) {
-            stringBuilder = new StringBuilder(endTime);
-            Integer a = Integer.parseInt(stringBuilder.substring(8, 9));
-            Integer b = Integer.parseInt(stringBuilder.substring(9, 10));
-            if (b == 9) {
-                a += 1;
-                b = 0;
-            } else {
-                b += 1;
-            }
-            stringBuilder.replace(8, 9, String.valueOf(a));
-            stringBuilder.replace(9, 10, String.valueOf(b));
-            System.out.println(stringBuilder);
+        String endDate=null;
+        System.out.println(endTime+"-------------------heng");
+        if(endTime!=null&&!"".equals(endTime)) {
+            endDate= DateUtil.dateAdd(endTime,1);
         }
-        if(PermissionUtils.isPermitted("1")||PermissionUtils.isPermitted("2")){
-            StringBuilder finalStringBuilder = stringBuilder;
+        if("1".equals(roleKey)||"2".equals(roleKey)){
+            String finalEndDate = endDate;
             Specification<SysLoginlog> querySpecifi = new Specification<SysLoginlog>() {
                 @Override
                 public Predicate toPredicate(Root<SysLoginlog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
                     List<Predicate> predicates = new ArrayList<>();
 
                     //大于或等于传入时间
-                    if(startTime!=null) {
+                    if(startTime!=null&&!"".equals(startTime)) {
                         predicates.add(cb.greaterThanOrEqualTo(root.get("createDate").as(String.class), startTime));
                     }
                     //小于或等于传入时间
-                    if(endTime!=null) {
-                        predicates.add(cb.lessThanOrEqualTo(root.get("createDate").as(String.class), String.valueOf(finalStringBuilder)));
+                    if(endTime!=null&&!"".equals(endTime)) {
+                        predicates.add(cb.lessThanOrEqualTo(root.get("createDate").as(String.class), finalEndDate));
                     }
                     if(deptId!=0) {
-                        if (PermissionUtils.isPermitted("1")) {
+                        if (userId!=0) {
+                            Optional<SysUser> sysUser=sysUserRepository.findById(userId);
+                            predicates.add(cb.equal(root.get("username").as(String.class), sysUser.get().getLoginName()));
+                        }else {
                             Optional<SysDept> sysDept = sysDeptRepository.findById(deptId);
                             predicates.add(cb.equal(root.get("deptName").as(String.class), sysDept.get().getDeptName()));
-                        }else if(PermissionUtils.isPermitted("2")){
-                            Optional<SysUser> sysUser=sysUserRepository.findById(deptId);
-                            predicates.add(cb.equal(root.get("username").as(String.class), sysUser.get().getLoginName()));
+                        }
+                    }else{
+                        if("1".equals(roleKey)&&userId!=0){
+                            predicates.add(cb.equal(root.get("username").as(String.class), loginName));
                         }
                     }
                     if(!"所有".equals(operation)){
                         predicates.add(cb.equal(root.get("operation").as(String.class), operation));
                     }
-                    if(PermissionUtils.isPermitted("2")){
-                        Optional<SysDept> sysDept= sysDeptRepository.findById(PermissionUtils.getSysUser().getDeptId());
+                    if("2".equals(roleKey)){
+                        Optional<SysDept> sysDept= sysDeptRepository.findById(dept);
                         predicates.add(cb.equal(root.get("deptName").as(String.class), sysDept.get().getDeptName()));
+
                     }
+                    criteriaQuery.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+                    criteriaQuery.orderBy(cb.desc(root.get("createDate")));
+
                     // and到一起的话所有条件就是且关系，or就是或关系
-                    return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+                    return criteriaQuery.getRestriction();
                 }
             };
-            List<SysLoginlog> sysUserlogPage=sysLoginlogRepository.findAll(querySpecifi);
+            List<SysLoginlog> sysUserLoginlogPage=sysLoginlogRepository.findAll(querySpecifi);
             map.put("status","1");
-            map.put("data",sysUserlogPage);
-            map.put("totalCount",sysUserlogPage.size());
+            map.put("data",sysUserLoginlogPage);
+            map.put("totalCount",sysUserLoginlogPage.size());
         }else {
-            return ToDataMessage.builder().status("0").message("权限不足").build();
+            map.put("status","0");
+            map.put("message","权限不足");
+
         }
         return map;
     }
