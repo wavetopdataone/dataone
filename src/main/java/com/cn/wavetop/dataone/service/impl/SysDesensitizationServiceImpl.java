@@ -29,11 +29,16 @@ public class SysDesensitizationServiceImpl implements SysDesensitizationService 
     @Override
     public Object addDesensitization(SysDesensitization sysDesensitization) {
         String[] destName = sysDesensitization.getDestField().split(",");
+        String[] sourceName = sysDesensitization.getSourceField().split(",");
+
         List<SysDesensitization> list=new ArrayList<>();
         HashMap<Object,Object> map=new HashMap<>();
+        //查询是否有子任务
         List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(sysDesensitization.getJobId());
+        //批量添加脱敏规则
         for (int i = 0; i < destName.length; i++) {
             list = sysDesensitizationRepository.findByJobIdAndDestTableAndDestField(sysDesensitization.getJobId(), sysDesensitization.getDestTable(), destName[i]);
+           //若存在脱敏的规则则修改
             if (list != null && list.size() > 0) {
 
                 list.get(0).setDesensitizationWay(sysDesensitization.getDesensitizationWay());
@@ -46,12 +51,15 @@ public class SysDesensitizationServiceImpl implements SysDesensitizationService 
 //                插入脱敏规则
 //                SysDesensitization sysDesensitization1 = sysDesensitizationRepository.save(sysDesensitization);
                 //查询关联的任务
+                //添加子任务的脱敏规则
                 if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
                     SysDesensitization s = null;
                     for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
                         sysDesensitizationRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId(), sysDesensitization.getDestTable(), sysDesensitization.getDestField());
                         s = new SysDesensitization();
                         s.setDestField(destName[i]);
+                        s.setSourceField(sourceName[i]);
+                        s.setSourceTable(sysDesensitization.getSourceTable());
                         s.setDestTable(sysDesensitization.getDestTable());
                         s.setDesensitizationWay(sysDesensitization.getDesensitizationWay());
                         s.setJobId(sysJobrelaRelated.getSlaveJobId());
@@ -65,20 +73,26 @@ public class SysDesensitizationServiceImpl implements SysDesensitizationService 
                 map.put("status","1");
                 map.put("message","修改成功");
             } else {
+                //添加脱敏规则
                SysDesensitization sysDesensitization1=new SysDesensitization();
                 sysDesensitization1.setDestField(destName[i]);
                 sysDesensitization1.setDestTable(sysDesensitization.getDestTable());
+                sysDesensitization1.setSourceField(sourceName[i]);
+                sysDesensitization1.setSourceTable(sysDesensitization.getSourceTable());
                 sysDesensitization1.setDesensitizationWay(sysDesensitization.getDesensitizationWay());
                 sysDesensitization1.setJobId(sysDesensitization.getJobId());
                 if("2".equals(sysDesensitization.getDesensitizationWay())) {
                     sysDesensitization1.setRemark(sysDesensitization.getRemark());
                 }
                 sysDesensitizationRepository.save(sysDesensitization1);
+                //添加子任务的脱敏规则
                 if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
                     SysDesensitization s = null;
                     for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
                         s = new SysDesensitization();
                         s.setDestField(destName[i]);
+                        s.setSourceField(sourceName[i]);
+                        s.setSourceTable(sysDesensitization.getSourceTable());
                         s.setDestTable(sysDesensitization.getDestTable());
                         s.setDesensitizationWay(sysDesensitization.getDesensitizationWay());
                         s.setJobId(sysJobrelaRelated.getSlaveJobId());
@@ -117,7 +131,7 @@ public class SysDesensitizationServiceImpl implements SysDesensitizationService 
     public Object delJobrelaRelated(Long jobId){
        List<SysJobrelaRelated> list= sysJobrelaRelatedRespository.findByMasterJobId(jobId);
         if(list!=null&&list.size()>0) {
-            //把主任务的目标端改成单个第一个
+            //把主任务的目标端改成单个（第一个目标端）
            Optional<SysJobrela> sysJobrela= sysJobrelaRespository.findById(jobId);
            String[] destName=sysJobrela.get().getDestName().split(",");
            sysJobrela.get().setDestName(destName[0]);
@@ -149,6 +163,7 @@ public class SysDesensitizationServiceImpl implements SysDesensitizationService 
                     sysUserJobrelaRepository.save(sysUserJobrela);
                 }
             }
+            //删除任务的关联关系
             sysJobrelaRelatedRespository.delete(jobId);
         }
         return ToDataMessage.builder().status("1").build();

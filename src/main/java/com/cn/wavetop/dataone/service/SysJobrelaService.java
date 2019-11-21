@@ -49,4 +49,6 @@ public interface SysJobrelaService {
     Object selJobrelaByDeptIdPage(Long deptId, Integer current, Integer size);
 
     Object findDbinfoById(Long jobId);
+    Object findRangeByJobId(long Id);
+
 }

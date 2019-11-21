@@ -92,23 +92,26 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             } else {
                 return ToDataMessage.builder().status("0").message("该任务没有连接").build();
             }
+            //查询该任务有没有关联的子任务
             List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(job_id);
             int a = sysTableruleRespository.deleteByJobIdAndSourceTable(job_id, source_name);
             if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
                 for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                    //先删除表规则字段規則過濾规则
                sysTableruleRespository.deleteByJobIdAndSourceTable(sysJobrelaRelated.getSlaveJobId(), source_name);
                sysFieldruleRepository.deleteByJobIdAndSourceName(sysJobrelaRelated.getSlaveJobId(), source_name);
                sysFilterTableRepository.deleteByJobIdAndFilterTable(sysJobrelaRelated.getSlaveJobId(),source_name);
 
                 }
                 }
+            //若源端表和目标端不一致则添加表规则
             if (!source_name.equals(dest_name)) {
                 byJobIdAndSourceTable.setDestTable(dest_name);
                 byJobIdAndSourceTable.setJobId(job_id);
                 byJobIdAndSourceTable.setSourceTable(source_name);
-                byJobIdAndSourceTable.setVarFlag(Long.valueOf(2));
+                byJobIdAndSourceTable.setVarFlag(Long.valueOf(2));//2代表映射
                 sysTableruleRespository.save(byJobIdAndSourceTable);
-                //查询多任务
+                //若有子任务为子任务添加表规则
                 if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
                     for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
 //                        SysTablerule sysTablerule= sysTableruleRespository.findByJobId(sysJobrelaRelated.getSlaveJobId());
@@ -125,10 +128,12 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                     }
                 }
             }
+            //删除主任务字段规则
             sysFieldruleRepository.deleteByJobIdAndSourceName(job_id, source_name);
 
             for (String s : split) {
                 String[] ziduan = s.split(",");
+                //若字段改变则存入字段规则表
                 if (!ziduan[0].equals(ziduan[1])) {
                     SysFieldrule build = SysFieldrule.builder().fieldName(ziduan[0])
                             .destFieldName(ziduan[1])
@@ -140,6 +145,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                             .sourceName(source_name)
                             .destName(dest_name).varFlag(Long.valueOf(2)).build();
                     sysFieldrules.add(repository.save(build));
+                    //若有子任务也保存规则
                     if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
                         for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
 //                            List<SysFieldrule> sysFieldrule= repository.findByJobId(sysJobrelaRelated.getSlaveJobId());
@@ -167,6 +173,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 sql = "SELECT COLUMN_NAME, DATA_TYPE, NVL(DATA_LENGTH,0), NVL(DATA_PRECISION,0), NVL(DATA_SCALE,0), NULLABLE, COLUMN_ID ,DATA_TYPE_OWNER FROM DBA_TAB_COLUMNS WHERE TABLE_NAME='" + source_name
                         + "' AND OWNER='" + sysDbinfo.getSchema() + "'";
             }
+            //不同步的字段
             list = DBConns.getResult(sysDbinfo, sql, list_data);
             SysFilterTable sysFilterTable=null;
             sysFilterTableRepository.deleteByJobIdAndFilterTable(job_id,source_name);
@@ -205,11 +212,11 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 }
             }
 
-
+                       //修改任务的状态为未激活
                     long job_id1 = job_id;
                     SysJobrela sysJobrelaById = sysJobrelaRespository.findById(job_id1);
                sysJobrelaById.setJobStatus("0");
-
+            //修改子任务的状态未激活
             List<SysJobrelaRelated> lists= sysJobrelaRelatedRespository.findByMasterJobId(job_id);
             if(lists!=null&&lists.size()>0) {
                 for(SysJobrelaRelated sysJobrelaRelated:lists){

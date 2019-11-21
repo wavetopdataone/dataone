@@ -79,6 +79,21 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             sysJobrelaList.get(0).setJobStatus("0");
             SysJobrela sysJobrela = sysJobrelaRepository.save(sysJobrelaList.get(0));
         }
+
+        //修改子任务状态
+        Optional<SysJobrela> ss=null;
+        List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(Long.valueOf(job_id));
+        if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+        for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds){
+            ss=sysJobrelaRepository.findById(sysJobrelaRelated.getSlaveJobId());
+              if(ss!=null){
+                  ss.get().setJobStatus("0");
+                  sysJobrelaRepository.save(ss.get());
+              }
+        }
+        }
+
+
         for(String s:stringList){
             list.add(SysTablerule.builder().sourceTable(s).build());
         }
@@ -149,18 +164,23 @@ public class SysTableruleServiceImpl implements SysTableruleService {
             }else{
                 return ToData.builder().status("0").message("该连接是目标端").build();
             }
+            //判断是否有子任务
            List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(sysTablerule.getJobId());
             if(sysTableruleList!=null&&sysTableruleList.size()>0){
+                //若是修改主任务则先删除标规则字段规则
                 int a= sysTableruleRepository.deleteByJobId(sysTablerule.getJobId());
                 sysFilterTableRepository.deleteByJobId(sysTablerule.getJobId());
                 if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                    //子任务的删除规则
                     for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                        sysTableruleRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
                         sysFilterTableRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
                     }
                 }
                 System.out.println(a);
                 SysTablerule sysTablerule1=null;
                 SysFilterTable sysFilterTable=null;
+                //添加过滤的表
                 for(int i=0;i<stringList.size();i++){
                     sysTablerule2=new SysTablerule();
                     sysFilterTable=new SysFilterTable();
@@ -171,6 +191,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     sysFilterTable.setJobId(sysTablerule.getJobId());
                     sysFilterTable.setFilterTable(stringList.get(i));
                     sysFilterTableRepository.save(sysFilterTable);
+                    //添加子任务过滤的表
                     if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
                         SysFilterTable sysFilterTable3=null;
                         for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
@@ -186,8 +207,10 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     return ToData.builder().status("1").data(list).message("修改成功").build();
 
             }else{
+                //添加
                 SysTablerule sysTablerule1=null;
                 SysFilterTable sysFilterTable=null;
+                //添加过滤的表
                 for(int i=0;i<stringList.size();i++){
                     sysTablerule2=new SysTablerule();
                     sysFilterTable=new SysFilterTable();
@@ -198,6 +221,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                     sysFilterTable.setJobId(sysTablerule.getJobId());
                     sysFilterTable.setFilterTable(stringList.get(i));
                     sysFilterTableRepository.save(sysFilterTable);
+                    //添加子任务过滤的表
                     if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
                         SysFilterTable sysFilterTable3=null;
 
