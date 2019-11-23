@@ -51,22 +51,28 @@ public void s(){
         System.out.println(s+"----");
     }
 }
-
-    @Test
-    public void show() {
-      String  dateStr="2019-10-31";
-
-            SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                Date dateMaxDate  = format.parse(dateStr);
-                Calendar calendar  =  new GregorianCalendar();
-                calendar.setTime(dateMaxDate);
-                calendar.add(calendar.DATE,1);//把日期往后增加一天.整数往后推,负数往前移动
-                dateStr=format.format(calendar.getTime());   //这个时间就是日期往后推一天的结果
-                System.out.println(dateStr);
-            } catch ( ParseException e) {
-                e.printStackTrace();
-            }
+    /**
+     * 日期转星期
+     *
+     * @param datetime
+     * @return
+     */
+    public static String dateToWeek(String datetime) {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        Calendar cal = Calendar.getInstance(); // 获得一个日历
+        Date datet = null;
+        try {
+            datet = f.parse(datetime);
+            cal.setTime(datet);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1; // 指示一个星期中的某天。
+        if (w < 0)
+            w = 0;
+        return weekDays[w];
+    }
 
 
 
@@ -138,5 +144,5 @@ public void s(){
 //        for (String b : list) {
 //            System.out.println(b);
 //        }
-    }
+
 }

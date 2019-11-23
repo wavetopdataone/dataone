@@ -2,10 +2,14 @@ package com.cn.wavetop.dataone.service.impl;
 
 import com.cn.wavetop.dataone.dao.ErrorLogRespository;
 import com.cn.wavetop.dataone.dao.MailnotifySettingsRespository;
+import com.cn.wavetop.dataone.dao.SysJobrelaRelatedRespository;
 import com.cn.wavetop.dataone.entity.ErrorQueueSettings;
 import com.cn.wavetop.dataone.entity.MailnotifySettings;
+import com.cn.wavetop.dataone.entity.SysFilterTable;
+import com.cn.wavetop.dataone.entity.SysJobrelaRelated;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.MailnotifySettingsService;
+import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,8 @@ import java.util.Map;
 public class MailnotifySettingsServiceImpl implements MailnotifySettingsService {
     @Autowired
     private MailnotifySettingsRespository repository;
+    @Autowired
+    private SysJobrelaRelatedRespository sysJobrelaRelatedRespository;
 
     @Override
     public Object getMailnotifyAll() {
@@ -67,17 +73,47 @@ public class MailnotifySettingsServiceImpl implements MailnotifySettingsService 
         HashMap<Object, Object> map = new HashMap();
         ArrayList<MailnotifySettings>  data = new ArrayList<>();
         long jobId = mailnotifySettings.getJobId();
+        List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(jobId);
 
         // 查看该任务是否存在，存在修改更新任务，不存在新建任务
         if (repository.existsByJobId(jobId)) {
 
             repository.updataByJobId(mailnotifySettings.getJobError(),mailnotifySettings.getErrorQueueAlert(),mailnotifySettings.getErrorQueuePause(),mailnotifySettings.getSourceChange(),jobId);
             MailnotifySettings save = repository.save(mailnotifySettings);
+            //若果是编辑者修改，则先删除子任务的规则，因为管理员在修改任务已经删除过了
+
+                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                    MailnotifySettings mailnotifySettings2=null;
+                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                        if(PermissionUtils.isPermitted("3")) {
+                        repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                    }
+                        mailnotifySettings2=new MailnotifySettings();
+                        mailnotifySettings2.setErrorQueueAlert(mailnotifySettings.getErrorQueueAlert());
+                        mailnotifySettings2.setErrorQueuePause(mailnotifySettings.getErrorQueuePause());
+                        mailnotifySettings2.setJobError(mailnotifySettings.getJobError());
+                        mailnotifySettings2.setSourceChange(mailnotifySettings.getSourceChange());
+                        mailnotifySettings2.setJobId(sysJobrelaRelated.getSlaveJobId());
+                        repository.save(mailnotifySettings2);
+                }
+            }
             map.put("status", 1);
             map.put("message", "修改成功");
             map.put("data", save);
         } else {
             MailnotifySettings save =repository.save(mailnotifySettings);
+            if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                MailnotifySettings mailnotifySettings1=null;
+                for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                    mailnotifySettings1=new MailnotifySettings();
+                    mailnotifySettings1.setErrorQueueAlert(mailnotifySettings.getErrorQueueAlert());
+                    mailnotifySettings1.setErrorQueuePause(mailnotifySettings.getErrorQueuePause());
+                    mailnotifySettings1.setJobError(mailnotifySettings.getJobError());
+                    mailnotifySettings1.setSourceChange(mailnotifySettings.getSourceChange());
+                    mailnotifySettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
+                    repository.save(mailnotifySettings1);
+                }
+                }
             map.put("status", 2);
             map.put("message", "添加成功");
             map.put("data", save);

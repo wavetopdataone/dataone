@@ -165,21 +165,29 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
         //StringBuffer sum=new StringBuffer();
         long sum=0;
         long errorDatas=0;
+        long readData=0;
+        long writeData=0;
         HashMap<Object, Object> map = new HashMap();
         if(sysMonitoringList!=null&&sysMonitoringList.size()>0) {
             for (SysMonitoring sysMonitoring:sysMonitoringList){
                 if(sysMonitoring.getSqlCount()==null){
                     sysMonitoring.setSqlCount((long) 0);
                 }
-
+                if(sysMonitoring.getReadData()==null){
+                    sysMonitoring.setReadData((long) 0);
+                }
+                if(sysMonitoring.getWriteData()==null){
+                    sysMonitoring.setWriteData((long) 0);
+                }
                 if(sysMonitoring.getErrorData()==null){
                     sysMonitoring.setErrorData((long) 0);
                 }
-                sum+=sysMonitoring.getSqlCount();
+                readData+=sysMonitoring.getReadData();
+                writeData+=sysMonitoring.getWriteData();
                 errorDatas+=sysMonitoring.getErrorData();
             }
-            map.put("read_datas",sum);
-            map.put("write_datas",sum);
+            map.put("read_datas",readData);
+            map.put("write_datas",writeData);
             map.put("error_datas",errorDatas);
 
             return map;
@@ -198,17 +206,28 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
             List<SysTablerule> sysTablerules=new ArrayList<SysTablerule>();
             List<SysMonitoring> sysMonitoringList1=new ArrayList<SysMonitoring>();
 
-            if(sysMonitoringList!=null&&sysMonitoringList.size()>0) {
+          if(sysMonitoringList!=null&&sysMonitoringList.size()>0) {
                 for (SysMonitoring sysMonitoring:sysMonitoringList){
                     sysTablerules= sysTableruleRepository.findBySourceTableAndJobId(sysMonitoring.getSourceTable(),sysMonitoring.getJobId());
+                    sysMonitoringList1=sysMonitoringRepository.findBySourceTableAndJobId(sysMonitoring.getSourceTable(),sysMonitoring.getJobId());
                     System.out.println(sysTablerules);
-                    for (SysTablerule sysTablerule:sysTablerules){
-                        sysMonitoringList1=sysMonitoringRepository.findBySourceTableAndJobId(sysMonitoring.getSourceTable(),sysMonitoring.getJobId());
-                        System.out.println(sysMonitoringList1);
-                        sysMonitoringList1.get(0).setDestTable(sysTablerule.getDestTable());
-                        SysMonitoring S= sysMonitoringRepository.save(sysMonitoringList1.get(0));
-                        System.out.println(S);
+                    //如果目的表没有，去tablerule中找（找到的一定是修改过的）目标表，插到监控表里
+                   // 如果tablerule中没有则代表源表和目的表是一致的;
+                    if(sysMonitoringList1!=null&&sysMonitoringList1.size()>0) {
+                        if (sysTablerules != null && sysTablerules.size()>0) {
+                            sysMonitoringList1.get(0).setDestTable(sysTablerules.get(0).getSourceTable());
+
+                        } else {
+                            sysMonitoringList1.get(0).setDestTable(sysMonitoringList1.get(0).getSourceTable());
+                        }
+                        sysMonitoringRepository.save(sysMonitoringList1.get(0));
                     }
+////                    for (SysTablerule sysTablerule:sysTablerules){
+////                        System.out.println(sysMonitoringList1);
+////                        sysMonitoringList1.get(0).setDestTable(sysTablerule.getDestTable());
+////                        SysMonitoring S= sysMonitoringRepository.save(sysMonitoringList1.get(0));
+////                        System.out.println(S);
+////                    }
                 }
                 sysMonitoringList=sysMonitoringRepository.findByJobId(job_id);
                 return ToData.builder().status("1").data(sysMonitoringList).build();
@@ -217,7 +236,6 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
             }
 
         }catch (Exception e){
-          TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
           return ToDataMessage.builder().status("0").message("发生错误").build();
 
         }

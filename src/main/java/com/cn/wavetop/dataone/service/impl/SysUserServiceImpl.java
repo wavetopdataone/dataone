@@ -550,7 +550,11 @@ public class SysUserServiceImpl implements SysUserService {
     public Object selectUserByParentId(Long userId) {
         if(PermissionUtils.isPermitted("1")){
             List<SysUserDept> list=sysUserRepository.findUserByUserId(userId,"3");
-            return ToData.builder().status("1").data(list).build();
+            if(list!=null&&list.size()>0) {
+                return ToData.builder().status("1").data(list).build();
+            }else{
+                return  ToDataMessage.builder().status("0").message("该部门下没有编辑者");
+            }
         }else{
           return  ToDataMessage.builder().status("0").message("权限不足").build();
         }

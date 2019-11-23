@@ -7,6 +7,7 @@ import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.entity.SysJobrelaRelated;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.SysJobinfoService;
+import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -94,9 +95,19 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
             data.setSyncWay(jobinfo.getSyncWay());
             data.setReadFrequency(jobinfo.getReadFrequency());
             repository.save(data);
+            if(PermissionUtils.isPermitted("3")) {
+                //查询该任务有没有关联的子任务
+                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                        //先删除表规则字段規則過濾规则
+                        repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                    }
+                }
+            }
                 if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                    SysJobinfo datas=null;
                     for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
-                        SysJobinfo datas = repository.findByJobId(Long.valueOf(sysJobrelaRelated.getSlaveJobId()));
+                        datas=new SysJobinfo();
                         datas.setSyncRange(jobinfo.getSyncRange());
                         //data.setId(jobinfo.getId());
                         datas.setJobId(sysJobrelaRelated.getSlaveJobId());
@@ -125,11 +136,7 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
             SysJobinfo data = repository.save(jobinfo);
             if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
                 for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
-                    //判断是第一次添加还是修改
-                    SysJobinfo sysJobinfo= repository.findByJobId(sysJobrelaRelated.getSlaveJobId());
-                    if(sysJobinfo!=null){
-                        continue;
-                    }else {
+
                         sysJobinfo1=new SysJobinfo();
                         sysJobinfo1.setJobId(sysJobrelaRelated.getSlaveJobId());
                         sysJobinfo1.setBeginTime(jobinfo.getBeginTime());
@@ -142,16 +149,24 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
                         sysJobinfo1.setSyncWay(jobinfo.getSyncWay());
                         System.out.println(sysJobrelaRelated.getSlaveJobId()+"renwu");
                         repository.save(sysJobinfo1);
-                    }
+
                 }
             }
             map.put("status", 2);
             map.put("message", "添加成功");
             map.put("data", data);
         }
+        //同步的方式
        Optional<SysJobrela> sysJobrela= sysJobrelaRespository.findById(jobinfo.getJobId());
         sysJobrela.get().setSyncRange(jobinfo.getSyncRange());
         sysJobrelaRespository.save(sysJobrela.get());
+        if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+            for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                Optional<SysJobrela> sysJobrelas= sysJobrelaRespository.findById(sysJobrelaRelated.getSlaveJobId());
+                sysJobrelas.get().setSyncRange(jobinfo.getSyncRange());
+                sysJobrelaRespository.save(sysJobrelas.get());
+            }
+            }
         return map;
     }
 

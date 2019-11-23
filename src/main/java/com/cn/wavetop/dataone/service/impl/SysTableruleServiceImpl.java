@@ -8,6 +8,7 @@ import com.cn.wavetop.dataone.service.SysTableruleService;
 import com.cn.wavetop.dataone.util.DBConn;
 import com.cn.wavetop.dataone.util.DBConns;
 import com.cn.wavetop.dataone.util.DBHelper;
+import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -170,11 +171,13 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 //若是修改主任务则先删除标规则字段规则
                 int a= sysTableruleRepository.deleteByJobId(sysTablerule.getJobId());
                 sysFilterTableRepository.deleteByJobId(sysTablerule.getJobId());
-                if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
-                    //子任务的删除规则
-                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                        sysTableruleRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
-                        sysFilterTableRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                if(PermissionUtils.isPermitted("3")) {
+                    if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                        //子任务的删除规则
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                            sysTableruleRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                            sysFilterTableRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                        }
                     }
                 }
                 System.out.println(a);

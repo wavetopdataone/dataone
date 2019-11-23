@@ -8,6 +8,7 @@ import com.cn.wavetop.dataone.entity.SysJobrelaRelated;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.DataChangeSettingsService;
+import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,17 +75,19 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
             repository.updateByJobId(dataChangeSettings.getJobId(), dataChangeSettings.getDeleteSyncingSource(), dataChangeSettings.getDeleteSync(), dataChangeSettings.getNewSync(), dataChangeSettings.getNewtableSource());
             if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
                 for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
-                 list=repository.findByJobId(sysJobrelaRelated.getSlaveJobId());
-                 if(list!=null&&list.size()>0){
-                     dataChangeSettings1=list.get(0);
+                    if(PermissionUtils.isPermitted("3")) {
+                        repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                    }
+
+                     dataChangeSettings1=new DataChangeSettings();
                      dataChangeSettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
                      dataChangeSettings1.setDeleteSync(dataChangeSettings.getDeleteSync());
                      dataChangeSettings1.setDeleteSyncingSource(dataChangeSettings.getDeleteSyncingSource());
                      dataChangeSettings1.setNewSync(dataChangeSettings.getNewSync());
                      dataChangeSettings1.setNewtableSource(dataChangeSettings.getNewtableSource());
+                     repository.save(dataChangeSettings1);
 
 
-                 }
                 }
             }
 

@@ -9,6 +9,7 @@ import com.cn.wavetop.dataone.service.SysFieldruleService;
 import com.cn.wavetop.dataone.util.DBConn;
 import com.cn.wavetop.dataone.util.DBConns;
 import com.cn.wavetop.dataone.util.DBHelper;
+import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,18 +93,22 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             } else {
                 return ToDataMessage.builder().status("0").message("该任务没有连接").build();
             }
-            //查询该任务有没有关联的子任务
-            List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(job_id);
+            List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(job_id);
             int a = sysTableruleRespository.deleteByJobIdAndSourceTable(job_id, source_name);
-            if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
-                for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                    //先删除表规则字段規則過濾规则
-               sysTableruleRespository.deleteByJobIdAndSourceTable(sysJobrelaRelated.getSlaveJobId(), source_name);
-               sysFieldruleRepository.deleteByJobIdAndSourceName(sysJobrelaRelated.getSlaveJobId(), source_name);
-               sysFilterTableRepository.deleteByJobIdAndFilterTable(sysJobrelaRelated.getSlaveJobId(),source_name);
+            if(PermissionUtils.isPermitted("3")) {
+                //查询该任务有没有关联的子任务
+                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                        //先删除表规则字段規則過濾规则
+                        sysTableruleRespository.deleteByJobIdAndSourceTable(sysJobrelaRelated.getSlaveJobId(), source_name);
+                        sysFieldruleRepository.deleteByJobIdAndSourceName(sysJobrelaRelated.getSlaveJobId(), source_name);
+                        sysFilterTableRepository.deleteByJobIdAndFilterTable(sysJobrelaRelated.getSlaveJobId(), source_name);
 
+                    }
                 }
-                }
+            }
+            //删除主任务的表规则
+            sysTableruleRespository.deleteByJobIdAndSourceTable(job_id, source_name);
             //若源端表和目标端不一致则添加表规则
             if (!source_name.equals(dest_name)) {
                 byJobIdAndSourceTable.setDestTable(dest_name);

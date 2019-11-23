@@ -16,4 +16,5 @@ public interface SysDesensitizationRepository extends JpaRepository<SysDesensiti
     List<SysDesensitization> findByJobIdAndDestTable(Long jobId,String destTable);
     List<SysDesensitization> findByJobIdAndSourceTable(Long jobId,String sourceTable);
 
+    int deleteByJobId(Long jobId);
 }

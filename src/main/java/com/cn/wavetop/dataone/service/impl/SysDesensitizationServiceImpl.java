@@ -55,7 +55,9 @@ public class SysDesensitizationServiceImpl implements SysDesensitizationService 
                 if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
                     SysDesensitization s = null;
                     for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                        sysDesensitizationRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId(), sysDesensitization.getDestTable(), sysDesensitization.getDestField());
+                        if(PermissionUtils.isPermitted("3")) {
+                            sysDesensitizationRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId(), sysDesensitization.getDestTable(), sysDesensitization.getDestField());
+                        }
                         s = new SysDesensitization();
                         s.setDestField(destName[i]);
                         s.setSourceField(sourceName[i]);
