@@ -3,6 +3,7 @@ package com.cn.wavetop.dataone.dao;
 import com.cn.wavetop.dataone.entity.SysDbinfo;
 import com.cn.wavetop.dataone.entity.SysFieldrule;
 import com.cn.wavetop.dataone.entity.SysJobrela;
+import com.cn.wavetop.dataone.entity.vo.EmailJobrelaVo;
 import com.cn.wavetop.dataone.entity.vo.SysJobrelaUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -94,5 +95,8 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
 
     @Query(value = "select sd from SysDbinfo sd,SysJobrela sj where  sj.destId=sd.id and sj.id=:id ")
     SysDbinfo findDbinfoById(Long id);
+
+    @Query(value = "select new com.cn.wavetop.dataone.entity.vo.EmailJobrelaVo(m.jobId,sj.jobName,m.jobError,m.errorQueueAlert,m.errorQueuePause,m.sourceChange) from MailnotifySettings m,SysJobrela sj where m.jobId=sj.id  and sj.jobStatus='1'")
+    List<EmailJobrelaVo> findEmailJobRelaUser();
 
 }

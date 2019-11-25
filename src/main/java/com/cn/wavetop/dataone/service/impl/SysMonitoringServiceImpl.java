@@ -189,12 +189,13 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
             map.put("read_datas",readData);
             map.put("write_datas",writeData);
             map.put("error_datas",errorDatas);
-
+            map.put("status","1");
             return map;
         }else{
             map.put("read_datas","0");
             map.put("write_datas","0");
             map.put("error_datas","0");
+            map.put("status","0");
             return map;
         }
     }

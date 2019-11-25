@@ -1,6 +1,8 @@
 package com.cn.wavetop.dataone.util;
 
 import com.cn.wavetop.dataone.entity.SysUser;
+import com.cn.wavetop.dataone.entity.vo.EmailPropert;
+import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.commons.net.smtp.SMTPClient;
@@ -40,6 +42,43 @@ public class EmailUtils {
         return sb.toString().substring(4, 8);  //截取字符串第4到8
     }
 
+    public boolean sendAuthCodeEmail(SysUser sysUser, EmailPropert emailPropert,List<SysUser> email) {
+        String hostName=sysUser.getEmailType();
+        String username=sysUser.getEmail();
+        String password=sysUser.getEmailPassword();
+        try {
+            SimpleEmail mail = new SimpleEmail();
+            System.out.println(sysUser.getEmailType() + "-----" + sysUser.getEmail());
+            mail.setHostName(hostName);//发送邮件的服务器
+            mail.setAuthentication(username, password);//登录邮箱的密码，是开启SMTP的密码
+            mail.setFrom(username, emailPropert.getForm());  //发送邮件的邮箱和发件人
+            mail.addHeader("X-Mailer","Microsoft Outlook Express 6.00.2900.2869");
+            mail.setSSLOnConnect(true); //使用安全链接
+            if(email!=null&&email.size()>0){
+                for(int i=0;i<email.size();i++){
+                    if(i==0) {
+                        mail.addTo(email.get(i).getEmail());
+                    }
+                    else{
+                        mail.addCc(email.get(i).getEmail());
+                    }
+                }
+            }
+            mail.setSubject(emailPropert.getSubject());//设置邮件的主题
+
+            StringBuffer messageText=new StringBuffer();//内容以html格式发送,防止被当成垃圾邮件
+
+            messageText.append(emailPropert.getMessageText());
+            mail.setMsg(emailPropert.getSag());//设置邮件的内容
+            mail.setContent(messageText.toString(),"text/html;charset=UTF-8");
+            mail.send();//发送
+            return true;
+        } catch (EmailException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
     public boolean sendAuthCodeEmail(SysUser sysUser,String email, String authCode) {
         String hostName=sysUser.getEmailType();
         String username=sysUser.getEmail();
