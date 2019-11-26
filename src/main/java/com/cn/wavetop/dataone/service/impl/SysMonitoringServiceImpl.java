@@ -242,4 +242,40 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
         }
 
     }
+
+    /**
+     * 更新读监听数据
+     * @param readData
+     */
+    @Transactional
+    @Override
+    public void updateReadMonitoring(long id, Long readData) {
+        //List<SysMonitoring> byId = sysMonitoringRepository.findById(id);
+        String table = "TEST";
+        sysMonitoringRepository.updateReadMonitoring(id,readData,table);
+    }
+    /**
+     * 更新写监听数据
+     */
+    @Transactional
+    @Override
+    public void updateWriteMonitoring (long id, Long writeData) {
+        String table = "TEST";
+        List<SysMonitoring> sysMonitoringList = sysMonitoringRepository.findByJobIdTable(id,table);
+        if(sysMonitoringList != null && sysMonitoringList.size() > 0){
+            for (SysMonitoring sysMonitoring : sysMonitoringList) {
+                try {
+                    Long readData = sysMonitoring.getReadData();
+                    System.out.println("readData = " + readData);
+                    System.out.println("writeData = " + writeData);
+                    /*Long errorData = readData - writeData;
+                    System.out.println("errorData = " + errorData);*/
+                    sysMonitoringRepository.updateWriteMonitoring(id,writeData,table);
+                } catch (Exception e){
+
+                }
+            }
+        }
+
+    }
 }

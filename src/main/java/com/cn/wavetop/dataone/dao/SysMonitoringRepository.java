@@ -22,4 +22,15 @@ public interface SysMonitoringRepository extends JpaRepository<SysMonitoring,Lon
     @Modifying
     @Query("delete from SysMonitoring where jobId = :job_id")
     int deleteByJobId(long job_id);
+
+
+    @Modifying
+    @Query("update SysMonitoring sm set sm.writeData = :writeData where sm.jobId = :id and sm.destTable = :table")
+    void updateWriteMonitoring(long id, Long writeData,String table);
+    @Modifying
+    @Query("select sm from SysMonitoring sm where sm.jobId = :id and sm.destTable = :table")
+    List<SysMonitoring> findByJobIdTable(long id,String table);
+    @Modifying
+    @Query("update SysMonitoring sm set sm.readData = :readData,sm.sqlCount = :readData where sm.jobId = :id and sm.destTable = :table")
+    void updateReadMonitoring(long id, Long readData,String table);
 }

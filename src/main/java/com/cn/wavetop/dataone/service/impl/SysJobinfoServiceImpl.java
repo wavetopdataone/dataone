@@ -67,6 +67,7 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
     @Transactional
     @Override
     public Object editJobinfo(SysJobinfo jobinfo) {
+        System.out.println(jobinfo);
         HashMap<Object, Object> map = new HashMap();
         long syncRange = jobinfo.getSyncRange();
         if (syncRange == 0) {
@@ -82,18 +83,25 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
             data.setJobId(jobinfo.getJobId());
             data.setBeginTime(jobinfo.getBeginTime());
             data.setDataEnc(jobinfo.getDataEnc());
-
             data.setDestCaseSensitive(jobinfo.getDestCaseSensitive());
             data.setDestWriteConcurrentNum(jobinfo.getDestWriteConcurrentNum());
             data.setEndTime(jobinfo.getEndTime());
             data.setMaxDestWrite(jobinfo.getMaxDestWrite());
             data.setMaxSourceRead(jobinfo.getMaxSourceRead());
-
             data.setPlayers(jobinfo.getPlayers());
             data.setReadBegin(jobinfo.getReadBegin());
             data.setReadWay(jobinfo.getReadWay());
             data.setSyncWay(jobinfo.getSyncWay());
             data.setReadFrequency(jobinfo.getReadFrequency());
+            if(jobinfo.getReadBegin()==1) {
+                data.setSourceType(jobinfo.getSourceType());
+                if (jobinfo.getSourceType().equals("1")) {
+                    data.setLogMinerScn(jobinfo.getLogMinerScn());
+                } else if (jobinfo.getSourceType().equals("2")) {
+                    data.setBinlog(jobinfo.getBinlog());
+                    data.setBinlogPostion(jobinfo.getBinlogPostion());
+                }
+            }
             repository.save(data);
             if(PermissionUtils.isPermitted("3")) {
                 //查询该任务有没有关联的子任务
@@ -125,6 +133,15 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
                         datas.setReadWay(jobinfo.getReadWay());
                         datas.setSyncWay(jobinfo.getSyncWay());
                         datas.setReadFrequency(jobinfo.getReadFrequency());
+                        if(jobinfo.getReadBegin()==1) {
+                            datas.setSourceType(jobinfo.getSourceType());
+                            if (jobinfo.getSourceType().equals("1")) {
+                                datas.setLogMinerScn(jobinfo.getLogMinerScn());
+                            } else if (jobinfo.getSourceType().equals("2")) {
+                                datas.setBinlog(jobinfo.getBinlog());
+                                datas.setBinlogPostion(jobinfo.getBinlogPostion());
+                            }
+                        }
                         repository.save(datas);
                     }
                 }
@@ -147,6 +164,15 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
                         sysJobinfo1.setReadFrequency(jobinfo.getReadFrequency());
                         sysJobinfo1.setSyncRange(jobinfo.getSyncRange());
                         sysJobinfo1.setSyncWay(jobinfo.getSyncWay());
+                        if(jobinfo.getReadBegin()==1) {
+                            sysJobinfo1.setSourceType(jobinfo.getSourceType());
+                        if (jobinfo.getSourceType().equals("1")) {
+                            sysJobinfo1.setLogMinerScn(jobinfo.getLogMinerScn());
+                        } else if (jobinfo.getSourceType().equals("2")) {
+                            sysJobinfo1.setBinlog(jobinfo.getBinlog());
+                            sysJobinfo1.setBinlogPostion(jobinfo.getBinlogPostion());
+                        }
+                    }
                         System.out.println(sysJobrelaRelated.getSlaveJobId()+"renwu");
                         repository.save(sysJobinfo1);
 

@@ -14,4 +14,8 @@ public interface SysMonitoringService {
     Object dataRate(long job_id);
     Object showMonitoring(long job_id);
     Object tableMonitoring(long job_id);
+
+    void updateReadMonitoring(long id, Long readData);
+
+    void updateWriteMonitoring(long id, Long writeData);
 }

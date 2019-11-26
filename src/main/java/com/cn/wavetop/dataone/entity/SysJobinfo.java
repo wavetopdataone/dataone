@@ -49,5 +49,9 @@ public class SysJobinfo {
   @Column(nullable = false)
   private Long jobId;
 
-
+  private String sourceType;
+  private String binlogPostion;
+  private String binlog;
+  private String logMinerScn;
+  private String changeTranking;
 }
