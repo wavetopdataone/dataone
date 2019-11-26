@@ -2,6 +2,7 @@ package com.cn.wavetop.dataone;
 
 import com.cn.wavetop.dataone.config.SpringContextUtil;
 import com.cn.wavetop.dataone.controller.EmailClient;
+import com.cn.wavetop.dataone.controller.MonitoringClient;
 import com.cn.wavetop.dataone.service.SysJobrelaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +19,7 @@ public class DataoneApplication {
 
 
         new EmailClient().start();
+        new MonitoringClient().start();
     }
 
 

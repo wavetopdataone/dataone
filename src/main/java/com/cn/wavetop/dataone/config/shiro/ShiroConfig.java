@@ -40,7 +40,7 @@ public class ShiroConfig {
        //登录拦截判断
         customFilterMap.put("authc", new ShiroFormAuthenticationFilter());
         //权限拦截判断
-       // customFilterMap.put("authorization", new ShiroRoleAuthorizationFilter());
+//        customFilterMap.put("authorization", new ShiroRoleAuthorizationFilter());
         bean.setFilters(customFilterMap);
          //过滤器
         LinkedHashMap<String,String> filterChainDefinitionMap=new LinkedHashMap<>();
@@ -54,10 +54,13 @@ public class ShiroConfig {
        // filterChainDefinitionMap.put("/sys_user/login**", "anon");
         filterChainDefinitionMap.put("/sys_user/login/", "anon");
         filterChainDefinitionMap.put("/sys_user/login_out/", "anon");
+        filterChainDefinitionMap.put("/toback/**", "anon");
 
 
+        filterChainDefinitionMap.put("/**", "authc");
 
-      //filterChainDefinitionMap.put("/**", "authc,kickout");
+
+//      filterChainDefinitionMap.put("/**", "authc,kickout");
               bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
@@ -163,17 +166,17 @@ public class ShiroConfig {
     }
 
     //配置异常处理，不配置的话没有权限后台报错，前台不会跳转到403页面
-//    @Bean(name="simpleMappingExceptionResolver")
-//    public SimpleMappingExceptionResolver
-//    createSimpleMappingExceptionResolver() {
-//        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
-//        Properties mappings = new Properties();
-//        mappings.setProperty("DatabaseException", "databaseError");//数据库异常处理
-//        mappings.setProperty("UnauthorizedException","403");
-//        simpleMappingExceptionResolver.setExceptionMappings(mappings);  // None by default
-//        simpleMappingExceptionResolver.setDefaultErrorView("error");    // No default
-//        simpleMappingExceptionResolver.setExceptionAttribute("ex");     // Default is "exception"
-//        return simpleMappingExceptionResolver;
-//    }
+    @Bean(name="simpleMappingExceptionResolver")
+    public SimpleMappingExceptionResolver
+    createSimpleMappingExceptionResolver() {
+        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
+        Properties mappings = new Properties();
+        mappings.setProperty("DatabaseException", "databaseError");//数据库异常处理
+        mappings.setProperty("UnauthorizedException","403");
+        simpleMappingExceptionResolver.setExceptionMappings(mappings);  // None by default
+        simpleMappingExceptionResolver.setDefaultErrorView("error");    // No default
+        simpleMappingExceptionResolver.setExceptionAttribute("ex");     // Default is "exception"
+        return simpleMappingExceptionResolver;
+    }
 
 }

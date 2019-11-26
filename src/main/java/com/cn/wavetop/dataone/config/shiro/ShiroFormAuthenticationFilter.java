@@ -1,5 +1,6 @@
 package com.cn.wavetop.dataone.config.shiro;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.http.HttpStatus;
@@ -55,7 +56,8 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
                 Map<Object,Object> map=new HashMap<>();
                 map.put("message", "请重新登录！");
                 map.put("status", "401");
-                out.println(map);
+               Object a= JSON.toJSON(map);
+                out.println(a);
                 out.flush();
                 out.close();
             } else {

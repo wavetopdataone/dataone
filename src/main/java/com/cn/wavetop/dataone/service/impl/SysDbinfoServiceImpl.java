@@ -2,10 +2,14 @@ package com.cn.wavetop.dataone.service.impl;
 
 import com.cn.wavetop.dataone.dao.SysDbinfoRespository;
 import com.cn.wavetop.dataone.dao.SysJobrelaRespository;
+import com.cn.wavetop.dataone.dao.SysUserDbinfoRepository;
 import com.cn.wavetop.dataone.entity.SysDbinfo;
+import com.cn.wavetop.dataone.entity.SysJobrela;
+import com.cn.wavetop.dataone.entity.SysUserDbinfo;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.SysDbinfoService;
 import com.cn.wavetop.dataone.util.DBConns;
+import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,20 +33,27 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
     private SysDbinfoRespository repository;
     @Autowired
     private SysJobrelaRespository sysJobrelarepository;
+    @Autowired
+    private SysUserDbinfoRepository sysUserDbinfoRepository;
 
     @Override
     public Object getDbinfoAll() {
+
         return ToData.builder().status("1").data(repository.findAll()).build();
     }
 
     @Override
     public Object getSourceAll() {
-        return ToData.builder().status("1").data(repository.findBySourDest(0)).build();
+//        return ToData.builder().status("1").data(repository.findBySourDest(0)).build();
+        return ToData.builder().status("1").data(repository.findBySourDestUser(0, PermissionUtils.getSysUser().getDeptId())).build();
+
     }
 
     @Override
     public Object getDestAll() {
-        return ToData.builder().status("1").data(repository.findBySourDest(1)).build();
+//        return ToData.builder().status("1").data(repository.findBySourDest(1)).build();
+                return ToData.builder().status("1").data(repository.findBySourDestUser(1, PermissionUtils.getSysUser().getDeptId())).build();
+
     }
 
 
@@ -62,108 +74,140 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
     @Transactional
     @Override
     public Object addbinfo(SysDbinfo sysDbinfo) {
-        //System.out.println(sysDbinfo);
-        //sysDbinfo.getId();
-       // if (repository.existsByIdOrName(sysDbinfo.getId(), sysDbinfo.getName())) {
         Connection conn = null;
-
         HashMap<Object, Object> map = new HashMap();
-        try {
-            if (repository.existsByName(sysDbinfo.getName())) {
-                return ToData.builder().status("0").message("任务已存在").build();
-            } else {
-                if (sysDbinfo.getType() == 1) {
-                    conn = DBConns.getOracleConn(sysDbinfo);
-                } else if (sysDbinfo.getType() == 2) {
-                    conn = DBConns.getMySQLConn(sysDbinfo);
-                }
 
-                if(conn!=null) {
-                    SysDbinfo data = repository.save(sysDbinfo);
-                    map.put("status", 1);
-                    map.put("data", data);
-                }else{
-                    map.put("status", 3);
-                    map.put("message", "数据库连接有问题");
-                }
-                return map;
-            }
-        }catch (Exception e){
-            map.put("status", 3);
-            map.put("message", "数据库连接不对");
-            return map;
-        }finally {
+        //添加数据源也要根据权限
+        if (PermissionUtils.isPermitted("2")) {
+        //查询该部门下是否存在这个数据源
+       List<SysDbinfo> list=repository.findNameByUser(sysDbinfo.getName(),PermissionUtils.getSysUser().getDeptId());
             try {
-                DBConns.close(conn);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Transactional
-    @Override
-    public Object editDbinfo(SysDbinfo sysDbinfo) {
-        Map<Object, Object> map = new HashMap();
-        Connection conn = null;
-        try {
-            boolean flag = sysJobrelarepository.existsByDestNameOrSourceName(sysDbinfo.getName(), sysDbinfo.getName());
-            System.out.println(flag);
-            if (!flag) {
-                boolean flag2 = repository.existsByName(sysDbinfo.getName());
-                System.out.println(flag2);
-                if (!flag2) {
-                    map.put("status", 0);
-                    map.put("message", "修改失败");
+//                if (repository.existsByName(sysDbinfo.getName())) {
+                    //查询该数据源是否存在
+                    if(list!=null&&list.size()>0){
+                    return ToData.builder().status("0").message("数据源已存在").build();
                 } else {
                     if (sysDbinfo.getType() == 1) {
                         conn = DBConns.getOracleConn(sysDbinfo);
                     } else if (sysDbinfo.getType() == 2) {
                         conn = DBConns.getMySQLConn(sysDbinfo);
                     }
+//                else if(sysDbinfo.getType()==3){
+//                    conn=DBConns
+//                }
 
                     if (conn != null) {
-                        SysDbinfo old = repository.findByName(sysDbinfo.getName());
-                        // old.setId(sysDbinfo.getId());
-                        old.setName(sysDbinfo.getName());
-                        old.setDbname(sysDbinfo.getDbname());
-                        old.setHost(sysDbinfo.getHost());
-                        old.setPassword(sysDbinfo.getPassword());
-                        old.setPort(sysDbinfo.getPort());
-                        old.setSchema(sysDbinfo.getSchema());
-                        old.setSourDest(sysDbinfo.getSourDest());
-                        old.setType(sysDbinfo.getType());
-                        old.setUser(sysDbinfo.getUser());
-
-                        SysDbinfo save = repository.save(old);
+                        SysDbinfo data = repository.save(sysDbinfo);
+                        //添加数据源与用户关联
+                        SysUserDbinfo sysUserDbinfo=new SysUserDbinfo();
+                        sysUserDbinfo.setDbinfoId(data.getId());
+                        sysUserDbinfo.setDeptId(PermissionUtils.getSysUser().getDeptId());
+                        sysUserDbinfo.setUserId(PermissionUtils.getSysUser().getId());
+                        sysUserDbinfoRepository.save(sysUserDbinfo);
                         map.put("status", 1);
-                        map.put("message", "修改成功");
-                        map.put("data", save);
+                        map.put("data", data);
+                    } else {
+                        map.put("status", 3);
+                        map.put("message", "数据库连接有问题");
                     }
+                    return map;
                 }
-            }else{
-                    map.put("status", 2);
-                    map.put("message", "正在被使用");
-                }
-        }catch (Exception e){
+            } catch (Exception e) {
                 map.put("status", 3);
                 map.put("message", "数据库连接不对");
-            }finally {
+                return map;
+            } finally {
                 try {
                     DBConns.close(conn);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-        return map;
+        }else{
+            map.put("status", 0);
+            map.put("message", "权限不足");
+            return map;
+        }
+    }
+    @Transactional
+    @Override
+    public Object editDbinfo(SysDbinfo sysDbinfo) {
+        Map<Object, Object> map = new HashMap();
+        Connection conn = null;
+        if(PermissionUtils.isPermitted("2")) {
+        //查询任务是否正在使用数据源
+     List<SysJobrela> list=sysJobrelarepository.findDestNameOrSourceName(sysDbinfo.getName(), sysDbinfo.getName(),PermissionUtils.getSysUser().getDeptId());
+            try {
+                boolean flag = sysJobrelarepository.existsByDestNameOrSourceName(sysDbinfo.getName(), sysDbinfo.getName());
+                System.out.println(flag);
+                if(list==null||list.size()<=0){
+//                if (!flag) {
+                    boolean flag2 = repository.existsByName(sysDbinfo.getName());
+                    //查询该部门下是否存在这个数据源
+       List<SysDbinfo> lists=repository.findNameByUser(sysDbinfo.getName(),PermissionUtils.getSysUser().getDeptId());
+                    if(lists!=null&&lists.size()>0){
+//                    if (!flag2) {
+                        map.put("status", 0);
+                        map.put("message", "数据源名称存在");
+                    } else {
+                        if (sysDbinfo.getType() == 1) {
+                            conn = DBConns.getOracleConn(sysDbinfo);
+                        } else if (sysDbinfo.getType() == 2) {
+                            conn = DBConns.getMySQLConn(sysDbinfo);
+                        }
+
+                        if (conn != null) {
+//                            SysDbinfo old = repository.findByName(sysDbinfo.getName());
+                            //根据id查询数据源
+                            Optional<SysDbinfo> old = repository.findById(sysDbinfo.getId());
+                            old.get().setName(sysDbinfo.getName());
+                            old.get().setDbname(sysDbinfo.getDbname());
+                            old.get().setHost(sysDbinfo.getHost());
+                            old.get().setPassword(sysDbinfo.getPassword());
+                            old.get().setPort(sysDbinfo.getPort());
+                            old.get().setSchema(sysDbinfo.getSchema());
+                            old.get().setSourDest(sysDbinfo.getSourDest());
+                            old.get().setType(sysDbinfo.getType());
+                            old.get().setUser(sysDbinfo.getUser());
+
+                            SysDbinfo save = repository.save(old.get());
+                            map.put("status", 1);
+                            map.put("message", "修改成功");
+                            map.put("data", save);
+                        }
+                    }
+                } else {
+                    map.put("status", 2);
+                    map.put("message", "正在被使用");
+                }
+            } catch (Exception e) {
+                map.put("status", 3);
+                map.put("message", "数据库连接不对");
+            } finally {
+                try {
+                    DBConns.close(conn);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return map;
+        } else {
+            map.put("status", "0");
+            map.put("message", "权限不足");
+            return map;
+        }
     }
 
     @Transactional
     @Override
     public Object deleteDbinfo(long id) {
         Map<Object, Object> map = new HashMap();
-        boolean flag = sysJobrelarepository.existsByDestIdOrSourceId(id, id);
-        if (!flag) {
+//        boolean flag = sysJobrelarepository.existsByDestIdOrSourceId(id, id);
+        //查询该部门下是否存在这个数据源
+       List<SysJobrela> list=sysJobrelarepository.findDestIdOrSourceId(id,id,PermissionUtils.getSysUser().getDeptId());
+        if(list==null||list.size()<=0){
+//        if (!flag) {
             boolean flag2 = repository.existsById(id);
             if (flag2){
                 repository.deleteById(id);

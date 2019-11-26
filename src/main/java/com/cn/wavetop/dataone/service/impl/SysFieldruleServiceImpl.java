@@ -390,9 +390,14 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         map.put("data", list);
         if (sysFieldruleList != null && sysFieldruleList.size() > 0) {
             map.put("destName", sysFieldruleList.get(0).getDestName());
-            sysDesensitizations = sysDesensitizationRepository.findByJobIdAndDestTable(job_id, sysFieldruleList.get(0).getDestName());
+            sysDesensitizations = sysDesensitizationRepository.findByJobIdAndDestTable(job_id, tablename);
         } else {
-            map.put("destName", null);
+            List<SysTablerule> sysTablerules = sysTableruleRespository.findByJobIdAndSourceTableAndVarFlag(job_id, tablename,2L);
+             if(sysTablerules!=null&&sysTablerules.size()>0){
+                 map.put("destName", sysTablerules.get(0).getDestTable());
+             }else {
+                 map.put("destName", null);
+             }
         }
         if (sysDesensitizations != null && sysDesensitizations.size() > 0) {
             map.put("data2", sysDesensitizations);

@@ -36,6 +36,17 @@ public class DBConns {
         return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
 
     }
+    /**
+     * 获取sqlserver对象
+     * @return    jdbc:sqlserver://localhost:1433;DatabaseName=tjl
+     */
+    public static Connection getSqlserverConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        String url = "jdbc:sqlserver://"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+";DatabaseName="+sysDbinfo.getDbname();
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        DriverManager.setLoginTimeout(3);
+        return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
+    }
+
 
     /**
      * 释放资源

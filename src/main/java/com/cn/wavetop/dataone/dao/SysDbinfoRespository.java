@@ -2,6 +2,7 @@ package com.cn.wavetop.dataone.dao;
 
 import com.cn.wavetop.dataone.entity.SysDbinfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +18,15 @@ public interface SysDbinfoRespository  extends JpaRepository<SysDbinfo,Long> {
     List<SysDbinfo> findBySourDest(long i);
 
 
+    //根据部门查询数据源
+    @Query("select d from SysDbinfo d,SysUserDbinfo sd where d.id=sd.dbinfoId and sd.deptId=:deptId and d.sourDest=:dest")
+    List<SysDbinfo> findBySourDestUser(long dest,Long deptId);
+     //查询该部门下的数据源名称是否存在
+     @Query("select d from SysDbinfo d,SysUserDbinfo sd where d.id=sd.dbinfoId and sd.deptId=:deptId and d.name=:name")
+     List<SysDbinfo> findNameByUser(String name,Long deptId);
+
+
+
     boolean existsByIdOrName(long id, String name);
 
     SysDbinfo findByIdOrName(long id, String name);
@@ -24,6 +34,7 @@ public interface SysDbinfoRespository  extends JpaRepository<SysDbinfo,Long> {
     SysDbinfo findByNameAndSourDest(String name, long SourDest);
 
     boolean existsByName(String name);
+    boolean existsById(Long id);
 
     SysDbinfo findByName(String name);
 

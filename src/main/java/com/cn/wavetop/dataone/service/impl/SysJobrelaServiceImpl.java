@@ -93,6 +93,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
 
     /**
      * 根据任务id处查询任务
+     *
      * @param id
      * @return
      */
@@ -118,6 +119,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
      * 只有管理员能添加任务，选择数据源，目的端可以是1个也可以是多个
      * 多个会分成多个任务，第一个是主任务，其他为子任务
      * 会在jobrelaRelated插入关联关系，当激活任务后，删除关系，添加子任务与用户关联
+     *
      * @param sysJobrela
      * @return
      */
@@ -135,8 +137,13 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         List<Long> jobIds = new ArrayList<>();
         //只有管理员能添加
         if (PermissionUtils.isPermitted("2")) {
-            if (repository.existsByJobName(sysJobrela.getJobName())) {
-                return ToData.builder().status("0").message("任务已存在").build();
+            //判断任务是否存在
+            List<SysJobrela> list = repository.findByUserIdJobName(PermissionUtils.getSysUser().getId(), sysJobrela.getJobName());
+            if (list != null && list.size() > 0) {
+//            if (repository.existsByJobName(sysJobrela.getJobName())) {
+//                return ToData.builder().status("0").message("任务已存在").build();
+                return ToData.builder().status("0").message("任务名称已存在").build();
+
             } else {
                 //多目的端，所以分割
                 String[] name = sysJobrela.getDestName().split(",");
@@ -221,6 +228,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
      * 修改任务一定是管理员才能修改数据源
      * 把任务的子任务包括规则关联全部删除，重新查询
      * 主任务做修改
+     *
      * @param sysJobrela
      * @return
      */
@@ -234,7 +242,10 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         if (PermissionUtils.isPermitted("2") || PermissionUtils.isPermitted("3")) {
             long id = sysJobrela.getId();
             // 查看该任务是新建否存在，存在修改更新任务，不存在任务
-            if (repository.existsByJobName(sysJobrela.getJobName())) {
+            //判断任务是否存在
+            List<SysJobrela> list = repository.findByUserIdJobName(PermissionUtils.getSysUser().getId(), sysJobrela.getJobName());
+            if (list == null || list.size() <= 0) {
+//            if (repository.existsByJobName(sysJobrela.getJobName())) {
 
                 //没有配置完成并且是主任务修改的话直接把子任务和对应的规则关系删除
                 List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(sysJobrela.getId());
@@ -246,7 +257,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                         sysJobinfoRespository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
                         //删除用户任务
                         sysUserJobrelaRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId());
-                       // 删除数据源变化配置
+                        // 删除数据源变化配置
                         dataChangeSettingsRespository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
                         //删除标规则
                         sysTableruleRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
@@ -274,7 +285,10 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 String[] name = sysJobrela.getDestName().split(",");
                 String jobName = sysJobrela.getJobName();
                 //查询修改的主任务
-                data = repository.findByJobName(sysJobrela.getJobName());
+//                data = repository.findByJobName(sysJobrela.getJobName());
+                //查询修改的主任务
+                Optional<SysJobrela> dataw = repository.findById(sysJobrela.getId());
+                data = dataw.get();
                 //分割成多个任务
                 // 查看端
                 SysDbinfo source = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getSourceName(), 0);
@@ -304,7 +318,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 if (name.length > 1) {
                     for (int i = 1; i < name.length; i++) {
                         SysDbinfo dests = sysDbinfoRespository.findByNameAndSourDest(name[i], 1);
-                        sysJobrela1=new SysJobrela();
+                        sysJobrela1 = new SysJobrela();
                         //子任务名称是主任务_i
                         jobName = null;
                         jobName = sysJobrela.getJobName() + "_" + i;
@@ -322,9 +336,8 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                         jobIds.add(save.getId());
                     }
                 }
-                    Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(sysJobrela.getJobName()).operate("修改").jobId(data.getId()).build();
-                    userlogRespository.save(build);
-
+                Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(sysJobrela.getJobName()).operate("修改").jobId(data.getId()).build();
+                userlogRespository.save(build);
 
 
                 SysJobrelaRelated sysJobrelaRelated = null;
@@ -350,6 +363,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             } else {
                 map.put("status", 0);
                 map.put("message", "任务不存在");
+//                map.put("message", "任务名称已存在");
             }
         } else {
             map.put("status", "2");
@@ -640,7 +654,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         SysJobrela byId = repository.findById(id1);
         String jobStatus = byId.getJobStatus();
         System.out.println(jobStatus);
-        if (PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")) {
+        if (PermissionUtils.isPermitted("2") || PermissionUtils.isPermitted("3")) {
             if ("1".equals(jobStatus)) {
                 byId.setJobStatus("21"); //  2 代表暂停中，21代表暂停动作
                 repository.save(byId);
@@ -680,7 +694,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         long id1 = id;
         SysJobrela byId = repository.findById(id1);
         String jobStatus = byId.getJobStatus();
-        if (PermissionUtils.isPermitted("2")||PermissionUtils.isPermitted("3")) {
+        if (PermissionUtils.isPermitted("2") || PermissionUtils.isPermitted("3")) {
             if (!"1".equals(jobStatus)) {
                 byId.setJobStatus("31"); // 3代表终止，31 代表停止功能
                 repository.save(byId);

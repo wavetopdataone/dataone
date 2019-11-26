@@ -167,6 +167,8 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
         long errorDatas=0;
         long readData=0;
         long writeData=0;
+        long readRate=0;
+        long disposeRate=0;
         HashMap<Object, Object> map = new HashMap();
         if(sysMonitoringList!=null&&sysMonitoringList.size()>0) {
             for (SysMonitoring sysMonitoring:sysMonitoringList){
@@ -185,17 +187,33 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
                 readData+=sysMonitoring.getReadData();
                 writeData+=sysMonitoring.getWriteData();
                 errorDatas+=sysMonitoring.getErrorData();
+                if(sysMonitoring.getReadRate()==null){
+                    sysMonitoring.setReadData((long) 0);
+                }
+                if(sysMonitoring.getDisposeRate()==null){
+                    sysMonitoring.setReadData((long) 0);
+                }
+                readRate+=sysMonitoring.getReadRate();
+                disposeRate+=sysMonitoring.getDisposeRate();
+
+
             }
+            readRate=readRate/3;
+            disposeRate=disposeRate/3;
             map.put("read_datas",readData);
             map.put("write_datas",writeData);
             map.put("error_datas",errorDatas);
+            map.put("read_rate",readRate);
+            map.put("dispose_rate",disposeRate);
             map.put("status","1");
             return map;
         }else{
             map.put("read_datas","0");
             map.put("write_datas","0");
             map.put("error_datas","0");
-            map.put("status","0");
+            map.put("read_rate","0");
+            map.put("dispose_rate","0");
+            map.put("status","1");
             return map;
         }
     }

@@ -220,8 +220,8 @@ public class SysUserServiceImpl implements SysUserService {
             sysUser1.get().setLoginName(sysUser.getLoginName());
             sysUser1.get().setEmail(sysUser.getEmail());
             sysUser1.get().setUserName(sysUser.getLoginName());
-            if(sysUser.getPassword()!=null&&!"".equals(sysUser.getPassword())){
-//            if(!sysUser1.get().getPassword().equals(sysUser.getPassword())){
+//            if(sysUser.getPassword()!=null&&!"".equals(sysUser.getPassword())){
+            if(!sysUser1.get().getPassword().equals(sysUser.getPassword())){
                 String[] saltAndCiphertext = CredentialMatcher.encryptPassword(sysUser.getPassword());
                 sysUser1.get().setSalt(saltAndCiphertext[0]);
                 sysUser1.get().setPassword(saltAndCiphertext[1]);
@@ -553,7 +553,7 @@ public class SysUserServiceImpl implements SysUserService {
             if(list!=null&&list.size()>0) {
                 return ToData.builder().status("1").data(list).build();
             }else{
-                return  ToDataMessage.builder().status("0").message("该部门下没有编辑者");
+                return  ToDataMessage.builder().status("0").message("该部门下没有编辑者").build();
             }
         }else{
           return  ToDataMessage.builder().status("0").message("权限不足").build();
