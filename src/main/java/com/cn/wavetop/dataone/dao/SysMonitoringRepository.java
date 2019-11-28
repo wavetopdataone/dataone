@@ -32,8 +32,9 @@ public interface SysMonitoringRepository extends JpaRepository<SysMonitoring,Lon
     @Query("select sm from SysMonitoring sm where sm.jobId = :id and sm.destTable = :table")
     List<SysMonitoring> findByJobIdTable(long id,String table);
     @Modifying
-    @Query("update SysMonitoring sm set sm.readData = :readData,sm.sqlCount = :readData where sm.jobId = :id and sm.destTable = :table")
+    @Query("update SysMonitoring sm set sm.readData = :readData where sm.jobId = :id and sm.destTable = :table")
     void updateReadMonitoring(long id, Long readData,String table);
+
     @Query("SELECT distinct jobId from SysMonitoring")
     List<Long> selJobId();
 

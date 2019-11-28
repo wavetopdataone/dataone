@@ -9,6 +9,7 @@ import com.cn.wavetop.dataone.service.SysUserService;
 import com.cn.wavetop.dataone.util.EmailUtils;
 import com.cn.wavetop.dataone.util.LogUtil;
 import com.cn.wavetop.dataone.util.PermissionUtils;
+import com.cn.wavetop.dataone.util.RedisUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.ModularRealmAuthorizer;
@@ -48,10 +49,14 @@ public class SysUserServiceImpl implements SysUserService {
     @Autowired
     private EmailUtils emailUtils;
     @Autowired
+    private RedisUtil redisUtil;
+    @Autowired
     private LogUtil logUtil;
     private String code=null;
     @Override
     public Object login(String name, String password) {
+        System.out.println(redisUtil.get("b")+"xuezihhao-----------------");
+
         SysUser sysUser=new SysUser();
         List<SysUserRoleVo> s=new ArrayList<>();
         Map<Object,Object> map=new HashMap<>();

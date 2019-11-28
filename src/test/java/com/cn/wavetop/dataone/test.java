@@ -5,11 +5,15 @@ import com.cn.wavetop.dataone.entity.SysFieldrule;
 import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.entity.SysUser;
 import com.cn.wavetop.dataone.entity.SysUserJobrela;
+import com.cn.wavetop.dataone.util.DBConns;
+import com.cn.wavetop.dataone.util.DateUtil;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -74,10 +78,33 @@ public void s(){
         return weekDays[w];
     }
 
+     @Test
+    public void sqa(){
+//         SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
+//
+//         String nowDate = dfs.format(new Date());//几号
+         Date date=new Date();
+         SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
+         String ab=dfs.format(date);
+//         if(num.equals("7")) {
+             DateUtil.dateAdd(ab, -6);
+//         }
+         System.out.println( DateUtil.dateAdd(ab, -6));
+//         System.out.println(d-a);
+     }
+
+     @Autowired
+     private RedisTemplate<String,Object> redisTemplate;
+     @Test
+    public void sawq(){
+         List<String> list=new ArrayList<>();
+         list.add("1");
+      redisTemplate.opsForValue().set("a",list);
+         System.out.println(redisTemplate.opsForValue().get("a"));
+     }
 
 
-
-        //驗證密碼
+    //驗證密碼
 //        String ciphertext = new Md5Hash("88888","0ae975a6aeb859797f60e98c575ee12c",3).toString(); //生成的密文
 //       String password="a3be8ba9c44a062345e2a210661df3b8";
 //        System.out.println(ciphertext);
