@@ -38,10 +38,10 @@ public class EmailClient extends Thread {
         EmailUtils emailUtils = new EmailUtils();
         EmailPropert emailPropert = null;
         Optional<SysJobrela> sysJobrela = null;
-        double readData = 0;
-        double errorData = 0;
-        double result = 0;
         while (stopMe) {
+            double readData = 0;
+            double errorData = 0;
+            double result = 0;
             sysUserOptional = sysUserRepository.findById(Long.valueOf(1));
             list = repository.findEmailJobRelaUser();
             for (EmailJobrelaVo emailJobrelaVo : list) {

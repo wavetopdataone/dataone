@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -33,4 +34,10 @@ public interface SysMonitoringRepository extends JpaRepository<SysMonitoring,Lon
     @Modifying
     @Query("update SysMonitoring sm set sm.readData = :readData,sm.sqlCount = :readData where sm.jobId = :id and sm.destTable = :table")
     void updateReadMonitoring(long id, Long readData,String table);
+    @Query("SELECT distinct jobId from SysMonitoring")
+    List<Long> selJobId();
+
+
+    @Query(value="from SysMonitoring sd where sd.jobId=:job_id and sd.optTime >= :parse")
+    List<SysMonitoring> findByIdAndDate(long job_id, Date parse);
 }

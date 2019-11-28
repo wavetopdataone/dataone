@@ -107,4 +107,8 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
     @Query(value = "select new com.cn.wavetop.dataone.entity.vo.EmailJobrelaVo(m.jobId,sj.jobName,m.jobError,m.errorQueueAlert,m.errorQueuePause,m.sourceChange) from MailnotifySettings m,SysJobrela sj where m.jobId=sj.id  and sj.jobStatus='1'")
     List<EmailJobrelaVo> findEmailJobRelaUser();
 
+    @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId  and sj.jobName=:job_name and u.id=:userId order by sj.id desc")
+    List<SysJobrela>  findJobByUserIdJobName(Long userId,String job_name);
+    @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId  and sj.id=:id and u.id=:userId order by sj.id desc")
+    List<SysJobrela>  findJobByUserIdJobId(Long userId,Long id);
 }

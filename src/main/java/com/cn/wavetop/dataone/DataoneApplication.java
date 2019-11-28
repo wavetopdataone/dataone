@@ -9,7 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @SpringBootApplication
 public class DataoneApplication {
 
@@ -19,7 +21,7 @@ public class DataoneApplication {
 
 
         new EmailClient().start();
-        new MonitoringClient().start();
+//        new MonitoringClient().start();
     }
 
 

@@ -37,5 +37,11 @@ public class SysDataChange {
     private Long readRate;
     @Column(name="dispose_rate", columnDefinition="INT default 0")
     private Long disposeRate;
+    @Column(name="last_error_data", columnDefinition="INT default 0")
+    private Long lastErrorData;
+    @Column(name="last_read_data", columnDefinition="INT default 0")
+    private Long lastReadData;
+    @Column(name="last_write_data", columnDefinition="INT default 0")
+    private Long lastWriteData;
 
 }

@@ -185,6 +185,16 @@ public class DateUtil {
 
         return str;
     }
-
+    public static  Date StringToDate(String dateTime) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        //         ParsePosition pos = new ParsePosition(0);
+        Date strtodate = null;
+        try {
+            strtodate = formatter.parse(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+       return strtodate;
+    }
 
 }

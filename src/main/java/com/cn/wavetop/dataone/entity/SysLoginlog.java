@@ -19,7 +19,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SysLoginlog {
+public class  SysLoginlog {
     /** 用户ID */
     @Id // 标识主键
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成

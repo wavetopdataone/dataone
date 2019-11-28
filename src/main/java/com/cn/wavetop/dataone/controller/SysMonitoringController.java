@@ -1,22 +1,34 @@
 package com.cn.wavetop.dataone.controller;
 
+import com.cn.wavetop.dataone.dao.SysDataChangeRepository;
+import com.cn.wavetop.dataone.dao.SysMonitoringRepository;
+import com.cn.wavetop.dataone.entity.SysDataChange;
 import com.cn.wavetop.dataone.entity.SysMonitoring;
 import com.cn.wavetop.dataone.entity.SysRela;
 import com.cn.wavetop.dataone.service.SysMonitoringService;
 import com.cn.wavetop.dataone.service.SysRelaService;
+import com.cn.wavetop.dataone.util.DateUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/sys_monitoring")
 public class SysMonitoringController {
     @Autowired
     private SysMonitoringService sysMonitoringService;
+    @Autowired
+    private SysMonitoringRepository sysMonitoringRepository;
+    @Autowired
+    private SysDataChangeRepository sysDataChangeRepository;
+
 
     @ApiOperation(value = "查看全部", protocols = "HTTP", produces = "application/json", notes = "查看全部")
     @RequestMapping("/monitoring_all")
@@ -64,4 +76,91 @@ public class SysMonitoringController {
     public Object tableMonitoring(long job_id){
         return sysMonitoringService.tableMonitoring(job_id);
     }
+    @PostMapping("/syncMonitoring")
+    public  Object SyncMonitoring(Long jobId,String num){
+
+        return sysMonitoringService.SyncMonitoring(jobId,num);
+    }
+    /**
+     * 折线图数据
+     * @param job_id
+     * @return
+     */
+    @ApiOperation(value = "折线图数据", protocols = "POST", produces = "application/json", notes = "折线图数据")
+    @PostMapping("/dataChangeView")
+    public Object dataChangeView(@RequestParam long job_id,@RequestParam Integer date){
+        return sysMonitoringService.dataChangeView(job_id,date);
+    }
+
+
+    @Scheduled(cron = "0 50 12 * * ?")
+    public void saveDataChange() {
+        SysDataChange dataChange = null;
+        HashMap<Object, Double> map = new HashMap<>();
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");// 设置日期格式
+        SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
+        long errorData = 0;//错误量
+        long readData = 0;//读取量
+        long writeData = 0;//写入量
+        long readRate = 0;//读取速率
+        long disposeRate = 0;//处理速率
+        long lastReadData = 0;//前面天数的读取总量
+        long lastWriteData = 0;//前面天数的写入总量
+        long lastErrorData = 0;//前面天数的错误总量
+//        String nowTime = df.format(new Date());//当前时间
+        String nowDate = dfs.format(new Date());//几号
+//        String hour = nowDate.substring(0, 2);
+//        String minue = nowDate.substring(3, 5);
+        String yesterDay = DateUtil.dateAdd(nowDate, -1);//昨天
+        String weekDay = DateUtil.todate(nowDate);//星期几
+//        String now = "";
+//        String last = "";
+////            if ("23".equals(hour)&&"59".equals(minue)) {
+////                System.out.println(new Date() + "起始时间：");
+//        last = df.format(new Date());
+        List<Long> jobIdList = sysMonitoringRepository.selJobId();//查询所有jobid
+        if (jobIdList != null && jobIdList.size() > 0) {
+            for (Long jobId : jobIdList) {
+                //根据jobid查询读写错误，处理写入值
+                map = (HashMap<Object, Double>) sysMonitoringService.showMonitoring(jobId);
+                dataChange = new SysDataChange();
+                dataChange = sysDataChangeRepository.findByJobIdAndCreateTime(jobId, DateUtil.StringToDate(yesterDay));
+                //如果前一天有值
+                if (dataChange != null) {
+                    lastReadData = map.get("read_datas").longValue();//前面天数的读取总量
+                    lastWriteData = map.get("write_datas").longValue();//前面天数的写入总量
+                    lastErrorData = map.get("error_datas").longValue();//前面天数的错误总量
+                    readData = map.get("read_datas").longValue() - dataChange.getLastReadData();
+                    writeData = map.get("write_datas").longValue() - dataChange.getLastWriteData();
+                    errorData = map.get("error_datas").longValue() - dataChange.getLastErrorData();
+                } else {
+                    readData = map.get("read_datas").longValue();
+                    writeData = map.get("write_datas").longValue();
+                    errorData = map.get("error_datas").longValue();
+                    lastReadData = map.get("read_datas").longValue();//前面天数的读取总量
+                    lastWriteData = map.get("write_datas").longValue();//前面天数的写入总量
+                    lastErrorData = map.get("error_datas").longValue();//前面天数的错误总量
+                }
+                readRate = map.get("read_rate").longValue();
+                disposeRate = map.get("dispose_rate").longValue();
+                SysDataChange dataChange2 = new SysDataChange();
+                dataChange2.setCreateTime(DateUtil.StringToDate(nowDate));
+                dataChange2.setDisposeRate(disposeRate);
+                dataChange2.setJobId(jobId);
+                dataChange2.setWeekDay(weekDay);
+                dataChange2.setErrorData(errorData);
+                dataChange2.setReadData(readData);
+                dataChange2.setWriteData(writeData);
+                dataChange2.setReadRate(readRate);
+                dataChange2.setLastReadData(lastReadData);
+                dataChange2.setLastWriteData(lastWriteData);
+                dataChange2.setLastErrorData(lastErrorData);
+                sysDataChangeRepository.save(dataChange2);
+            }
+        }
+
+    }
+
+
+//    }
 }

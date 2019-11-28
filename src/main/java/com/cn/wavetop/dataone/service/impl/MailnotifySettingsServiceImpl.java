@@ -79,7 +79,7 @@ public class MailnotifySettingsServiceImpl implements MailnotifySettingsService 
         if (repository.existsByJobId(jobId)) {
 
             repository.updataByJobId(mailnotifySettings.getJobError(),mailnotifySettings.getErrorQueueAlert(),mailnotifySettings.getErrorQueuePause(),mailnotifySettings.getSourceChange(),jobId);
-            MailnotifySettings save = repository.save(mailnotifySettings);
+//            MailnotifySettings save = repository.save(mailnotifySettings);
             //若果是编辑者修改，则先删除子任务的规则，因为管理员在修改任务已经删除过了
 
                 if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
@@ -99,7 +99,7 @@ public class MailnotifySettingsServiceImpl implements MailnotifySettingsService 
             }
             map.put("status", 1);
             map.put("message", "修改成功");
-            map.put("data", save);
+//            map.put("data", save);
         } else {
             MailnotifySettings save =repository.save(mailnotifySettings);
             if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {

@@ -27,10 +27,10 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         if (isLoginRequest(request, response)) {
             if (isLoginSubmission(request, response)) {
-                System.out.println("hahahhahahahahaha");
+
                 return executeLogin(request, response);
             } else {
-                System.out.println("henghengehneg");
+
                 return true;
                 //allow them to see the login page ;)
             }
@@ -46,7 +46,7 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
             //前端Ajax请求时requestHeader里面带一些参数，用于判断是否是前端的请求
             String ajaxHeader = req.getHeader("authToken");
             if (ajaxHeader != null || req.getHeader("x-requested-with") != null) {
-                System.out.println("------wowowowowowowo");
+
                 //前端Ajax请求，则不会重定向
                 resp.setHeader("Access-Control-Allow-Origin",  req.getHeader("Origin"));
                 resp.setHeader("Access-Control-Allow-Credentials", "true");

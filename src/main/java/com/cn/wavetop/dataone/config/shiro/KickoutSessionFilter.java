@@ -65,7 +65,7 @@ public class KickoutSessionFilter extends AccessControlFilter
         Subject subject = getSubject(request, response);
         if (!subject.isAuthenticated() && !subject.isRemembered() || maxSession == -1)
         {
-            System.out.println("我是靴子好哈哈哈");
+
             // 如果没有登录或用户最大会话数为-1，直接进行之后的流程
             return true;
         }
@@ -76,9 +76,7 @@ public class KickoutSessionFilter extends AccessControlFilter
             SysUser user = PermissionUtils.getSysUser();
             String loginName = user.getLoginName();
             Serializable sessionId = session.getId();
-            System.out.println(sessionId+"shayisi");
-            System.out.println(user+"34567812");
-            System.out.println(cache.get(loginName)+"3456781-----------cache");
+
 
             // 读取缓存用户 没有就存入
             Deque<Serializable> deque = cache.get(loginName);
@@ -100,7 +98,7 @@ public class KickoutSessionFilter extends AccessControlFilter
             // 如果队列里的sessionId数超出最大会话数，开始踢人
             while (deque.size() > maxSession)
             {
-                System.out.println("我是李志祥哈哈哈");
+
 
                 Serializable kickoutSessionId = null;
                 // 是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；
@@ -156,7 +154,7 @@ public class KickoutSessionFilter extends AccessControlFilter
         if (ServletUtils.isAjaxRequest(req))
         {
             Map<Object,Object> map=new HashMap<>();
-            map.put("status","402");
+            map.put("status","401");
             map.put("message","用户已在其他地方登录");
 
             ServletUtils.renderString(res, objectMapper.writeValueAsString(map));

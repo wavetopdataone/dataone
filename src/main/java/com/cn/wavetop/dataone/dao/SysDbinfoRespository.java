@@ -25,7 +25,9 @@ public interface SysDbinfoRespository  extends JpaRepository<SysDbinfo,Long> {
      @Query("select d from SysDbinfo d,SysUserDbinfo sd where d.id=sd.dbinfoId and sd.deptId=:deptId and d.name=:name")
      List<SysDbinfo> findNameByUser(String name,Long deptId);
 
-
+    //查询该部门下的数据源名称是否存在
+    @Query("select d from SysDbinfo d,SysUserDbinfo sd where d.id=sd.dbinfoId and sd.deptId=:deptId and d.id=:id")
+    List<SysDbinfo> findDbNameByUser(Long id,Long deptId);
 
     boolean existsByIdOrName(long id, String name);
 

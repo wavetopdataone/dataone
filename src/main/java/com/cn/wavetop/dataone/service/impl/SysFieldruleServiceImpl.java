@@ -10,6 +10,7 @@ import com.cn.wavetop.dataone.util.DBConn;
 import com.cn.wavetop.dataone.util.DBConns;
 import com.cn.wavetop.dataone.util.DBHelper;
 import com.cn.wavetop.dataone.util.PermissionUtils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +69,21 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     @Override
     public Object addFieldrule(SysFieldrule sysFieldrule) {
         return "该接口已弃用";
+    }
+
+    //判断字段是否发生改变
+    public boolean fieldChange(String[] split){
+        boolean flag=false;
+        for (String s : split) {
+            String[] ziduan = s.split(",");
+            //若字段改变则存入字段规则表
+//                if (!ziduan[0].equals(ziduan[1]) || !ziduan[3].equals(ziduan[7]) || !ziduan[5].equals(ziduan[8])) {
+            if (!ziduan[0].equals(ziduan[1])){
+                flag=true;
+                return flag;
+            }
+        }
+        return flag;
     }
 
     @Transactional
@@ -136,6 +152,32 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
 //                        }
                     }
                 }
+            } else {
+                //表相同但是字段发生映射改变，表也要存入tablerule
+                boolean flag = fieldChange(split);
+                if (flag) {
+                    byJobIdAndSourceTable.setDestTable(dest_name);
+                    byJobIdAndSourceTable.setJobId(job_id);
+                    byJobIdAndSourceTable.setSourceTable(source_name);
+                    byJobIdAndSourceTable.setVarFlag(Long.valueOf(2));//2代表映射
+                    sysTableruleRespository.save(byJobIdAndSourceTable);
+                    //若有子任务为子任务添加表规则
+                    if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+//                        SysTablerule sysTablerule= sysTableruleRespository.findByJobId(sysJobrelaRelated.getSlaveJobId());
+//                        if(sysTablerule!=null){
+//                            continue;
+//                        }else {
+                            byJobIdAndSourceTable2 = new SysTablerule();
+                            byJobIdAndSourceTable2.setDestTable(dest_name);
+                            byJobIdAndSourceTable2.setJobId(sysJobrelaRelated.getSlaveJobId());
+                            byJobIdAndSourceTable2.setSourceTable(source_name);
+                            byJobIdAndSourceTable2.setVarFlag(Long.valueOf(2));
+                            sysTableruleRespository.save(byJobIdAndSourceTable2);
+//                        }
+                        }
+                    }
+                }
             }
             //删除主任务字段规则
             sysFieldruleRepository.deleteByJobIdAndSourceName(job_id, source_name);
@@ -155,6 +197,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                             .sourceName(source_name)
                             .destName(dest_name).varFlag(Long.valueOf(2)).build();
                     sysFieldrules.add(repository.save(build));
+
                     //若有子任务也保存规则
                     if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
                         for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
@@ -175,6 +218,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
 //                            }
                         }
                     }
+
                 }
                 //字段类型发生改变
                 //查询字段的默认映射
@@ -230,17 +274,17 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             sysFilterTableRepository.deleteByJobIdAndFilterTable(job_id, source_name);
             System.out.println("xuezihaoxuezihaoxuezihao" + list.size() + "---------------");
             for (SysFieldrule sysFieldrule : list) {
-                sysFieldrule1 = new SysFieldrule();
                 sysFilterTable = new SysFilterTable();
-                sysFieldrule1.setFieldName(sysFieldrule.getFieldName());
-                sysFieldrule1.setScale(sysFieldrule.getScale());
-                sysFieldrule1.setType(sysFieldrule.getType());
-                sysFieldrule1.setDestFieldName(sysFieldrule.getFieldName());
-                sysFieldrule1.setJobId(job_id);
-                sysFieldrule1.setSourceName(source_name);
-                sysFieldrule1.setDestName(dest_name);
-                sysFieldrule1.setVarFlag(Long.valueOf(1));
-                SysFieldrule sysFieldrule2 = sysFieldruleRepository.save(sysFieldrule1);
+//                sysFieldrule1 = new SysFieldrule();
+//                sysFieldrule1.setFieldName(sysFieldrule.getFieldName());
+//                sysFieldrule1.setScale(sysFieldrule.getScale());
+//                sysFieldrule1.setType(sysFieldrule.getType());
+//                sysFieldrule1.setDestFieldName(sysFieldrule.getFieldName());
+//                sysFieldrule1.setJobId(job_id);
+//                sysFieldrule1.setSourceName(source_name);
+//                sysFieldrule1.setDestName(dest_name);
+//                sysFieldrule1.setVarFlag(Long.valueOf(1));
+//                SysFieldrule sysFieldrule2 = sysFieldruleRepository.save(sysFieldrule1);
                 sysFilterTable.setFilterTable(source_name);
                 sysFilterTable.setJobId(job_id);
                 sysFilterTable.setFilterField(sysFieldrule.getFieldName());
@@ -385,12 +429,12 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         ArrayList<Object> data = new ArrayList<>();
         List<SysFieldrule> sysFieldruleList = sysFieldruleRepository.findByJobIdAndSourceName(job_id, tablename);
         List<SysFieldrule> list = sysFieldruleRepository.findByJobIdAndSourceNameAndVarFlag(job_id, tablename, Long.valueOf(2));
-        List<SysDesensitization> sysDesensitizations = new ArrayList<>();
+        List<SysDesensitization> sysDesensitizations = sysDesensitizationRepository.findByJobIdAndSourceTable(job_id, tablename);
+        ;
         map.put("status", "1");
         map.put("data", list);
         if (sysFieldruleList != null && sysFieldruleList.size() > 0) {
             map.put("destName", sysFieldruleList.get(0).getDestName());
-            sysDesensitizations = sysDesensitizationRepository.findByJobIdAndDestTable(job_id, tablename);
         } else {
             List<SysTablerule> sysTablerules = sysTableruleRespository.findByJobIdAndSourceTableAndVarFlag(job_id, tablename,2L);
              if(sysTablerules!=null&&sysTablerules.size()>0){

@@ -7,6 +7,7 @@ import com.cn.wavetop.dataone.entity.SysDbinfo;
 import com.cn.wavetop.dataone.entity.SysJobrela;
 import com.cn.wavetop.dataone.entity.SysUserDbinfo;
 import com.cn.wavetop.dataone.entity.vo.ToData;
+import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysDbinfoService;
 import com.cn.wavetop.dataone.util.DBConns;
 import com.cn.wavetop.dataone.util.PermissionUtils;
@@ -144,18 +145,20 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
 //                if (!flag) {
                     boolean flag2 = repository.existsByName(sysDbinfo.getName());
                     //查询该部门下是否存在这个数据源
-       List<SysDbinfo> lists=repository.findNameByUser(sysDbinfo.getName(),PermissionUtils.getSysUser().getDeptId());
+       List<SysDbinfo> lists=repository.findDbNameByUser(sysDbinfo.getId(),PermissionUtils.getSysUser().getDeptId());
                     if(lists!=null&&lists.size()>0){
-//                    if (!flag2) {
-                        map.put("status", 0);
-                        map.put("message", "数据源名称存在");
-                    } else {
                         if (sysDbinfo.getType() == 1) {
                             conn = DBConns.getOracleConn(sysDbinfo);
                         } else if (sysDbinfo.getType() == 2) {
                             conn = DBConns.getMySQLConn(sysDbinfo);
                         }
-
+                        //判断修改的数据源名称该部门下已经存在了
+                        List<SysDbinfo> listss=repository.findNameByUser(sysDbinfo.getName(),PermissionUtils.getSysUser().getDeptId());
+                        if(listss!=null&&listss.size()>0) {
+                            if (!listss.get(0).getId().equals(sysDbinfo.getId())) {
+                                return ToDataMessage.builder().status("0").message("该部门下面已经存在该数据源名称").build();
+                            }
+                        }
                         if (conn != null) {
 //                            SysDbinfo old = repository.findByName(sysDbinfo.getName());
                             //根据id查询数据源
@@ -175,6 +178,9 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
                             map.put("message", "修改成功");
                             map.put("data", save);
                         }
+                    }else{
+                        map.put("status", 0);
+                        map.put("message", "数据源不存在");
                     }
                 } else {
                     map.put("status", 2);

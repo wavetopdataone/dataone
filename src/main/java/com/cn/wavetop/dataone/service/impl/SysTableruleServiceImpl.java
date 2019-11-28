@@ -42,6 +42,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
     @Override
     public Object checkTablerule(long job_id) {
         List<SysTablerule> sysUserList=sysTableruleRepository.findByJobId(job_id);
+        //查询过滤表
+//        List<SysFilterTable> sysUserList= sysFilterTableRepository.findJobId(job_id);
         String sql="";
         SysDbinfo sysDbinfo=new SysDbinfo();
         List<SysTablerule> list=new ArrayList<SysTablerule>();
@@ -69,6 +71,10 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 stringBuffer.append(sysTablerule.getSourceTable());
                 stringBuffer.append(",");
             }
+//            for(SysFilterTable sysTablerule:sysUserList){
+//                stringBuffer.append(sysTablerule.getFilterTable());
+//                stringBuffer.append(",");
+//            }
             tablerule.setSourceTable(stringBuffer.toString());
             stringList = DBConns.getConn(sysDbinfo, tablerule, sql);
 
@@ -185,8 +191,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 SysFilterTable sysFilterTable=null;
                 //添加过滤的表
                 for(int i=0;i<stringList.size();i++){
-                    sysTablerule2=new SysTablerule();
                     sysFilterTable=new SysFilterTable();
+                    sysTablerule2=new SysTablerule();
                     sysTablerule2.setJobId(sysTablerule.getJobId());
                     sysTablerule2.setSourceTable(stringList.get(i));
                     sysTablerule2.setVarFlag(Long.valueOf(1));
@@ -204,10 +210,10 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                             sysFilterTableRepository.save(sysFilterTable3);
                         }
                     }
-                    list.add(sysTablerule1);
+//                    list.add(sysTablerule1);
                 }
 
-                    return ToData.builder().status("1").data(list).message("修改成功").build();
+                    return ToData.builder().status("1").message("修改成功").build();
 
             }else{
                 //添加
@@ -240,7 +246,7 @@ public class SysTableruleServiceImpl implements SysTableruleService {
 //                            }
                         }
                     }
-                    list.add(sysTablerule1);
+//                    list.add(sysTablerule1);
                 }
 
                     return ToData.builder().status("1").message("新增成功").build();

@@ -243,10 +243,16 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             long id = sysJobrela.getId();
             // 查看该任务是新建否存在，存在修改更新任务，不存在任务
             //判断任务是否存在
-            List<SysJobrela> list = repository.findByUserIdJobName(PermissionUtils.getSysUser().getId(), sysJobrela.getJobName());
-            if (list == null || list.size() <= 0) {
-//            if (repository.existsByJobName(sysJobrela.getJobName())) {
-
+            List<SysJobrela> lists = repository.findJobByUserIdJobId(PermissionUtils.getSysUser().getId(), sysJobrela.getId());
+            if (lists != null && lists.size() >= 0) {
+                 //判断修改的任务名称在该部门下是否存在
+                List<SysJobrela> list = repository.findJobByUserIdJobName(PermissionUtils.getSysUser().getId(), sysJobrela.getJobName());
+                if(list!=null&&list.size()>0) {
+                    if (!list.get(0).getId().equals(sysJobrela.getId())) {
+                        System.out.println(list.get(0).getId()+"-----"+sysJobrela.getId());
+                        return ToDataMessage.builder().status("0").message("该部门下任务名称已存在").build();
+                    }
+                }
                 //没有配置完成并且是主任务修改的话直接把子任务和对应的规则关系删除
                 List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(sysJobrela.getId());
                 if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {

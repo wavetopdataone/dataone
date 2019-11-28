@@ -14,8 +14,10 @@ public interface SysMonitoringService {
     Object dataRate(long job_id);
     Object showMonitoring(long job_id);
     Object tableMonitoring(long job_id);
+    Object SyncMonitoring(Long jobId,String num);
 
-    void updateReadMonitoring(long id, Long readData);
+    void updateReadMonitoring(long id, Long readData,String table);
 
-    void updateWriteMonitoring(long id, Long writeData);
+    void updateWriteMonitoring(long id, Long writeData,String table);
+    Object dataChangeView(long job_id,Integer date);
 }
