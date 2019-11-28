@@ -55,7 +55,7 @@ public class SysUserServiceImpl implements SysUserService {
     private String code=null;
     @Override
     public Object login(String name, String password) {
-        System.out.println(redisUtil.get("b")+"xuezihhao-----------------");
+
 
         SysUser sysUser=new SysUser();
         List<SysUserRoleVo> s=new ArrayList<>();
