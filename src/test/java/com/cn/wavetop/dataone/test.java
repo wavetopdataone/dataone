@@ -7,6 +7,7 @@ import com.cn.wavetop.dataone.entity.SysUser;
 import com.cn.wavetop.dataone.entity.SysUserJobrela;
 import com.cn.wavetop.dataone.util.DBConns;
 import com.cn.wavetop.dataone.util.DateUtil;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,14 @@ public void s(){
       redisTemplate.opsForValue().set("a",list);
          System.out.println(redisTemplate.opsForValue().get("a"));
      }
-
+     @Test
+    public void encryptPassword() {
+        String salt = new SecureRandomNumberGenerator().nextBytes().toHex(); //生成盐值
+        String ciphertext = new Md5Hash("Aa111111", salt, 3).toString(); //生成的密文
+        String[] strings = new String[]{salt, ciphertext};
+         System.out.println(salt);
+         System.out.println(ciphertext);
+    }
 
     //驗證密碼
 //        String ciphertext = new Md5Hash("88888","0ae975a6aeb859797f60e98c575ee12c",3).toString(); //生成的密文

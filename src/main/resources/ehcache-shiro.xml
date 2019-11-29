@@ -24,7 +24,7 @@
             maxElementsInMemory="10000"
             eternal="false"
             timeToIdleSeconds="36000"
-            timeToLiveSeconds="36000"
+            timeToLiveSeconds="0"
             overflowToDisk="false"
             diskPersistent="false"
             diskExpiryThreadIntervalSeconds="120"

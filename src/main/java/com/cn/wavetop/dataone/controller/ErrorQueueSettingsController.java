@@ -41,7 +41,7 @@ public class  ErrorQueueSettingsController {
   }
 
   @ApiImplicitParam
-  @RequestMapping("/add_error_queue")
+  @PostMapping("/add_error_queue")
   public Object add_error_queue( @RequestBody ErrorQueueSettings errorQueueSettings) {
     System.out.println(errorQueueSettings);
     return service.addErrorQueue(errorQueueSettings);

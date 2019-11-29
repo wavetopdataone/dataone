@@ -51,11 +51,5 @@ public class MailnotifySettingsController {
         return service.deleteErrorlog(job_id);
     }
 
-    @ApiImplicitParam
-    @PostMapping("/send_email")
-    public Object send_email(long job_id) {
-        System.out.println(job_id);
-        return "发送邮件？待实现！";
-    }
 
 }
