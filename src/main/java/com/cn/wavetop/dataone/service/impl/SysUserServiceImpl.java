@@ -79,15 +79,19 @@ public class SysUserServiceImpl implements SysUserService {
         try{
             if(list!=null&&list.size()>0) {
                 if(list.get(0).getStatus().equals("1")) {
+                    s = sysUserRepository.findByLoginName(name);
+                    if(s==null){
+                        return ToDataMessage.builder().status("0").message("该用户不存在角色权限").build();
+                    }
                     subject.login(token);
                     Serializable tokenId = subject.getSession().getId();
                     Session session=subject.getSession();
                     session.setAttribute("user",SecurityUtils.getSubject());
                     System.out.println(tokenId);
                    //美其效果
-                    subject.getSession().setTimeout(36000*60*1000);
+//                    subject.getSession().setTimeout(36000*60*1000);
                     //查的是用户角色权限三张表
-                    s = sysUserRepository.findByLoginName(name);
+
 //                    //比较用户是否有super这个权限
                     if(s.get(0).getUserId()==1) {
                         Optional<SysUser> sysUserList = sysUserRepository.findById(Long.valueOf(1));
@@ -130,6 +134,7 @@ public class SysUserServiceImpl implements SysUserService {
                 map.put("message", "用户不存在");
             }
         }catch (Exception e){
+            System.out.println(e);
             map.put("status","2");
             map.put("message","密码错误");
         }

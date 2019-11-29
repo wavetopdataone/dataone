@@ -51,10 +51,23 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/", "anon");
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/login**", "anon");
         filterChainDefinitionMap.put("/sys_user/login**", "anon");
         filterChainDefinitionMap.put("/sys_user/login/", "anon");
         filterChainDefinitionMap.put("/sys_user/login_out/", "anon");
         filterChainDefinitionMap.put("/toback/**", "anon");
+        filterChainDefinitionMap.put("/icons/**", "anon");
+        filterChainDefinitionMap.put("/asset-manifest.json/**", "anon");
+        filterChainDefinitionMap.put("/index.html", "anon");
+        filterChainDefinitionMap.put("/**.js", "anon");
+        filterChainDefinitionMap.put("/**.css", "anon");
+        filterChainDefinitionMap.put("/sys_user/login/**", "anon");
+        filterChainDefinitionMap.put("/static/**.js", "anon");
+        filterChainDefinitionMap.put("/static/**.css", "anon");
+        filterChainDefinitionMap.put("/static/**.jpg", "anon");
+        filterChainDefinitionMap.put("/api/**", "anon");
+        filterChainDefinitionMap.put("/user", "anon");
+        filterChainDefinitionMap.put("/favicon.ico", "anon");
 //        filterChainDefinitionMap.put("/sys_monitoring/**", "anon");
 
         filterChainDefinitionMap.put("/**", "authc");
