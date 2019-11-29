@@ -50,12 +50,14 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/", "anon");
-        filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/login**", "anon");
+        filterChainDefinitionMap.put("/login/**", "anon");
         filterChainDefinitionMap.put("/sys_user/login**", "anon");
         filterChainDefinitionMap.put("/sys_user/login/", "anon");
         filterChainDefinitionMap.put("/sys_user/login_out/", "anon");
+        //后台kafka调用的接口
         filterChainDefinitionMap.put("/toback/**", "anon");
+        //前端js，css，图片
         filterChainDefinitionMap.put("/icons/**", "anon");
         filterChainDefinitionMap.put("/asset-manifest.json/**", "anon");
         filterChainDefinitionMap.put("/index.html", "anon");
@@ -66,8 +68,25 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/static/**.css", "anon");
         filterChainDefinitionMap.put("/static/**.jpg", "anon");
         filterChainDefinitionMap.put("/api/**", "anon");
-        filterChainDefinitionMap.put("/user", "anon");
-        filterChainDefinitionMap.put("/favicon.ico", "anon");
+        filterChainDefinitionMap.put("/favicon.**", "anon");
+//        前端react的路由
+        filterChainDefinitionMap.put("/busList**", "anon");
+        filterChainDefinitionMap.put("/busList/**", "anon");
+        filterChainDefinitionMap.put("/sys_user/login/", "anon");
+        filterChainDefinitionMap.put("/user**", "anon");
+        filterChainDefinitionMap.put("/user/**", "anon");
+        filterChainDefinitionMap.put("/personal**", "anon");
+        filterChainDefinitionMap.put("/personal/**", "anon");
+        filterChainDefinitionMap.put("/busCreat**", "anon");
+        filterChainDefinitionMap.put("/busCreat/**", "anon");
+        filterChainDefinitionMap.put("/watch**", "anon");
+        filterChainDefinitionMap.put("/watch/**", "anon");
+        filterChainDefinitionMap.put("/log**", "anon");
+        filterChainDefinitionMap.put("/log/**", "anon");
+        filterChainDefinitionMap.put("/usermanage**", "anon");
+        filterChainDefinitionMap.put("/usermanage/**", "anon");
+        filterChainDefinitionMap.put("/bussiness**", "anon");
+        filterChainDefinitionMap.put("/bussiness/**", "anon");
 //        filterChainDefinitionMap.put("/sys_monitoring/**", "anon");
 
         filterChainDefinitionMap.put("/**", "authc");

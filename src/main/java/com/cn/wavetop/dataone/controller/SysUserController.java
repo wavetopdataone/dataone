@@ -23,7 +23,7 @@ public class SysUserController {
 
         return sysUserService.addSysUser(sysUser,id);
     }
-    @RequiresGuest
+//    @RequiresGuest
     @ApiOperation(value = "登录",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "用户登录")
     @PostMapping("/login")
     public Object login(String name,String password){
