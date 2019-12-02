@@ -72,14 +72,14 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     }
 
     //判断字段是否发生改变
-    public boolean fieldChange(String[] split){
-        boolean flag=false;
+    public boolean fieldChange(String[] split) {
+        boolean flag = false;
         for (String s : split) {
             String[] ziduan = s.split(",");
             //若字段改变则存入字段规则表
 //                if (!ziduan[0].equals(ziduan[1]) || !ziduan[3].equals(ziduan[7]) || !ziduan[5].equals(ziduan[8])) {
-            if (!ziduan[0].equals(ziduan[1])){
-                flag=true;
+            if (!ziduan[0].equals(ziduan[1])) {
+                flag = true;
                 return flag;
             }
         }
@@ -113,6 +113,25 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             } else {
                 return ToDataMessage.builder().status("0").message("该任务没有连接").build();
             }
+            //若目标端存在此表则提示用户
+            String sqlss = "";
+            if (sysDbinfo2.getType() == 1) {
+                //oracle
+                sqlss = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo2.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
+            } else if (sysDbinfo2.getType() == 2) {
+                //mysql
+                sqlss = "show tables";
+            } else if (sysDbinfo2.getType() == 3) {
+                //sqlserver
+                sqlss = "select name from sysobjects where xtype='u'";
+            }
+            System.out.print(sysDbinfo2+"-------------");
+            //查询目标端是否出现此表
+            List<String> tablename = DBConns.existsTableName(sysDbinfo2, sqlss, dest_name);
+            if (tablename != null && tablename.size() > 0) {
+                return ToDataMessage.builder().status("0").message("表名" + dest_name + "已经存在").build();
+            }
+            //查询是否关联的有子任务
             List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(job_id);
             int a = sysTableruleRespository.deleteByJobIdAndSourceTable(job_id, source_name);
             if (PermissionUtils.isPermitted("3")) {
@@ -186,8 +205,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 String[] ziduan = s.split(",");
                 //若字段改变则存入字段规则表
 //                if (!ziduan[0].equals(ziduan[1]) || !ziduan[3].equals(ziduan[7]) || !ziduan[5].equals(ziduan[8])) {
-                if (!ziduan[0].equals(ziduan[1])){
-                SysFieldrule build = SysFieldrule.builder().fieldName(ziduan[0])
+                if (!ziduan[0].equals(ziduan[1])) {
+                    SysFieldrule build = SysFieldrule.builder().fieldName(ziduan[0])
                             .destFieldName(ziduan[1])
                             .jobId(job_id)
                             .type(ziduan[2])
@@ -436,12 +455,12 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         if (sysFieldruleList != null && sysFieldruleList.size() > 0) {
             map.put("destName", sysFieldruleList.get(0).getDestName());
         } else {
-            List<SysTablerule> sysTablerules = sysTableruleRespository.findByJobIdAndSourceTableAndVarFlag(job_id, tablename,2L);
-             if(sysTablerules!=null&&sysTablerules.size()>0){
-                 map.put("destName", sysTablerules.get(0).getDestTable());
-             }else {
-                 map.put("destName", null);
-             }
+            List<SysTablerule> sysTablerules = sysTableruleRespository.findByJobIdAndSourceTableAndVarFlag(job_id, tablename, 2L);
+            if (sysTablerules != null && sysTablerules.size() > 0) {
+                map.put("destName", sysTablerules.get(0).getDestTable());
+            } else {
+                map.put("destName", null);
+            }
         }
         if (sysDesensitizations != null && sysDesensitizations.size() > 0) {
             map.put("data2", sysDesensitizations);

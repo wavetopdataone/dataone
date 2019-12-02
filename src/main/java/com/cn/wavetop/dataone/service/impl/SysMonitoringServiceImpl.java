@@ -1,19 +1,14 @@
 package com.cn.wavetop.dataone.service.impl;
 
 import com.cn.wavetop.dataone.config.shiro.MyShiroRelam;
-import com.cn.wavetop.dataone.dao.SysDataChangeRepository;
-import com.cn.wavetop.dataone.dao.SysMonitoringRepository;
-import com.cn.wavetop.dataone.dao.SysRelaRepository;
-import com.cn.wavetop.dataone.dao.SysTableruleRepository;
-import com.cn.wavetop.dataone.entity.SysDataChange;
-import com.cn.wavetop.dataone.entity.SysMonitoring;
-import com.cn.wavetop.dataone.entity.SysRela;
-import com.cn.wavetop.dataone.entity.SysTablerule;
+import com.cn.wavetop.dataone.dao.*;
+import com.cn.wavetop.dataone.entity.*;
 import com.cn.wavetop.dataone.entity.vo.CountAndTime;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysMonitoringService;
 import com.cn.wavetop.dataone.util.DateUtil;
+import org.hibernate.dialect.Sybase11Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -31,7 +26,8 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
     private SysTableruleRepository sysTableruleRepository;
     @Autowired
     private SysDataChangeRepository sysDataChangeRepository;
-
+    @Autowired
+    private SysJobrelaRespository sysJobrelaRespository;
     @Override
     public Object findAll() {
         List<SysMonitoring> sysUserList = sysMonitoringRepository.findAll();
@@ -229,7 +225,7 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
             map.put("dispose_rate", disposeRate);
             map.put("synchronous", synchronous);
             map.put("status", "1");
-            return map;
+
         } else {
             map.put("read_datas", "0");
             map.put("write_datas", "0");
@@ -238,8 +234,13 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
             map.put("dispose_rate", "0");
             map.put("synchronous", "0");
             map.put("status", "1");
-            return map;
+
         }
+        //把同步速率更新到任务表用于首页的显示
+       SysJobrela sysJobrela= sysJobrelaRespository.findById(job_id);
+        sysJobrela.setJobRate(synchronous);
+        sysJobrelaRespository.save(sysJobrela);
+        return map;
     }
 
     @Transactional

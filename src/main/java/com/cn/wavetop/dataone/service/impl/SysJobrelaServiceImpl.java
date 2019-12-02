@@ -907,6 +907,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                     sysUserJobVo.setCreateTime(sysLoglist.get(0).getCreateDate());
                     sysUserJobVo.setCreateUser(sysLoglist.get(0).getUsername());
                 }
+                //查询参与此任务的人
                 sysUserList = sysUserJobrelaRepository.selUserNameByJobId(sysJobrela.getId());
                 for (int i = 0; i < sysUserList.size(); i++) {
                     stringBuffer.append(sysUserList.get(i).getLoginName());
@@ -917,6 +918,13 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 sysUserJobVo.setJobId(sysJobrela.getId());
                 sysUserJobVo.setJobName(sysJobrela.getJobName());
                 sysUserJobVo.setUserName(String.valueOf(stringBuffer));
+                //操作详情
+                if(sysJobrela.getJobStatus().equals("5")){
+                    sysUserJobVo.setOperate("等待完善");
+                }else {
+                    sysUserJobVo.setOperate("查看详情");
+                }
+                sysUserJobVo.setJobStatus(sysUserJobVo.getJobStatus());//任务状态
                 stringBuffer.setLength(0);
                 sysUserJobVoList.add(sysUserJobVo);
             }

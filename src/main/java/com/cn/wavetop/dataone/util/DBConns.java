@@ -230,12 +230,79 @@ public class DBConns {
         return stringList;
   }
 
+    /**
+     * 查询目的端表名是否存在表名
+     * @param
+     * @throws SQLException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws ClassNotFoundException
+     */
+    public static List<String> existsTableName(SysDbinfo sysDbinfo, String sql, String destName) {
+        Connection conn = null;
+        Statement stmt = null;
+        PreparedStatement ps=null;
+        ResultSet rs = null;
+        String tableName = null;
+        List<String> list=new ArrayList<>();
+        try {
+            if (sysDbinfo.getType() == 1) {
+                conn = DBConns.getOracleConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
+                while (rs.next()){
+                    tableName = rs.getString(1);
+                    if(tableName.equals(destName)){
+                       list.add(tableName);
+                    }
+                }
+            } else if (sysDbinfo.getType() == 2) {
+                conn = DBConns.getMySQLConn(sysDbinfo);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery(sql);
+                while (rs.next()){
+                    tableName = rs.getString(1);
+                    if(tableName.equals(destName)){
+                        list.add(tableName);
+                    }
+                }
+            } else if (sysDbinfo.getType() == 3) {
+                conn = DBConns.getSqlserverConn(sysDbinfo);
+                ps = conn.prepareStatement(sql);
+                rs = ps.executeQuery();
+                while (rs.next()){
+                    tableName = rs.getString(1);
+                    if(tableName.equals(destName)){
+                        list.add(tableName);
+                    }
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+            System.out.println("类型错误");
+        } finally {
+            if(ps!=null){
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            DBConns.close(stmt, conn, rs);
+        }
+        return list;
+    }
+
     public static void main(String[] args) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException {
-        SysDbinfo mysql = SysDbinfo.builder().host("192.168.1.226").port(Long.valueOf(3306)).dbname("dataone").user("root").password("888888").build();
-        Connection mySQLConn = getMySQLConn(mysql);
-        System.out.println(mySQLConn);
+//        SysDbinfo mysql = SysDbinfo.builder().host("192.168.1.226").port(Long.valueOf(3306)).dbname("dataone").user("root").password("888888").build();
+//        Connection mySQLConn = getMySQLConn(mysql);
+//        System.out.println(mySQLConn);
         SysDbinfo oracle = SysDbinfo.builder().host("192.168.103.238").port(Long.valueOf(1521)).dbname("ORCL").user("test").password("test").build();
         Connection oracleConn = getOracleConn(oracle);
         System.out.println(oracleConn);
+        SysDbinfo sqlserver = SysDbinfo.builder().host("192.168.10.176").port(Long.valueOf(1433)).dbname("TEST1").user("sa").password("wavetop_888888").build();
+        Connection sqlserverConn = getSqlserverConn(sqlserver);
+        System.out.println(sqlserverConn);
+
     }
 }
