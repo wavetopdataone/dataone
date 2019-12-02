@@ -116,8 +116,8 @@ public class SysUserServiceImpl implements SysUserService {
                     }else{
                         if(PermissionUtils.getSysUser().getDeptId()==null){
                             sysUserRepository.deleteById(PermissionUtils.getSysUser().getId());
+                            return ToDataMessage.builder().status("0").message("用户不存在!").build();
                         }
-                        return ToDataMessage.builder().status("0").message("用户不存在").build();
                     }
                     sysLog.setIp(session.getHost());
                     sysLog.setMethod("com.cn.wavetop.dataone.controller.SysUserController.login");

@@ -26,11 +26,11 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
     Page<SysJobrela> findAll(Pageable pageable);
 
     boolean existsByDestNameOrSourceName(String name, String name1);
-    //查询数据源是否被使用
-    @Query(value = "select j from SysJobrela j,SysUserJobrela uj where  uj.jobrelaId=j.id and uj.deptId=:deptId and j.jobStatus not in('0','5') and j.sourceName=:name or j.destName=:name1 ")
+    //查询数据源是否被使用and j.jobStatus not in('0','5')
+    @Query(value = "select j from SysJobrela j,SysUserJobrela uj where  uj.jobrelaId=j.id and uj.deptId=:deptId  and j.sourceName=:name or j.destName=:name1 ")
     List<SysJobrela> findDestNameOrSourceName(String name,String name1,Long deptId);
-    //查询数据源是否被使用
-    @Query(value = "select j from SysJobrela j,SysUserJobrela uj where  uj.jobrelaId=j.id and uj.deptId=:deptId and j.jobStatus not in('0','5') and j.sourceId=:id or j.destId=:id1 ")
+    //查询数据源是否被使用 and j.jobStatus not in('0','5')
+    @Query(value = "select j from SysJobrela j,SysUserJobrela uj where  uj.jobrelaId=j.id and uj.deptId=:deptId and j.sourceId=:id or j.destId=:id1 ")
     List<SysJobrela> findDestIdOrSourceId(Long id,Long id1,Long deptId);
 
     boolean existsByDestIdOrSourceId(long id, long id1);

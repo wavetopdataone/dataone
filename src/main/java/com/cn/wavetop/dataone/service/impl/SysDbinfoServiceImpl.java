@@ -210,18 +210,23 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
     public Object deleteDbinfo(long id) {
         Map<Object, Object> map = new HashMap();
 //        boolean flag = sysJobrelarepository.existsByDestIdOrSourceId(id, id);
-        //查询该部门下是否存在这个数据源
+        //查询数据源是否被使用
        List<SysJobrela> list=sysJobrelarepository.findDestIdOrSourceId(id,id,PermissionUtils.getSysUser().getDeptId());
         if(list==null||list.size()<=0){
 //        if (!flag) {
-            boolean flag2 = repository.existsById(id);
-            if (flag2){
-                repository.deleteById(id);
-                map.put("status", 1);
-                map.put("message", "删除成功");
-            }else {
+            if(PermissionUtils.isPermitted("2")) {
+                boolean flag2 = repository.existsById(id);
+                if (flag2) {
+                    repository.deleteById(id);
+                    map.put("status", 1);
+                    map.put("message", "删除成功");
+                } else {
+                    map.put("status", 0);
+                    map.put("message", "目标不存在");
+                }
+            }else{
                 map.put("status", 0);
-                map.put("message", "目标不存在");
+                map.put("message", "数据源只能由管理员删除");
             }
         } else {
             map.put("status", 2);
