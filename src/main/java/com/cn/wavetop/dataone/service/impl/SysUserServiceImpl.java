@@ -105,7 +105,7 @@ public class SysUserServiceImpl implements SysUserService {
                     map.put("check", check);
                     SysLoginlog sysLog=new SysLoginlog();
                     sysLog.setCreateDate(new Date());
-                    if(PermissionUtils.getSysUser().getDeptId()!=0&&PermissionUtils.getSysUser().getDeptId()!=null) {
+                    if(PermissionUtils.getSysUser().getDeptId()!=null&&PermissionUtils.getSysUser().getDeptId()!=0) {
                         //获取部门信息
                         Optional<SysDept> sysDepts = sysDeptRepository.findById(PermissionUtils.getSysUser().getDeptId());
                         String deptName = "";
@@ -113,6 +113,11 @@ public class SysUserServiceImpl implements SysUserService {
                             deptName = sysDepts.get().getDeptName();
                             sysLog.setDeptName(deptName);
                         }
+                    }else{
+                        if(PermissionUtils.getSysUser().getDeptId()==null){
+                            sysUserRepository.deleteById(PermissionUtils.getSysUser().getId());
+                        }
+                        return ToDataMessage.builder().status("0").message("用户不存在").build();
                     }
                     sysLog.setIp(session.getHost());
                     sysLog.setMethod("com.cn.wavetop.dataone.controller.SysUserController.login");

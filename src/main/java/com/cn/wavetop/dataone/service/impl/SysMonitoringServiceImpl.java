@@ -366,7 +366,7 @@ public class SysMonitoringServiceImpl implements SysMonitoringService {
      */
     @Transactional
     @Override
-    public void updateWriteMonitoring(long id, Long writeData, String table) {
+    public void  updateWriteMonitoring(long id, Long writeData, String table) {
 //        String table = "TEST";
 
         List<SysMonitoring> sysMonitoringList = sysMonitoringRepository.findByJobIdTable(id, table);
