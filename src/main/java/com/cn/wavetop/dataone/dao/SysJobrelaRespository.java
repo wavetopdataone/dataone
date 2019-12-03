@@ -111,4 +111,8 @@ public interface SysJobrelaRespository   extends JpaRepository<SysJobrela,Long>
     List<SysJobrela>  findJobByUserIdJobName(Long userId,String job_name);
     @Query(value = "select sj from SysUser u,SysJobrela sj,SysUserJobrela uj where u.id=uj.userId and sj.id=uj.jobrelaId  and sj.id=:id and u.id=:userId order by sj.id desc")
     List<SysJobrela>  findJobByUserIdJobId(Long userId,Long id);
+
+
+    //根据任务名模糊查询
+    List<SysJobrela> findByJobNameLike(String jobName);
 }

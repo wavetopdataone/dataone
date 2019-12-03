@@ -16,4 +16,5 @@ public interface SysDataChangeRepository extends JpaRepository<SysDataChange,Lon
     List<SysDataChange> findByJobIdAndTime(Long jobId, Date createTime);
     @Query(value="from SysDataChange sd where sd.jobId=:job_id and sd.createTime = :parse")
     SysDataChange findByJobIdAndDate(long job_id,Date parse);
+    int deleteByJobId(Long jobId);
 }

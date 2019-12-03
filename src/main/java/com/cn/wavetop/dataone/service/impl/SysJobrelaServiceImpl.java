@@ -64,6 +64,10 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     @Autowired
     private ErrorQueueSettingsRespository errorQueueSettingsRespository;
     @Autowired
+    private SysDataChangeRepository sysDataChangeRepository;
+    @Autowired
+    private SysMonitoringRepository sysMonitoringRepository;
+    @Autowired
     private LogUtil logUtil;
 
     //首页根据用户权限查询任务，现在已经弃用
@@ -153,9 +157,9 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 for (int i = 0; i < name.length; i++) {
                     sysJobrela1 = new SysJobrela();
                     // 查看端
-                    SysDbinfo source = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getSourceName(), 0);
+                    SysDbinfo source = sysDbinfoRespository.findByNameAndSourDestUser(PermissionUtils.getSysUser().getId(),sysJobrela.getSourceName(), 0);
                     //目标端
-                    SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDest(name[i], 1);
+                    SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDestUser(PermissionUtils.getSysUser().getId(),name[i], 1);
                     //主任务是原名字，后续的拼上_i
                     if (i == 0) {
                         sysJobrela1.setJobName(jobName);
@@ -167,7 +171,6 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                     sysJobrela1.setSourceId(source.getId());
                     sysJobrela1.setSourceType(source.getType());
                     sysJobrela1.setSourceName(source.getName());
-
                     //主任务目的端先是多个，等激活后再分割
                     if (i == 0) {
                         sysJobrela1.setDestName(sysJobrela.getDestName());
@@ -188,6 +191,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                         sysUserJobrela.setDeptId(PermissionUtils.getSysUser().getDeptId());
                         sysUserJobrela.setJobrelaId(save.getId());
                         sysUserJobrelaRepository.save(sysUserJobrela);
+                        System.out.println(sysUserJobrela+"----------");
                     }
                     //python的操作流程
                     Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(jobName).operate("添加").jobId(save.getId()).build();
@@ -211,18 +215,20 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                         sysJobrelaRelatedRespository.save(sysJobrelaRelated);
                     }
                 }
-
                 Optional<SysJobrela> ss = repository.findById(jobId);
                 map.put("status", 1);
                 map.put("message", "添加成功");
                 map.put("data", ss.get());
+                return map;
             }
         } else {
             map.put("status", "2");
             map.put("message", "权限不足");
+            return map;
         }
-        return map;
+
     }
+
 
     /**
      * 修改任务一定是管理员才能修改数据源
@@ -245,11 +251,11 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
             //判断任务是否存在
             List<SysJobrela> lists = repository.findJobByUserIdJobId(PermissionUtils.getSysUser().getId(), sysJobrela.getId());
             if (lists != null && lists.size() >= 0) {
-                 //判断修改的任务名称在该部门下是否存在
+                //判断修改的任务名称在该部门下是否存在
                 List<SysJobrela> list = repository.findJobByUserIdJobName(PermissionUtils.getSysUser().getId(), sysJobrela.getJobName());
-                if(list!=null&&list.size()>0) {
+                if (list != null && list.size() > 0) {
                     if (!list.get(0).getId().equals(sysJobrela.getId())) {
-                        System.out.println(list.get(0).getId()+"-----"+sysJobrela.getId());
+                        System.out.println(list.get(0).getId() + "-----" + sysJobrela.getId());
                         return ToDataMessage.builder().status("0").message("该部门下任务名称已存在").build();
                     }
                 }
@@ -297,9 +303,9 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 data = dataw.get();
                 //分割成多个任务
                 // 查看端
-                SysDbinfo source = sysDbinfoRespository.findByNameAndSourDest(sysJobrela.getSourceName(), 0);
+                SysDbinfo source = sysDbinfoRespository.findByNameAndSourDestUser(PermissionUtils.getSysUser().getId(),sysJobrela.getSourceName(), 0);
                 //目标端
-                SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDest(name[0], 1);
+                SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDestUser(PermissionUtils.getSysUser().getId(),name[0], 1);
                 //若是主任务则修改
                 if (jobName.equals(sysJobrela.getJobName())) {
                     data.setJobName(sysJobrela.getJobName());
@@ -323,7 +329,7 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 }
                 if (name.length > 1) {
                     for (int i = 1; i < name.length; i++) {
-                        SysDbinfo dests = sysDbinfoRespository.findByNameAndSourDest(name[i], 1);
+                        SysDbinfo dests = sysDbinfoRespository.findByNameAndSourDestUser(PermissionUtils.getSysUser().getId(),name[i], 1);
                         sysJobrela1 = new SysJobrela();
                         //子任务名称是主任务_i
                         jobName = null;
@@ -393,6 +399,8 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                     repository.deleteById(id);
                     sysJobinfoRespository.deleteByJobId(id);
                     sysUserJobrelaRepository.deleteByJobrelaId(id);
+                    sysDataChangeRepository.deleteByJobId(id);//删除速率计算表
+                    sysMonitoringRepository.deleteByJobId(id);//删除监控表
                     dataChangeSettingsRespository.deleteByJobId(id);
                     sysTableruleRepository.deleteByJobId(id);
                     sysFieldruleRepository.deleteByJobId(id);
@@ -919,9 +927,9 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
                 sysUserJobVo.setJobName(sysJobrela.getJobName());
                 sysUserJobVo.setUserName(String.valueOf(stringBuffer));
                 //操作详情
-                if(sysJobrela.getJobStatus().equals("5")){
+                if (sysJobrela.getJobStatus().equals("5")) {
                     sysUserJobVo.setOperate("等待完善");
-                }else {
+                } else {
                     sysUserJobVo.setOperate("查看详情");
                 }
                 sysUserJobVo.setJobStatus(sysUserJobVo.getJobStatus());//任务状态
@@ -1030,5 +1038,181 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
     public Object findRangeByJobId(long Id) {
         SysJobrela jobrela = repository.findById(Id);
         return jobrela.getSyncRange();
+    }
+
+
+    /**
+     * 复制任务
+     */
+    @Transactional
+    @Override
+    public Object copyJob(Long jobId) {
+        HashMap<String, Object> map = new HashMap<>();
+        if (PermissionUtils.isPermitted("2")) {
+            Optional<SysJobrela> sysJobrela = repository.findById(jobId);
+            //查看有多少个复制的任务
+            List<SysJobrela> list = repository.findByJobNameLike(sysJobrela.get().getJobName() + "_copy%");
+            SysJobrela sysJobrela1 = new SysJobrela();
+            sysJobrela1.setJobStatus("0");
+            sysJobrela1.setDestName(sysJobrela.get().getDestName());
+            sysJobrela1.setSyncRange(sysJobrela.get().getSyncRange());
+            sysJobrela1.setSourceName(sysJobrela.get().getSourceName());
+            //复制的任务名称
+            sysJobrela1.setJobName(sysJobrela.get().getJobName() + "_copy" + (list.size() + 1));
+            sysJobrela1.setDestId(sysJobrela.get().getDestId());
+            sysJobrela1.setDestType(sysJobrela.get().getDestType());
+            sysJobrela1.setSourceId(sysJobrela.get().getSourceId());
+            sysJobrela1.setSourceType(sysJobrela.get().getSourceType());
+            //相关性
+//        sysJobrela1.setRelevence(sysJobrela.get().getRelevence());
+            SysJobrela sysJobrela2 = repository.save(sysJobrela1);
+            //添加任务参与人（复制的那个人，只能是管理员）
+            SysUserJobrela sysUserJobrela = new SysUserJobrela();
+            sysUserJobrela.setUserId(PermissionUtils.getSysUser().getId());
+            sysUserJobrela.setDeptId(PermissionUtils.getSysUser().getDeptId());
+            sysUserJobrela.setJobrelaId(sysJobrela2.getId());
+            sysUserJobrelaRepository.save(sysUserJobrela);
+            //添加数据变化设计表
+            List<DataChangeSettings> dataChangeSettings = dataChangeSettingsRespository.findByJobId(jobId);
+            if (dataChangeSettings != null && dataChangeSettings.size() > 0) {
+                DataChangeSettings dataChangeSettings1 = null;
+                for (DataChangeSettings dataChangeSetting : dataChangeSettings) {
+                    dataChangeSettings1 = new DataChangeSettings();
+                    dataChangeSettings1.setJobId(sysJobrela2.getId());
+                    dataChangeSettings1.setDeleteSync(dataChangeSetting.getDeleteSync());
+                    dataChangeSettings1.setDeleteSyncingSource(dataChangeSetting.getDeleteSyncingSource());
+                    dataChangeSettings1.setNewSync(dataChangeSetting.getNewSync());
+                    dataChangeSettings1.setNewtableSource(dataChangeSetting.getNewtableSource());
+                    dataChangeSettingsRespository.save(dataChangeSettings1);
+                }
+            }
+            //添加错误队列设置表
+            ErrorQueueSettings errorQueueSettings = errorQueueSettingsRespository.findByJobId(jobId);
+            if (errorQueueSettings != null) {
+                ErrorQueueSettings errorQueueSettings1 = new ErrorQueueSettings();
+                errorQueueSettings1.setPauseSetup(errorQueueSettings.getPauseSetup());
+                errorQueueSettings1.setPreSteup(errorQueueSettings.getPreSteup());
+                errorQueueSettings1.setWarnSetup(errorQueueSettings.getWarnSetup());
+                errorQueueSettings1.setJobId(sysJobrela2.getId());
+                errorQueueSettingsRespository.save(errorQueueSettings1);
+            }
+            //添加邮件通知
+            List<MailnotifySettings> mailnotifySettings = mailnotifySettingsRespository.findByJobId(jobId);
+            if (mailnotifySettings != null && mailnotifySettings.size() > 0) {
+                MailnotifySettings mailnotifySettings1 = null;
+                for (MailnotifySettings mailnotifySettings2 : mailnotifySettings) {
+                    mailnotifySettings1 = new MailnotifySettings();
+                    mailnotifySettings1.setErrorQueueAlert(mailnotifySettings2.getErrorQueueAlert());
+                    mailnotifySettings1.setErrorQueuePause(mailnotifySettings2.getErrorQueuePause());
+                    mailnotifySettings1.setJobError(mailnotifySettings2.getJobError());
+                    mailnotifySettings1.setSourceChange(mailnotifySettings2.getSourceChange());
+                    mailnotifySettings1.setJobId(sysJobrela2.getId());
+                    mailnotifySettingsRespository.save(mailnotifySettings1);
+                }
+            }
+            //任务脱敏规则
+            List<SysDesensitization> sysDesensitizations = sysDesensitizationRepository.findByJobId(jobId);
+            if (sysDesensitizations != null && sysDesensitizations.size() > 0) {
+                SysDesensitization sysDesensitization = null;
+                for (SysDesensitization sysDesensitization1 : sysDesensitizations) {
+                    sysDesensitization = new SysDesensitization();
+                    sysDesensitization.setDestField(sysDesensitization1.getDestField());
+                    sysDesensitization.setSourceField(sysDesensitization1.getSourceField());
+                    sysDesensitization.setSourceTable(sysDesensitization1.getSourceTable());
+                    sysDesensitization.setDestTable(sysDesensitization1.getDestTable());
+                    sysDesensitization.setDesensitizationWay(sysDesensitization1.getDesensitizationWay());
+                    sysDesensitization.setJobId(sysJobrela2.getId());
+                    if ("2".equals(sysDesensitization1.getDesensitizationWay())) {
+                        sysDesensitization.setRemark(sysDesensitization1.getRemark());
+                    }
+                    sysDesensitizationRepository.save(sysDesensitization);
+                }
+            }
+            //表字段规则
+            List<SysFieldrule> sysFieldruleList = sysFieldruleRepository.findByJobId(jobId);
+            if (sysFieldruleList != null && sysFieldruleList.size() > 0) {
+                SysFieldrule sysFieldrule = null;
+                for (SysFieldrule sysFieldrule1 : sysFieldruleList) {
+                    sysFieldrule = new SysFieldrule();
+                    sysFieldrule.setDestFieldName(sysFieldrule1.getDestFieldName());
+                    sysFieldrule.setFieldName(sysFieldrule1.getFieldName());
+                    sysFieldrule.setAccuracy(sysFieldrule1.getAccuracy());
+                    sysFieldrule.setNotNull(sysFieldrule1.getNotNull());
+                    sysFieldrule.setScale(sysFieldrule1.getScale());
+                    sysFieldrule.setType(sysFieldrule1.getType());
+                    sysFieldrule.setVarFlag(sysFieldrule1.getVarFlag());
+                    sysFieldrule.setSourceName(sysFieldrule1.getSourceName());
+                    sysFieldrule.setDestName(sysFieldrule1.getDestName());
+                    sysFieldrule.setJobId(sysJobrela2.getId());
+                    sysFieldruleRepository.save(sysFieldrule);
+                }
+            }
+            //表规则
+            List<SysTablerule> sysTableruleList = sysTableruleRepository.findByJobId(jobId);
+            if (sysTableruleList != null && sysTableruleList.size() > 0) {
+                SysTablerule sysTablerule = null;
+                for (SysTablerule sysTablerule1 : sysTableruleList) {
+                    sysTablerule = new SysTablerule();
+                    sysTablerule.setDestTable(sysTablerule1.getDestTable());
+                    sysTablerule.setJobId(sysJobrela2.getId());
+                    sysTablerule.setSourceTable(sysTablerule1.getSourceTable());
+                    sysTablerule.setVarFlag(sysTablerule1.getVarFlag());
+                    sysTableruleRepository.save(sysTablerule);
+                }
+            }
+            //过滤规则
+            List<SysFilterTable> sysFilterTables = sysFilterTableRepository.findByJobId(jobId);
+            if (sysFilterTables != null && sysFilterTables.size() > 0) {
+                SysFilterTable sysFilterTable = null;
+                for (SysFilterTable sysFilterTable1 : sysFilterTables) {
+                    sysFilterTable = new SysFilterTable();
+                    sysFilterTable.setJobId(sysJobrela2.getId());
+                    sysFilterTable.setFilterTable(sysFilterTable1.getFilterTable());
+                    if (sysFilterTable1.getFilterField() != null) {
+                        sysFilterTable.setFilterField(sysFilterTable1.getFilterField());
+                    }
+                    sysFilterTableRepository.save(sysFilterTable);
+                }
+            }
+            //任务详细信息
+            SysJobinfo jobinfo = sysJobinfoRespository.findByJobId(jobId);
+            if (jobinfo != null) {
+                SysJobinfo data = new SysJobinfo();
+                data.setSyncRange(jobinfo.getSyncRange());
+                data.setJobId(sysJobrela2.getId());
+                data.setBeginTime(jobinfo.getBeginTime());
+                data.setDataEnc(jobinfo.getDataEnc());
+                data.setDestCaseSensitive(jobinfo.getDestCaseSensitive());
+                data.setDestWriteConcurrentNum(jobinfo.getDestWriteConcurrentNum());
+                data.setEndTime(jobinfo.getEndTime());
+                data.setMaxDestWrite(jobinfo.getMaxDestWrite());
+                data.setMaxSourceRead(jobinfo.getMaxSourceRead());
+                data.setPlayers(jobinfo.getPlayers());
+                data.setReadBegin(jobinfo.getReadBegin());
+                data.setReadWay(jobinfo.getReadWay());
+                data.setSyncWay(jobinfo.getSyncWay());
+                data.setReadFrequency(jobinfo.getReadFrequency());
+                if (jobinfo.getReadBegin() == 1) {
+                    data.setSourceType(jobinfo.getSourceType());
+                    if (jobinfo.getSourceType().equals("1")) {
+                        data.setLogMinerScn(jobinfo.getLogMinerScn());
+                    } else if (jobinfo.getSourceType().equals("2")) {
+                        data.setBinlog(jobinfo.getBinlog());
+                        data.setBinlogPostion(jobinfo.getBinlogPostion());
+                    }
+                }
+                sysJobinfoRespository.save(data);
+            }
+            //添加任务日志
+            logUtil.addJoblog(sysJobrela2, "com.cn.wavetop.dataone.service.impl.SysJobrelaServiceImpl.copyJob", "添加任务");
+            //python的操作流程
+            Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(sysJobrela2.getJobName()).operate("添加").jobId(sysJobrela2.getId()).build();
+            userlogRespository.save(build);
+            map.put("status", "1");
+            map.put("data", sysJobrela2);
+            return map;
+        } else {
+            return ToDataMessage.builder().status("0").message("权限不足").build();
+        }
     }
 }

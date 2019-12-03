@@ -35,6 +35,9 @@ public interface SysDbinfoRespository  extends JpaRepository<SysDbinfo,Long> {
 
     SysDbinfo findByNameAndSourDest(String name, long SourDest);
 
+    @Query("SELECT  s from SysDbinfo s,SysUserDbinfo su where s.id=su.dbinfoId and su.userId=:userId and s.name=:name and s.sourDest=:SourDest")
+    SysDbinfo findByNameAndSourDestUser(Long userId,String name, long SourDest);
+
     boolean existsByName(String name);
     boolean existsById(Long id);
 

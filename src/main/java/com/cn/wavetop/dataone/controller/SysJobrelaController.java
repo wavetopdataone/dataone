@@ -36,7 +36,7 @@ public class SysJobrelaController {
     }
 
 
-    @ApiOperation(value = "添加任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "添加任务添加参与人")
+    @ApiOperation(value = "添加任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "添加任务")
     @PostMapping("/add_jobrela")
     public Object add_jobrela(@RequestBody  SysJobrela sysJobrela) {
 
@@ -161,4 +161,10 @@ public class SysJobrelaController {
 
         return service.selJobrelaByDeptIdPage(deptId,current,size);
     }
+    @ApiOperation(value = "复制任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "复制任务")
+    @PostMapping("/copyJob")
+    public Object copyJob(Long jobId) {
+        return service.copyJob(jobId);
+    }
+
 }

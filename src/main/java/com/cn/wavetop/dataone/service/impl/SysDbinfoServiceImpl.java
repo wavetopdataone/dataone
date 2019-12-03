@@ -196,7 +196,6 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
                     e.printStackTrace();
                 }
             }
-
             return map;
         } else {
             map.put("status", "0");

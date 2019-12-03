@@ -50,5 +50,6 @@ public interface SysJobrelaService {
 
     Object findDbinfoById(Long jobId);
     Object findRangeByJobId(long Id);
+    Object copyJob(Long jobId);
 
 }

@@ -11,6 +11,8 @@ import com.cn.wavetop.dataone.util.LogUtil;
 import com.cn.wavetop.dataone.util.PermissionUtils;
 import com.cn.wavetop.dataone.util.RedisUtil;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.ModularRealmAuthorizer;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -23,12 +25,15 @@ import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
@@ -52,7 +57,17 @@ public class SysUserServiceImpl implements SysUserService {
     private RedisUtil redisUtil;
     @Autowired
     private LogUtil logUtil;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     private String code=null;
+    //用户登录次数计数  redisKey 前缀
+    private String SHIRO_LOGIN_COUNT = "shiro-login-count";
+    //用户登录是否被锁定    一小时 redisKey 前缀
+    private String SHIRO_IS_LOCK = "shiro-is-lock";
+    private int lefttime=5;
+    private int index=0;
+
     @Override
     public Object login(String name, String password) {
 
@@ -76,7 +91,29 @@ public class SysUserServiceImpl implements SysUserService {
         Subject subject= SecurityUtils.getSubject();
 //        Session sessionss=subject.getSession();
 //        System.out.println(sessionss.getId()+"dsadsaxuezihao.................");
+        ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
+        //验证密码
+        String ciphertext = new Md5Hash(password,list.get(0).getSalt(),3).toString(); //生成的密文
+         //密码错误次数计数，
+         if(!list.get(0).getPassword().equals(ciphertext)) {
+             opsForValue.increment(SHIRO_LOGIN_COUNT + name, 1);
+             //重试的次数改为5,第5次错误时间下标改为0
+             if (opsForValue.get(SHIRO_LOGIN_COUNT + name).equals("1")) {
+                 lefttime = 5;
+                 index=0;
+             }
+             //计数第5次时，设置用户被锁定5分钟
+             if (Integer.parseInt(opsForValue.get(SHIRO_LOGIN_COUNT + name)) == 5) {
+                 opsForValue.set(SHIRO_IS_LOCK + name, "LOCK");
+                 stringRedisTemplate.expire(SHIRO_IS_LOCK + name, 1, TimeUnit.MINUTES);
+                 stringRedisTemplate.expire(SHIRO_LOGIN_COUNT + name, 1, TimeUnit.MINUTES);
+             }
+         }
         try{
+            if ("LOCK".equals(opsForValue.get(SHIRO_IS_LOCK+name))){
+                throw new LockedAccountException();
+            }
+
             if(list!=null&&list.size()>0) {
                 if(list.get(0).getStatus().equals("1")) {
                     s = sysUserRepository.findByLoginName(name);
@@ -103,6 +140,11 @@ public class SysUserServiceImpl implements SysUserService {
                     map.put("authToken", tokenId);
                     map.put("data", s);
                     map.put("check", check);
+                    opsForValue.set(SHIRO_LOGIN_COUNT+name, "0");
+                    opsForValue.set(SHIRO_IS_LOCK+name, "UNLOCK");
+//                    opsForValue.
+                    lefttime=5;
+                    index=0;
                     SysLoginlog sysLog=new SysLoginlog();
                     sysLog.setCreateDate(new Date());
                     if(PermissionUtils.getSysUser().getDeptId()!=null&&PermissionUtils.getSysUser().getDeptId()!=0) {
@@ -138,10 +180,19 @@ public class SysUserServiceImpl implements SysUserService {
                 map.put("status", "0");
                 map.put("message", "用户不存在");
             }
-        }catch (Exception e){
+        }catch (LockedAccountException e) {
+            map.put("status", 400);
+            map.put("message", "您已经被锁定5分钟！");
+            index++;
+
+            opsForValue.set("logintime"+index, String.valueOf(new Date().getTime()));
+            map.put("date",opsForValue.get("logintime1"));
+        } catch (Exception e){
             System.out.println(e);
+            lefttime--;
             map.put("status","2");
             map.put("message","密码错误");
+            map.put("lefttime",lefttime);
         }
         return map;
     }
