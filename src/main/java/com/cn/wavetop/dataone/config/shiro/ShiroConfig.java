@@ -87,7 +87,13 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/usermanage/**", "anon");
         filterChainDefinitionMap.put("/bussiness**", "anon");
         filterChainDefinitionMap.put("/bussiness/**", "anon");
+        //忘记密码时的接口
+        filterChainDefinitionMap.put("/sys_user/sendEmail/**", "anon");
+        filterChainDefinitionMap.put("/sys_user/codeEquals/**", "anon");
+        filterChainDefinitionMap.put("/sys_user/editPasswordByEmail/**", "anon");
+
 //        filterChainDefinitionMap.put("/sys_monitoring/**", "anon");
+
 
         filterChainDefinitionMap.put("/**", "authc");
 

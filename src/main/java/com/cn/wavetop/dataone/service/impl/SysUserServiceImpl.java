@@ -63,7 +63,7 @@ public class SysUserServiceImpl implements SysUserService {
     private String code=null;
     //用户登录次数计数  redisKey 前缀
     private String SHIRO_LOGIN_COUNT = "shiro-login-count";
-    //用户登录是否被锁定    一小时 redisKey 前缀
+    //用户登录是否被锁定    5分钟 redisKey 前缀
     private String SHIRO_IS_LOCK = "shiro-is-lock";
     private int lefttime=5;
     private int index=0;
@@ -99,8 +99,9 @@ public class SysUserServiceImpl implements SysUserService {
              opsForValue.increment(SHIRO_LOGIN_COUNT + name, 1);
              //重试的次数改为5,第5次错误时间下标改为0
              if (opsForValue.get(SHIRO_LOGIN_COUNT + name).equals("1")) {
-                 lefttime = 5;
-                 index=0;
+                 opsForValue.set("lefttime"+name,"5");
+                 opsForValue.set("index"+name,"0");
+
              }
              //计数第5次时，设置用户被锁定5分钟
              if (Integer.parseInt(opsForValue.get(SHIRO_LOGIN_COUNT + name)) == 5) {
@@ -142,9 +143,8 @@ public class SysUserServiceImpl implements SysUserService {
                     map.put("check", check);
                     opsForValue.set(SHIRO_LOGIN_COUNT+name, "0");
                     opsForValue.set(SHIRO_IS_LOCK+name, "UNLOCK");
-//                    opsForValue.
-                    lefttime=5;
-                    index=0;
+                    opsForValue.set("lefttime"+name,"5");
+                    opsForValue.set("index"+name,"0");
                     SysLoginlog sysLog=new SysLoginlog();
                     sysLog.setCreateDate(new Date());
                     if(PermissionUtils.getSysUser().getDeptId()!=null&&PermissionUtils.getSysUser().getDeptId()!=0) {
@@ -183,13 +183,16 @@ public class SysUserServiceImpl implements SysUserService {
         }catch (LockedAccountException e) {
             map.put("status", 400);
             map.put("message", "您已经被锁定5分钟！");
-            index++;
-
-            opsForValue.set("logintime"+index, String.valueOf(new Date().getTime()));
-            map.put("date",opsForValue.get("logintime1"));
+             index= Integer.parseInt(opsForValue.get("index"+name));
+             index++;
+            opsForValue.set("index"+name,String.valueOf(index));
+            opsForValue.set("logintime"+name+index, String.valueOf(new Date().getTime()));
+            map.put("date",opsForValue.get("logintime"+name+"1"));
         } catch (Exception e){
             System.out.println(e);
+            lefttime=Integer.parseInt(opsForValue.get("lefttime"+name));
             lefttime--;
+            opsForValue.set("lefttime"+name,String.valueOf(lefttime));
             map.put("status","2");
             map.put("message","密码错误");
             map.put("lefttime",lefttime);
@@ -686,8 +689,6 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public Object bindEmail(String email, String emailPassword) {
-        System.out.println(PermissionUtils.getSysUser()+"weishenme");
-        System.out.println(PermissionUtils.isPermitted("1")+"quanxiancaozuo");
             if(!PermissionUtils.flag(email)){
                 return ToDataMessage.builder().status("0").message("邮箱格式不正确").build();
             }

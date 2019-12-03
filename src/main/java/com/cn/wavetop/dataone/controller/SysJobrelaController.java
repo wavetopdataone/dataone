@@ -145,6 +145,7 @@ public class SysJobrelaController {
     @ApiOperation(value = "查询用户参与的任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户没有参与的任务")
     @PostMapping("/findUserJob")
     public Object findUserJob(Long userId) {
+
         return service.findUserJob(userId);
     }
     @ApiOperation(value = "查询用户没有参与的任务", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "查询用户参与的任务")
