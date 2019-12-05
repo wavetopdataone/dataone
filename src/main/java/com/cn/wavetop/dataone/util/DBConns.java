@@ -269,7 +269,13 @@ public class DBConns {
                 while (rs.next()){
                     tableName = rs.getString(1);
                     if(tableName.equals(destName)){
-                        list.add(tableName);
+                        if(sysDbinfo.getSourDest()==0){
+                            if(!tableName.equals(sourceName)){
+                                list.add(tableName);
+                            }
+                        }else {
+                            list.add(tableName);
+                        }
                     }
                 }
             } else if (sysDbinfo.getType() == 3) {
@@ -278,7 +284,11 @@ public class DBConns {
                 rs = ps.executeQuery();
                 while (rs.next()){
                     tableName = rs.getString(1);
-                    if(tableName.equals(destName)){
+                    if(sysDbinfo.getSourDest()==0){
+                        if(!tableName.equals(sourceName)){
+                            list.add(tableName);
+                        }
+                    }else {
                         list.add(tableName);
                     }
                 }

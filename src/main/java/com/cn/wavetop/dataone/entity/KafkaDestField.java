@@ -18,7 +18,7 @@ public class KafkaDestField {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
     private Long id;
     @Column(nullable = false)
-    private int kafkaDestId;
+    private Long kafkaDestId;
     @Column(nullable = false)
     private String fieldName;
     @Column(nullable = false)
@@ -29,6 +29,8 @@ public class KafkaDestField {
     private String fieldNotnull;
     @Column(nullable = false)
     private String fieldDesensitization;
+    @Column(nullable = false)
+    private Long jobId;
 
 }
 

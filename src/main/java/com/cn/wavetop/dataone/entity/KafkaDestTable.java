@@ -19,7 +19,7 @@ public class KafkaDestTable {
     @Column(nullable = false)
     private Long jobId;
     @Column(nullable = false)
-    private int destDbid;
+    private Long destDbid;
     @Column(nullable = false)
     private String destTable;
 }

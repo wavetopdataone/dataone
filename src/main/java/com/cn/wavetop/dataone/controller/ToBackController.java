@@ -1,10 +1,7 @@
 package com.cn.wavetop.dataone.controller;
 
 import com.cn.wavetop.dataone.dao.*;
-import com.cn.wavetop.dataone.entity.ErrorLog;
-import com.cn.wavetop.dataone.entity.SysDbinfo;
-import com.cn.wavetop.dataone.entity.SysJobrela;
-import com.cn.wavetop.dataone.entity.SysMonitoring;
+import com.cn.wavetop.dataone.entity.*;
 import com.cn.wavetop.dataone.service.SysJobinfoService;
 import com.cn.wavetop.dataone.service.SysJobrelaService;
 import com.cn.wavetop.dataone.service.SysMonitoringService;
@@ -12,10 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/toback")
@@ -36,6 +30,11 @@ public class ToBackController {
     private SysMonitoringRepository sysMonitoringRepository;
     @Autowired
     private ErrorLogRespository errorLogRespository;
+
+    @Autowired
+    private KafkaDestFieldRepository kafkaDestFieldRepository;
+    @Autowired
+    private KafkaDestTableRepository kafkaDestTableRepository;
     /**
      * 根据jobid查询数据信息
      * @param jobId
@@ -164,5 +163,22 @@ public class ToBackController {
          errorLog.setOptTime(new Date());
          errorLogRespository.save(errorLog);
 
+    }
+    /**
+     * kafka需要的同步数据
+     */
+    @ApiOperation(value = "kafka需要的同步数据", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "kafka需要的同步数据")
+    @GetMapping("/kafkaFiled/{jobId}")
+    public Object kafkaFiled(@PathVariable Long jobId){
+       List<KafkaDestTable> kafkaDestTableList= kafkaDestTableRepository.findByJobId(jobId);
+       List<Object> list=new ArrayList<>();
+        Map<String,Object> map=new HashMap<>();
+       for(KafkaDestTable kafkaDestTable:kafkaDestTableList){
+          List<KafkaDestField> kafkaDestFieldList= kafkaDestFieldRepository.findByKafkaDestId(kafkaDestTable.getId());
+           list=new ArrayList<>();
+           list.add(kafkaDestFieldList);
+           map.put(kafkaDestTable.getDestTable(),list);
+       }
+       return map;
     }
 }
