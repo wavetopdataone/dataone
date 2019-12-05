@@ -24,6 +24,8 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -36,7 +38,10 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
+
 public class SysUserServiceImpl implements SysUserService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private SysUserRepository sysUserRepository;
     @Autowired
@@ -86,6 +91,9 @@ public class SysUserServiceImpl implements SysUserService {
             }
         }
         List<SysUser> list=sysUserRepository.findAllByLoginName(name);
+        if(list==null&&list.size()<=0){
+            return ToDataMessage.builder().status("0").message("用户不存在").build();
+        }
         UsernamePasswordToken token=new UsernamePasswordToken(name,password);
         //ThreadContext.bind(SecurityUtils.getSubject());
         Subject subject= SecurityUtils.getSubject();

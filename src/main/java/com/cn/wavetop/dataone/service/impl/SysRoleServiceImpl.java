@@ -6,6 +6,8 @@ import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysRoleService;
 import com.cn.wavetop.dataone.util.PermissionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private SysRoleRepository sysRoleRepository;

@@ -11,6 +11,8 @@ import com.cn.wavetop.dataone.util.DBConns;
 import com.cn.wavetop.dataone.util.DBHelper;
 import com.cn.wavetop.dataone.util.PermissionUtils;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ import java.util.*;
  */
 @Service
 public class SysFieldruleServiceImpl implements SysFieldruleService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private SysFieldruleRespository repository;
     @Autowired
@@ -46,7 +50,10 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     private SysDesensitizationRepository sysDesensitizationRepository;
     @Autowired
     private SysFiledTypeRepository sysFiledTypeRepository;
-
+    @Autowired
+    private KafkaDestFieldRepository kafkaDestFieldRepository;
+    @Autowired
+    private KafkaDestTableRepository kafkaDestTableRepository;
     @Override
     public Object getFieldruleAll() {
         return ToData.builder().status("1").data(repository.findAll()).build();

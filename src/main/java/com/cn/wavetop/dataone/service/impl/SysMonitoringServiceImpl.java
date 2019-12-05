@@ -9,6 +9,8 @@ import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysMonitoringService;
 import com.cn.wavetop.dataone.util.DateUtil;
 import org.hibernate.dialect.Sybase11Dialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -20,6 +22,8 @@ import java.util.*;
 
 @Service
 public class SysMonitoringServiceImpl implements SysMonitoringService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private SysMonitoringRepository sysMonitoringRepository;
     @Autowired

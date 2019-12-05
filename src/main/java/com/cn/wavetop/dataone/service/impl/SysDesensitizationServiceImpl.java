@@ -5,6 +5,8 @@ import com.cn.wavetop.dataone.entity.*;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysDesensitizationService;
 import com.cn.wavetop.dataone.util.PermissionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import java.util.Optional;
 
 @Service
 public class SysDesensitizationServiceImpl implements SysDesensitizationService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private SysDesensitizationRepository sysDesensitizationRepository;
     @Autowired

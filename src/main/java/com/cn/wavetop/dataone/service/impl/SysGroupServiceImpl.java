@@ -5,6 +5,8 @@ import com.cn.wavetop.dataone.entity.SysFieldrule;
 import com.cn.wavetop.dataone.entity.SysGroup;
 import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.SysGroupService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.Optional;
  */
 @Service
 public class SysGroupServiceImpl implements SysGroupService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private SysGroupRespository repository;
 

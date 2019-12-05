@@ -11,6 +11,8 @@ import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.MailnotifySettingsService;
 import com.cn.wavetop.dataone.util.PermissionUtils;
 import org.aspectj.weaver.ast.Var;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ import java.util.Map;
 
 @Service
 public class MailnotifySettingsServiceImpl implements MailnotifySettingsService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private MailnotifySettingsRespository repository;
     @Autowired

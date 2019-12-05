@@ -7,6 +7,8 @@ import com.cn.wavetop.dataone.entity.SysUserJobrela;
 import com.cn.wavetop.dataone.entity.vo.ToDataMessage;
 import com.cn.wavetop.dataone.service.SysUserJobrelaService;
 import com.cn.wavetop.dataone.util.PermissionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
 
 @Service
 public class SysUserJobrelaServiceImpl implements SysUserJobrelaService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private SysUserJobrelaRepository sysUserJobrelaRepository;

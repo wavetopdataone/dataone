@@ -9,6 +9,8 @@ import com.cn.wavetop.dataone.util.DBConn;
 import com.cn.wavetop.dataone.util.DBConns;
 import com.cn.wavetop.dataone.util.DBHelper;
 import com.cn.wavetop.dataone.util.PermissionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -21,6 +23,8 @@ import java.util.Optional;
 
 @Service
 public class SysTableruleServiceImpl implements SysTableruleService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private SysTableruleRepository sysTableruleRepository;
     @Autowired

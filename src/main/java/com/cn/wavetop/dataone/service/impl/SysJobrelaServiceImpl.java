@@ -27,7 +27,7 @@ import java.util.*;
  */
 @Service
 public class SysJobrelaServiceImpl implements SysJobrelaService {
-    private static final Logger logger = LoggerFactory.getLogger(ServiceLogAspect.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private SysJobrelaRespository repository;
