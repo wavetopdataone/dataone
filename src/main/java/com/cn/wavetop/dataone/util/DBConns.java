@@ -22,7 +22,7 @@ public class DBConns {
     public static Connection getMySQLConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         String url="jdbc:mysql://"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+"/"+sysDbinfo.getDbname()+"?characterEncoding=utf8&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai";
         Class.forName("com.mysql.jdbc.Driver");
-        DriverManager.setLoginTimeout(3);
+        DriverManager.setLoginTimeout(10);
         return DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
     }
     /**
@@ -32,7 +32,7 @@ public class DBConns {
     public static Connection getOracleConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         String url = "jdbc:oracle:thin:@"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+":"+sysDbinfo.getDbname();
         Class.forName("oracle.jdbc.driver.OracleDriver");
-        DriverManager.setLoginTimeout(3);
+        DriverManager.setLoginTimeout(10);
         return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
 
     }
@@ -43,7 +43,7 @@ public class DBConns {
     public static Connection getSqlserverConn(SysDbinfo sysDbinfo) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         String url = "jdbc:sqlserver://"+sysDbinfo.getHost()+":"+sysDbinfo.getPort()+";DatabaseName="+sysDbinfo.getDbname();
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        DriverManager.setLoginTimeout(3);
+        DriverManager.setLoginTimeout(10);
         return  DriverManager.getConnection(url, sysDbinfo.getUser(), sysDbinfo.getPassword());
     }
 
@@ -238,7 +238,7 @@ public class DBConns {
      * @throws InstantiationException
      * @throws ClassNotFoundException
      */
-    public static List<String> existsTableName(SysDbinfo sysDbinfo, String sql, String destName) {
+    public static List<String> existsTableName(SysDbinfo sysDbinfo, String sql,String sourceName, String destName) {
         Connection conn = null;
         Statement stmt = null;
         PreparedStatement ps=null;
@@ -253,7 +253,13 @@ public class DBConns {
                 while (rs.next()){
                     tableName = rs.getString(1);
                     if(tableName.equals(destName)){
-                       list.add(tableName);
+                        if(sysDbinfo.getSourDest()==0){
+                             if(!tableName.equals(sourceName)){
+                                 list.add(tableName);
+                             }
+                        }else {
+                            list.add(tableName);
+                        }
                     }
                 }
             } else if (sysDbinfo.getType() == 2) {

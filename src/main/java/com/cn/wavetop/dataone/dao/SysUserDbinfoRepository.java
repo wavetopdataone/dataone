@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SysUserDbinfoRepository extends JpaRepository<SysUserDbinfo,Long> {
-
+    int deleteByDbinfoId(Long dbinfoId);
 }

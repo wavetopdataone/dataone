@@ -10,12 +10,16 @@ import com.cn.wavetop.dataone.entity.vo.EmailJobrelaVo;
 import com.cn.wavetop.dataone.entity.vo.EmailPropert;
 import com.cn.wavetop.dataone.service.SysJobrelaService;
 import com.cn.wavetop.dataone.util.EmailUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class EmailClient extends Thread {
+    // 日志
+    private static Logger log = LoggerFactory.getLogger(EmailClient.class); // 日志
 
 //    private SysJobrelaService sysJobrelaService = (SysJobrelaService) SpringContextUtil.getBean("sysJobrelaServiceImpl");
 

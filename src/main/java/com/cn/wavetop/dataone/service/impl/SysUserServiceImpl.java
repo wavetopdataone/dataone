@@ -96,13 +96,28 @@ public class SysUserServiceImpl implements SysUserService {
         String ciphertext = new Md5Hash(password,list.get(0).getSalt(),3).toString(); //生成的密文
          //密码错误次数计数，
          if(!list.get(0).getPassword().equals(ciphertext)) {
+
              opsForValue.increment(SHIRO_LOGIN_COUNT + name, 1);
+             //超过一个小时从新计数
+             if(opsForValue.get("outTime"+name)==null){
+                 opsForValue.set("lefttime"+name,"5");
+                 opsForValue.set("index"+name,"0");
+                 opsForValue.set(SHIRO_LOGIN_COUNT + name,"1");
+             }
              //重试的次数改为5,第5次错误时间下标改为0
              if (opsForValue.get(SHIRO_LOGIN_COUNT + name).equals("1")) {
                  opsForValue.set("lefttime"+name,"5");
                  opsForValue.set("index"+name,"0");
-
+                 //设置1个小时内输出都会限制
+                 opsForValue.set("outTime"+name,String.valueOf(new Date().getTime()),1,TimeUnit.HOURS);
              }
+//              long outtime=Long.valueOf(opsForValue.get("outTime"+name)).longValue();
+//              long newtime=new Date().getTime();
+//              long gap=newtime-outtime;
+//              if(gap>=5*60*1000){
+//                  opsForValue.()
+//              }
+
              //计数第5次时，设置用户被锁定5分钟
              if (Integer.parseInt(opsForValue.get(SHIRO_LOGIN_COUNT + name)) == 5) {
                  opsForValue.set(SHIRO_IS_LOCK + name, "LOCK");

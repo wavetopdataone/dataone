@@ -93,7 +93,7 @@ public class SysMonitoringController {
     }
 
 
-    @Scheduled(cron = "0 59 23 * * ?")
+    @Scheduled(cron = "0 58 23 * * ?")
     public void saveDataChange() {
         SysDataChange dataChange = null;
         HashMap<Object, Double> map = new HashMap<>();

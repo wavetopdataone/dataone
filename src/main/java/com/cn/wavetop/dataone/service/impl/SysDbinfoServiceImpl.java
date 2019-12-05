@@ -217,6 +217,7 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
                 boolean flag2 = repository.existsById(id);
                 if (flag2) {
                     repository.deleteById(id);
+                    sysUserDbinfoRepository.deleteByDbinfoId(id);//删除用户与数据源的关联关系
                     map.put("status", 1);
                     map.put("message", "删除成功");
                 } else {

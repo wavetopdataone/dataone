@@ -127,9 +127,24 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
             }
             System.out.print(sysDbinfo2+"-------------");
             //查询目标端是否出现此表
-            List<String> tablename = DBConns.existsTableName(sysDbinfo2, sqlss, dest_name);
+            List<String> tablename = DBConns.existsTableName(sysDbinfo2, sqlss,source_name, dest_name);
+            String sssql="";
+            if (sysDbinfo.getType() == 1) {
+                //oracle
+                sssql = "SELECT TABLE_NAME FROM DBA_ALL_TABLES WHERE OWNER='" + sysDbinfo2.getSchema() + "'AND TEMPORARY='N' AND NESTED='NO'";
+            } else if (sysDbinfo.getType() == 2) {
+                //mysql
+                sssql = "show tables";
+            }
+            //查詢源端是否存在此表名
+            List<String> sourcetablename = DBConns.existsTableName(sysDbinfo, sssql,source_name, dest_name);
+            //查看目的端是否存在表名
             if (tablename != null && tablename.size() > 0) {
-                return ToDataMessage.builder().status("0").message("表名" + dest_name + "已经存在").build();
+                return ToDataMessage.builder().status("0").message("目的端表名" + dest_name + "已经存在").build();
+            }
+            //查看源端是否存在表名
+            if (sourcetablename != null && sourcetablename.size() > 0) {
+                return ToDataMessage.builder().status("0").message("源端表名" + dest_name + "已经存在").build();
             }
             //查询是否关联的有子任务
             List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(job_id);
