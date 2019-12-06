@@ -52,7 +52,9 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
             e.printStackTrace();
             return ToDataMessage.builder().status("0").message("任务不存在").build();
         }catch (Exception e) {
-            logger.error("*"+e);
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             e.printStackTrace();
             return ToDataMessage.builder().status("0").message("发生异常").build();
         }
@@ -135,7 +137,9 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
             e.printStackTrace();
             return ToDataMessage.builder().status("0").message("任务不存在").build();
         } catch (Exception e) {
-            logger.error("*"+e);
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             e.printStackTrace();
         }
         return map;

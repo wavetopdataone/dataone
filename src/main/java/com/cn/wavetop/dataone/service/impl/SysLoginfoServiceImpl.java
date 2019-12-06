@@ -108,7 +108,10 @@ public class SysLoginfoServiceImpl implements SysLoginfoService {
                 return ToDataMessage.builder().status("0").message("没有找到删除目标").build();
             }
         }catch (Exception e){
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
             return ToDataMessage.builder().status("0").message("发生错误").build();
         }
 

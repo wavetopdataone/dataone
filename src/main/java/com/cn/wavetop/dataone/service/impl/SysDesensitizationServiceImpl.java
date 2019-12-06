@@ -116,7 +116,8 @@ public class SysDesensitizationServiceImpl implements SysDesensitizationService 
                 }
             }
         } catch (Exception e) {
-            logger.error("*"+e);
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             e.printStackTrace();
         }
         return map;
@@ -139,7 +140,8 @@ public class SysDesensitizationServiceImpl implements SysDesensitizationService 
                 }
             }
         } catch (Exception e) {
-            logger.error("*"+e);
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             e.printStackTrace();
         }
         return ToDataMessage.builder().status("1").message("删除成功").build();

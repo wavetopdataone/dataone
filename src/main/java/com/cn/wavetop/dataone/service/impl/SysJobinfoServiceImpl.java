@@ -199,7 +199,8 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
                 }
                 }
         } catch (Exception e) {
-            logger.error("*"+e);
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             e.printStackTrace();
         }
         return map;

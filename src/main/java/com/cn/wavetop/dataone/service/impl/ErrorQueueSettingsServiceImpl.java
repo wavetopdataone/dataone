@@ -73,47 +73,55 @@ public class  ErrorQueueSettingsServiceImpl implements ErrorQueueSettingsService
         long jobId = errorQueueSettings.getJobId();
         List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(jobId);
 
-        // 查看该任务是否存在，存在修改更新任务，不存在新建任务
-        if (repository.existsByJobId(jobId)) {
-            ErrorQueueSettings data = repository.findByJobId(jobId);
-            data.setPauseSetup(errorQueueSettings.getPauseSetup());
-            data.setPreSteup(errorQueueSettings.getPreSteup());
-            data.setWarnSetup(errorQueueSettings.getWarnSetup());
-           // data.setId(errorQueueSettings.getId());
-            data = repository.save(data);
-            //若果是编辑者修改，则先删除子任务的规则，因为管理员在修改任务已经删除过了
-                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
-                    ErrorQueueSettings errorQueueSettings1=null;
-                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                        if(PermissionUtils.isPermitted("3")) {
-                        repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+        try {
+            // 查看该任务是否存在，存在修改更新任务，不存在新建任务
+            if (repository.existsByJobId(jobId)) {
+                ErrorQueueSettings data = repository.findByJobId(jobId);
+                data.setPauseSetup(errorQueueSettings.getPauseSetup());
+                data.setPreSteup(errorQueueSettings.getPreSteup());
+                data.setWarnSetup(errorQueueSettings.getWarnSetup());
+               // data.setId(errorQueueSettings.getId());
+                data = repository.save(data);
+                //若果是编辑者修改，则先删除子任务的规则，因为管理员在修改任务已经删除过了
+                    if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                        ErrorQueueSettings errorQueueSettings1=null;
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                            if(PermissionUtils.isPermitted("3")) {
+                            repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
 
+                        }
+                            errorQueueSettings1=new ErrorQueueSettings();
+                            errorQueueSettings1.setPauseSetup(errorQueueSettings.getPauseSetup());
+                            errorQueueSettings1.setPreSteup(errorQueueSettings.getPreSteup());
+                            errorQueueSettings1.setWarnSetup(errorQueueSettings.getWarnSetup());
+                            errorQueueSettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
                     }
-                        errorQueueSettings1=new ErrorQueueSettings();
+                }
+                map.put("status", 1);
+                map.put("message", "修改成功");
+                map.put("data", data);
+            } else {
+                errorQueueSettings = repository.save(errorQueueSettings);
+                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                    ErrorQueueSettings errorQueueSettings1 = null;
+                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                        errorQueueSettings1 = new ErrorQueueSettings();
                         errorQueueSettings1.setPauseSetup(errorQueueSettings.getPauseSetup());
                         errorQueueSettings1.setPreSteup(errorQueueSettings.getPreSteup());
                         errorQueueSettings1.setWarnSetup(errorQueueSettings.getWarnSetup());
                         errorQueueSettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
+                    }
                 }
+                map.put("status", 2);
+                map.put("message", "添加成功");
+                map.put("data", errorQueueSettings);
             }
-            map.put("status", 1);
-            map.put("message", "修改成功");
-            map.put("data", data);
-        } else {
-            errorQueueSettings = repository.save(errorQueueSettings);
-            if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
-                ErrorQueueSettings errorQueueSettings1 = null;
-                for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                    errorQueueSettings1 = new ErrorQueueSettings();
-                    errorQueueSettings1.setPauseSetup(errorQueueSettings.getPauseSetup());
-                    errorQueueSettings1.setPreSteup(errorQueueSettings.getPreSteup());
-                    errorQueueSettings1.setWarnSetup(errorQueueSettings.getWarnSetup());
-                    errorQueueSettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
-                }
-            }
-            map.put("status", 2);
-            map.put("message", "添加成功");
-            map.put("data", errorQueueSettings);
+        } catch (Exception e) {
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
+            map.put("status",0);
+            map.put("message", "出现异常");
+            e.printStackTrace();
         }
         return map;
     }

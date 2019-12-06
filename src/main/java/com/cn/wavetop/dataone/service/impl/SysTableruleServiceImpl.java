@@ -142,6 +142,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 return ToData.builder().status("1").data(list).build();
             }
         }catch (Exception e){
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ToDataMessage.builder().status("0").message("发生错误").build();
         }
@@ -257,6 +259,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
 
             }
         }catch (Exception e){
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ToDataMessage.builder().status("0").message("发生错误").build();
         }
@@ -280,6 +284,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 return ToDataMessage.builder().status("0").message("任务不存在").build();
             }
         }catch (Exception e){
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ToDataMessage.builder().status("0").message("发生错误").build();
         }
@@ -309,6 +315,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 return ToData.builder().status("1").data(list).build();
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
+                StackTraceElement stackTraceElement = e.getStackTrace()[0];
+                logger.error("*"+stackTraceElement.getLineNumber()+e);
                 return ToDataMessage.builder().status("0").message("数据库连接错误").build();
 
             }finally {
@@ -329,6 +337,8 @@ public class SysTableruleServiceImpl implements SysTableruleService {
                 return ToData.builder().status("1").data(list).build();
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
+                StackTraceElement stackTraceElement = e.getStackTrace()[0];
+                logger.error("*"+stackTraceElement.getLineNumber()+e);
                 return ToDataMessage.builder().status("0").message("数据库连接错误").build();
             }finally {
                 DBConns.close(stmt,conn,rs);

@@ -76,7 +76,7 @@ public class SysUserServiceImpl implements SysUserService {
     private int index=0;
 
     @Override
-    public Object login(String name, String password) {
+    public Object login(String name, String password)  {
 
         SysUser sysUser=new SysUser();
         List<SysUserRoleVo> s=new ArrayList<>();
@@ -91,19 +91,25 @@ public class SysUserServiceImpl implements SysUserService {
                 return ToDataMessage.builder().status("0").message("用户不存在").build();
             }
         }
+        String ciphertext = null;
         List<SysUser> list=sysUserRepository.findAllByLoginName(name);
-        if(list==null&&list.size()<=0){
-            return ToDataMessage.builder().status("0").message("用户不存在").build();
-        }
+        ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
         UsernamePasswordToken token=new UsernamePasswordToken(name,password);
         //ThreadContext.bind(SecurityUtils.getSubject());
         Subject subject= SecurityUtils.getSubject();
+
+
+        if(list==null||list.size()<=0){
+            return ToDataMessage.builder().status("0").message("用户不存在").build();
+        }
+
 //        Session sessionss=subject.getSession();
 //        System.out.println(sessionss.getId()+"dsadsaxuezihao.................");
-        ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
         //验证密码
-        String ciphertext = new Md5Hash(password,list.get(0).getSalt(),3).toString(); //生成的密文
-         //密码错误次数计数，
+        //生成的密文
+
+            ciphertext = new Md5Hash(password,list.get(0).getSalt(),3).toString();
+        //密码错误次数计数，
          if(!list.get(0).getPassword().equals(ciphertext)) {
 
              opsForValue.increment(SHIRO_LOGIN_COUNT + name, 1);
@@ -213,6 +219,7 @@ public class SysUserServiceImpl implements SysUserService {
             opsForValue.set("logintime"+name+index, String.valueOf(new Date().getTime()));
             map.put("date",opsForValue.get("logintime"+name+"1"));
         } catch (Exception e){
+
             System.out.println(e);
             lefttime=Integer.parseInt(opsForValue.get("lefttime"+name));
             lefttime--;
@@ -455,6 +462,8 @@ public class SysUserServiceImpl implements SysUserService {
 
             }
         }catch (Exception e){
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ToDataMessage.builder().status("0").message("发生错误").build();
         }

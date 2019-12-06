@@ -6,15 +6,17 @@ import com.cn.wavetop.dataone.entity.vo.ToData;
 import com.cn.wavetop.dataone.service.ErrorLogService;
 import com.cn.wavetop.dataone.util.DateUtil;
 import com.cn.wavetop.dataone.util.PermissionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.*;
 
 /**
@@ -23,6 +25,8 @@ import java.util.*;
  */
 @Service
 public class ErrorLogServiceImpl  implements ErrorLogService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private ErrorLogRespository repository;
     @Override
@@ -32,7 +36,7 @@ public class ErrorLogServiceImpl  implements ErrorLogService {
     }
     //条件查询
     @Override
-    public Object getCheckError(Long jobId,String tableName,String startTime,String endTime) {
+    public Object getCheckError(Long jobId,String tableName,String type,String startTime,String endTime,String context) {
         // Pageable page = PageRequest.of(current - 1, size, Sort.Direction.DESC, "id");
         List<ErrorLog> sysErrorlogList=new ArrayList<>();
         Map<Object,Object> map=new HashMap<>();
@@ -42,35 +46,52 @@ public class ErrorLogServiceImpl  implements ErrorLogService {
             endDate= DateUtil.dateAdd(endTime,1);
         }
         if(PermissionUtils.isPermitted("1")||PermissionUtils.isPermitted("2")){
-            String finalEndDate = endDate;
-            Specification<ErrorLog> querySpecifi = new Specification<ErrorLog>() {
-                @Override
-                public Predicate toPredicate(Root<ErrorLog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
-                    List<Predicate> predicates = new ArrayList<>();
-                    //大于或等于传入时间
-                    if(startTime!=null&&!"".equals(startTime)) {
-                        predicates.add(cb.greaterThanOrEqualTo(root.get("optTime").as(String.class),startTime));
+            try {
+                String finalEndDate = endDate;
+                Specification<ErrorLog> querySpecifi = new Specification<ErrorLog>() {
+                    @Override
+                    public Predicate toPredicate(Root<ErrorLog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
+                        List<Predicate> predicates = new ArrayList<>();
+                        //大于或等于传入时间
+                        if(startTime!=null&&!"".equals(startTime)) {
+                            predicates.add(cb.greaterThanOrEqualTo(root.get("optTime").as(String.class),startTime));
+                        }
+                        //小于或等于传入时间
+                        if(endTime!=null&&!"".equals(endTime)) {
+                            predicates.add(cb.lessThanOrEqualTo(root.get("optTime").as(String.class), finalEndDate));
+                        }
+                        if(type!=null&&!"".equals(type)){
+                            predicates.add(cb.equal(root.get("optType").as(String.class), type));
+
+                        }
+                        if(tableName!=null&&!"".equals(tableName)){
+                            predicates.add(cb.equal(root.get("sourceName").as(String.class), tableName));
+
+                        }
+                        if(context!=null&&!"".equals(context)){
+                            predicates.add(cb.like(root.get("optContext").as(String.class), "%"+context+"%"));
+                        }
+
+                        criteriaQuery.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+                        criteriaQuery.orderBy(cb.desc(root.get("optTime")));
+
+                        // and到一起的话所有条件就是且关系，or就是或关系
+                        return criteriaQuery.getRestriction();
+                        // and到一起的话所有条件就是且关系，or就是或关系
+                        // return cb.and(predicates.toArray(new Predicate[predicates.size()]));
                     }
-                    //小于或等于传入时间
-                    if(endTime!=null&&!"".equals(endTime)) {
-                        predicates.add(cb.lessThanOrEqualTo(root.get("optTime").as(String.class), finalEndDate));
-                    }
-
-                        predicates.add(cb.like(root.get("sourceName").as(String.class), "%"+tableName+"%"));
-
-                    criteriaQuery.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
-                    criteriaQuery.orderBy(cb.desc(root.get("optTime")));
-
-                    // and到一起的话所有条件就是且关系，or就是或关系
-                    return criteriaQuery.getRestriction();
-                    // and到一起的话所有条件就是且关系，or就是或关系
-                    // return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-                }
-            };
-            List<ErrorLog> sysUserlogPage=repository.findAll(querySpecifi);
-            map.put("status","1");
-            map.put("data",sysUserlogPage);
-            map.put("totalCount",sysUserlogPage.size());
+                };
+                List<ErrorLog> sysUserlogPage=repository.findAll(querySpecifi);
+                map.put("status","1");
+                map.put("data",sysUserlogPage);
+                map.put("totalCount",sysUserlogPage.size());
+            } catch (Exception e) {
+                StackTraceElement stackTraceElement = e.getStackTrace()[0];
+                logger.error("*"+stackTraceElement.getLineNumber()+e);
+                e.printStackTrace();
+                map.put("status","0");
+                map.put("message","异常");
+            }
         }else {
             map.put("status","0");
             map.put("message","权限不足");
@@ -93,6 +114,7 @@ public class ErrorLogServiceImpl  implements ErrorLogService {
         }
     }
 
+    @Transactional
     @Override
     public Object editErrorlog(ErrorLog errorLog) {
         HashMap<Object, Object> map = new HashMap();
@@ -125,18 +147,17 @@ public class ErrorLogServiceImpl  implements ErrorLogService {
         return map;
     }
 
+    @Transactional
     @Override
-    public Object deleteErrorlog(long id) {
+    public Object deleteErrorlog(String ids) {
         HashMap<Object, Object> map = new HashMap();
-
+        String []id=ids.split(",");
         // 查看该任务是否存在，存在删除任务，返回数据给前端
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            map.put("status", 1);
-            map.put("message", "删除成功");
-        } else {
-            map.put("status", 0);
-            map.put("message", "任务不存在");
+        for(String idss:id) {
+
+                repository.deleteById(Long.valueOf(idss));
+                map.put("status", 1);
+                map.put("message", "删除成功");
         }
         return map;
     }

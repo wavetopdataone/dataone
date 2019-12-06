@@ -437,7 +437,9 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 map.put("message", "保存成功");
             }
         }catch (Exception e){
-            logger.error("添加任务配置异常"+e);
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*添加任务配置异常"+stackTraceElement.getLineNumber()+e);
+
             map.put("status", 0);
             map.put("message", "发生异常");
         }
@@ -495,7 +497,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                     list.add(sysFieldrule);
                 }
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                logger.error("*"+e);
+                StackTraceElement stackTraceElement = e.getStackTrace()[0];
+                logger.error("*"+stackTraceElement.getLineNumber()+e);
                 e.printStackTrace();
                 return "连接异常@！";
             }
@@ -529,7 +532,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                     list.add(sysFieldrule);
                 }
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                logger.error("*"+e);
+                StackTraceElement stackTraceElement = e.getStackTrace()[0];
+                logger.error("*"+stackTraceElement.getLineNumber()+e);
                 e.printStackTrace();
                 return "连接异常@！";
             }
@@ -550,13 +554,43 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     @Override
     public Object DestlinkTableDetails(SysDbinfo sysDbinfo, String tablename, Long job_id) {
         HashMap<Object, Object> map = new HashMap<>();
-        ArrayList<Object> data = new ArrayList<>();
+        HashMap<Object, Object> haspmap = new HashMap<>();
+        ArrayList<SysFieldrule> data = new ArrayList<>();
+
         List<SysFieldrule> sysFieldruleList = sysFieldruleRepository.findByJobIdAndSourceName(job_id, tablename);
         List<SysFieldrule> list = sysFieldruleRepository.findByJobIdAndSourceNameAndVarFlag(job_id, tablename, Long.valueOf(2));
         List<SysDesensitization> sysDesensitizations = sysDesensitizationRepository.findByJobIdAndSourceTable(job_id, tablename);
         try {
+            List<SysJobrela> sysJobrelaList = sysJobrelaRepository.findById(job_id.longValue());
+            //查询目的数据库连接
+            SysDbinfo  sysDbinfo2 = sysDbinfoRespository.findById(sysJobrelaList.get(0).getDestId().longValue());
+            List<SysFiledType> sysFiledTypeList=null;
+            //拿到源端的字段集合
+            haspmap=(HashMap<Object, Object>)linkTableDetails(sysDbinfo,tablename,job_id);
+            data= (ArrayList<SysFieldrule>) haspmap.get("data");
+            //先把类型转换为目标端的类型
+            for(int i=0;i<data.size();i++){
+                sysFiledTypeList=new ArrayList<>();
+                if(sysDbinfo.getType()!=sysDbinfo2.getType()) {
+                    //去找到映射的字段类型
+                    sysFiledTypeList = sysFiledTypeRepository.findBySourceTypeAndDestTypeAndSourceFiledType(String.valueOf(sysDbinfo.getType()), String.valueOf(sysDbinfo2.getType()), data.get(i).getType().toUpperCase());
+                   if(sysFiledTypeList!=null&&sysFiledTypeList.size()>0) {
+                       data.get(i).setType(sysFiledTypeList.get(0).getDestFiledType());
+                   }
+                }
+            }
+           if(list!=null&&list.size()>0) {
+               //做过修改的替换进来，其余不变
+               for (SysFieldrule sysFieldrule : list) {
+                   for (int i = 0; i < data.size(); i++) {
+                       if (sysFieldrule.getFieldName().equals(data.get(i).getFieldName())) {
+                           data.set(i, sysFieldrule);
+                       }
+                   }
+               }
+           }
             map.put("status", "1");
-            map.put("data", list);
+            map.put("data", data);
             if (sysFieldruleList != null && sysFieldruleList.size() > 0) {
                 map.put("destName", sysFieldruleList.get(0).getDestName());
             } else {
@@ -571,7 +605,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 map.put("data2", sysDesensitizations);
             }
         } catch (Exception e) {
-            logger.error("*"+e);
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            logger.error("*"+stackTraceElement.getLineNumber()+e);
             e.printStackTrace();
         }
         return map;

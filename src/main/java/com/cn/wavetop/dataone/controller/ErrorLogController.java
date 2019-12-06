@@ -1,4 +1,6 @@
 package com.cn.wavetop.dataone.controller;
+import com.cn.wavetop.dataone.dao.ErrorLogRespository;
+import com.cn.wavetop.dataone.dao.SysErrorRepository;
 import com.cn.wavetop.dataone.dao.SysJobrelaRespository;
 import com.cn.wavetop.dataone.dao.UserlogRespository;
 import com.cn.wavetop.dataone.entity.ErrorLog;
@@ -37,6 +39,8 @@ public class ErrorLogController {
     private SysJobrelaRespository sysJobrelaRespository;
     @Autowired
     private UserlogRespository userlogRespository;
+    @Autowired
+    private ErrorLogRespository errorLogRespository;
 
     @ApiOperation(value = "查看全部", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "查询用户信息")
     @GetMapping("/errorlog_all")
@@ -46,8 +50,8 @@ public class ErrorLogController {
 
     @ApiOperation(value = "根据表名，时间查询错误队列", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "根据表名，时间查询错误队列")
     @PostMapping("/check_errorlog")
-    public Object check_errorlog(Long jobId,String tableName,String startTime,String endTime) {
-        return service.getCheckError(jobId,tableName,startTime,endTime);
+    public Object check_errorlog(Long jobId,String tableName,String type,String startTime,String endTime,String context) {
+        return service.getCheckError(jobId,tableName,type,startTime,endTime,context);
     }
 
     @ApiImplicitParam
@@ -66,9 +70,9 @@ public class ErrorLogController {
 
     @ApiImplicitParam(name = "id", value = "id", dataType = "long")
     @PostMapping("/delete_errorlog")
-    public Object delete_errorlog(long id) {
-        System.out.println(id);
-        return service.deleteErrorlog(id);
+    public Object delete_errorlog(String ids) {
+        System.out.println(ids);
+        return service.deleteErrorlog(ids);
     }
     @ApiOperation(value = "根据任务ID查询错误队列，表名，错误量", httpMethod = "POST", protocols = "HTTP", produces = "application/json", notes = "根据任务ID查询错误队列，表名，错误量")
     @PostMapping("/query_errorlog")
@@ -83,7 +87,8 @@ public class ErrorLogController {
 
     @ApiOperation(value = "导出错误队列量", httpMethod = "GET", protocols = "HTTP", produces = "application/json", notes = "导出错误队列量")
     @GetMapping("/outErrorlog")
-    public void outErrorlog(Long jobId, String tableName, String startTime, String endTime, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
+    public void outErrorlog(Long jobId,String  ids, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
+       String []id=ids.split(",");
         //消息列表
        Optional<SysJobrela> sysJobrela= sysJobrelaRespository.findById(jobId);
        Userlog build2 = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(sysJobrela.get().getJobName()).operate("导出了错误队列").jobId(jobId).build();
@@ -96,8 +101,13 @@ public class ErrorLogController {
         HashMap<String, Object> map = new HashMap<>();
 
         //一、从数据库拿数据
-        map = (HashMap<String, Object>) service.getCheckError(jobId,tableName,startTime,endTime);
-        list = (List) map.get("data");
+//        map = (HashMap<String, Object>) service.getCheckError(jobId,tableName,startTime,endTime);
+//        list = (List) map.get("data");
+        ErrorLog errorLog=null;
+        for(String idss:id){
+            errorLog= errorLogRespository.findById(Long.valueOf(idss).longValue());
+            list.add(errorLog);
+        }
 
         //设置表格
         if (list != null) {
