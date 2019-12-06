@@ -58,7 +58,7 @@ public class LogUtil {
     public SysUserlog saveSysUserlog(Object o,String method, String Operation) {
         SysUserlog sysLog=new SysUserlog();
         sysLog.setCreateDate(new Date());
-        if(PermissionUtils.getSysUser().getDeptId()!=0&&PermissionUtils.getSysUser().getDeptId()!=null) {
+        if(PermissionUtils.getSysUser().getDeptId()!=null&&PermissionUtils.getSysUser().getDeptId()!=0) {
             //获取部门信息
             Optional<SysDept> sysDepts = sysDeptRepository.findById(PermissionUtils.getSysUser().getDeptId());
             String deptName = "";

@@ -73,6 +73,9 @@
         <appender-ref ref="stdout" />
         <appender-ref ref="application_file" />
         <appender-ref ref="error_file"/>
+
+    </root>
+    <root level="error">
         <appender-ref ref="db_classic_mysql_pool" />
     </root>
 

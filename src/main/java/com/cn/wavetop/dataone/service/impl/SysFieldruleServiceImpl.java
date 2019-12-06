@@ -96,13 +96,14 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
     @Transactional
     @Override
     public Object editFieldrule(String list_data, String source_name, String dest_name, Long job_id) {
+        System.out.println(list_data+"-----------");
         Map<Object, Object> map = new HashMap();
         SysFieldrule sysFieldrule1 = new SysFieldrule();
         List<SysFieldrule> sysFieldrules = new ArrayList<>();
         List<SysFieldrule> list = new ArrayList<>();
         String sql = "";
         String[] split;
-//        try {
+        try {
             if (list_data != null && source_name != null && dest_name != null && !"undefined".equals(list_data) && !"undefined".equals(dest_name)) {
 
                 split = list_data.replace("$", "@").split(",@,");
@@ -250,11 +251,15 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 kafkaDestFieldRepository.deleteByJobId(job_id);
                 //查询kafka需要的表名称
                 KafkaDestTable kafkaDestTable2 = kafkaDestTableRepository.findByJobIdAndDestTable(job_id,dest_name);
+                KafkaDestField kafkaDestField=null;
                 for (String s : split) {
                     String[] ziduan = s.split(",");
+                    System.out.println(s+"xieuxizi");
+                    System.out.println(ziduan[5]+"-----------");
+
                     //添加kafka字段规则
                     //todo 暂时使用源端的，后续要换目标端
-                    KafkaDestField kafkaDestField = new KafkaDestField();
+                     kafkaDestField = new KafkaDestField();
                     kafkaDestField.setJobId(job_id);
                     System.out.println(ziduan[5]+"----------------");
                     if(ziduan[5]==null||"".equals(ziduan[5])){
@@ -265,7 +270,12 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                     kafkaDestField.setFieldNotnull(ziduan[4]);
                     kafkaDestField.setFieldType(ziduan[2]);
                     kafkaDestField.setKafkaDestId(kafkaDestTable2.getId());
-                    kafkaDestFieldRepository.save(kafkaDestField);
+                    System.out.println(kafkaDestField+"--------------");
+                    KafkaDestField kafkaDestField2= kafkaDestFieldRepository.save(kafkaDestField);
+                    System.out.println(kafkaDestField2+"--------------");
+
+                    System.out.println(sysJobrelaRelateds+"--------------");
+
                     if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
                         KafkaDestField kafkaDestField1 = null;
                         for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
@@ -279,7 +289,7 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                             kafkaDestFieldRepository.save(kafkaDestField1);
                         }
                     }
-
+                    System.out.println("xuezihao--------------------");
 
                     //若字段改变则存入字段规则表
 //                if (!ziduan[0].equals(ziduan[1]) || !ziduan[3].equals(ziduan[7]) || !ziduan[5].equals(ziduan[8])) {
@@ -293,6 +303,8 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                                 .accuracy(ziduan[5])
                                 .sourceName(source_name)
                                 .destName(dest_name).varFlag(Long.valueOf(2)).build();
+                        System.out.println(build+"xuezihao--------------------");
+
                         sysFieldrules.add(repository.save(build));
 
                         //若有子任务也保存规则
@@ -424,11 +436,11 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                 map.put("status", 1);
                 map.put("message", "保存成功");
             }
-//        }catch (Exception e){
-//            logger.error("添加任务配置异常"+e);
-//            map.put("status", 0);
-//            map.put("message", "发生异常");
-//        }
+        }catch (Exception e){
+            logger.error("添加任务配置异常"+e);
+            map.put("status", 0);
+            map.put("message", "发生异常");
+        }
         return map;
     }
 
@@ -467,18 +479,23 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                     sysFieldrule = new SysFieldrule();
                     sysFieldrule.setFieldName(rs.getString("ColumnName"));
                     sysFieldrule.setType(rs.getString("TypeName"));
-                    if (rs.getString("length") != null || !"".equals(rs.getString("length"))) {
+                    if (rs.getString("length") != null && !"".equals(rs.getString("length"))) {
                         sysFieldrule.setScale(rs.getString("length"));
                     } else {
-                        sysFieldrule.setScale(rs.getString("0"));
+                        sysFieldrule.setScale("0");
                     }
                     sysFieldrule.setNotNull(Long.valueOf(rs.getString("CanNull")));
-                    sysFieldrule.setAccuracy(rs.getString("Scale"));
+                    if (rs.getString("Scale") != null && !"".equals(rs.getString("Scale"))) {
+                        sysFieldrule.setAccuracy(rs.getString("Scale"));
+                    } else {
+                        sysFieldrule.setAccuracy("0");
+                    }
                     System.out.println(sysFieldrule + "aaaaaaaaaaassssssss");
 
                     list.add(sysFieldrule);
                 }
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                logger.error("*"+e);
                 e.printStackTrace();
                 return "连接异常@！";
             }
@@ -493,21 +510,26 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
                     sysFieldrule = new SysFieldrule();
                     sysFieldrule.setFieldName(rs.getString("COLUMN_NAME"));
                     sysFieldrule.setType(rs.getString("DATA_TYPE"));
-                    if (rs.getString("NVL(DATA_LENGTH,0)") != null || !"".equals(rs.getString("NVL(DATA_LENGTH,0)"))) {
+                    if (rs.getString("NVL(DATA_LENGTH,0)") != null && !"".equals(rs.getString("NVL(DATA_LENGTH,0)"))) {
                         sysFieldrule.setScale(rs.getString("NVL(DATA_LENGTH,0)"));
                     } else {
-                        sysFieldrule.setScale(rs.getString("0"));
+                        sysFieldrule.setScale("0");
                     }
                     if (rs.getString("NULLABLE").equals("Y")) {
                         sysFieldrule.setNotNull(Long.valueOf(0));
                     } else {
                         sysFieldrule.setNotNull(Long.valueOf(1));
                     }
-                    sysFieldrule.setAccuracy(rs.getString("NVL(DATA_SCALE,0)"));
+                    if (rs.getString("NVL(DATA_SCALE,0)")!= null && !"".equals(rs.getString("NVL(DATA_SCALE,0)"))) {
+                        sysFieldrule.setAccuracy(rs.getString("NVL(DATA_SCALE,0)"));
+                    } else {
+                        sysFieldrule.setAccuracy("0");
+                    }
                     System.out.println(sysFieldrule + "eeeeeeeeeeeeeeeee");
                     list.add(sysFieldrule);
                 }
             } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                logger.error("*"+e);
                 e.printStackTrace();
                 return "连接异常@！";
             }
@@ -532,21 +554,25 @@ public class SysFieldruleServiceImpl implements SysFieldruleService {
         List<SysFieldrule> sysFieldruleList = sysFieldruleRepository.findByJobIdAndSourceName(job_id, tablename);
         List<SysFieldrule> list = sysFieldruleRepository.findByJobIdAndSourceNameAndVarFlag(job_id, tablename, Long.valueOf(2));
         List<SysDesensitization> sysDesensitizations = sysDesensitizationRepository.findByJobIdAndSourceTable(job_id, tablename);
-        ;
-        map.put("status", "1");
-        map.put("data", list);
-        if (sysFieldruleList != null && sysFieldruleList.size() > 0) {
-            map.put("destName", sysFieldruleList.get(0).getDestName());
-        } else {
-            List<SysTablerule> sysTablerules = sysTableruleRespository.findByJobIdAndSourceTableAndVarFlag(job_id, tablename, 2L);
-            if (sysTablerules != null && sysTablerules.size() > 0) {
-                map.put("destName", sysTablerules.get(0).getDestTable());
+        try {
+            map.put("status", "1");
+            map.put("data", list);
+            if (sysFieldruleList != null && sysFieldruleList.size() > 0) {
+                map.put("destName", sysFieldruleList.get(0).getDestName());
             } else {
-                map.put("destName", null);
+                List<SysTablerule> sysTablerules = sysTableruleRespository.findByJobIdAndSourceTableAndVarFlag(job_id, tablename, 2L);
+                if (sysTablerules != null && sysTablerules.size() > 0) {
+                    map.put("destName", sysTablerules.get(0).getDestTable());
+                } else {
+                    map.put("destName", null);
+                }
             }
-        }
-        if (sysDesensitizations != null && sysDesensitizations.size() > 0) {
-            map.put("data2", sysDesensitizations);
+            if (sysDesensitizations != null && sysDesensitizations.size() > 0) {
+                map.put("data2", sysDesensitizations);
+            }
+        } catch (Exception e) {
+            logger.error("*"+e);
+            e.printStackTrace();
         }
         return map;
     }

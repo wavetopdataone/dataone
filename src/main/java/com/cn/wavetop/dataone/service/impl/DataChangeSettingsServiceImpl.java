@@ -41,10 +41,20 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
     @Override
     public Object getCheckDataChangeByjobid(long job_id) {
         List<DataChangeSettings> dataChangeSettings = repository.findByJobId(job_id);
-        if (dataChangeSettings.size() <= 0) {
-            return ToData.builder().status("0").message("任务不存在").build();
-        } else {
-            return ToData.builder().status("1").data(dataChangeSettings).build();
+        try {
+            if (dataChangeSettings.size() <= 0) {
+                return ToData.builder().status("0").message("任务不存在").build();
+            } else {
+                return ToData.builder().status("1").data(dataChangeSettings).build();
+            }
+        } catch (NullPointerException e) {
+            logger.error("*"+e);
+            e.printStackTrace();
+            return ToDataMessage.builder().status("0").message("任务不存在").build();
+        }catch (Exception e) {
+            logger.error("*"+e);
+            e.printStackTrace();
+            return ToDataMessage.builder().status("0").message("发生异常").build();
         }
 
 
@@ -75,49 +85,58 @@ public class DataChangeSettingsServiceImpl implements DataChangeSettingsService 
         List<DataChangeSettings> list=new ArrayList<>();
         // 查看该任务是否存在，存在修改更新任务，不存在新建任务
         DataChangeSettings dataChangeSettings1=null;
-        if (repository.existsByJobId(dataChangeSettings.getJobId())) {
-            repository.updateByJobId(dataChangeSettings.getJobId(), dataChangeSettings.getDeleteSyncingSource(), dataChangeSettings.getDeleteSync(), dataChangeSettings.getNewSync(), dataChangeSettings.getNewtableSource());
-            if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
-                for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
-                    if(PermissionUtils.isPermitted("3")) {
-                        repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+        try {
+            if (repository.existsByJobId(dataChangeSettings.getJobId())) {
+                repository.updateByJobId(dataChangeSettings.getJobId(), dataChangeSettings.getDeleteSyncingSource(), dataChangeSettings.getDeleteSync(), dataChangeSettings.getNewSync(), dataChangeSettings.getNewtableSource());
+                if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                    for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                        if(PermissionUtils.isPermitted("3")) {
+                            repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                        }
+
+                         dataChangeSettings1=new DataChangeSettings();
+                         dataChangeSettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
+                         dataChangeSettings1.setDeleteSync(dataChangeSettings.getDeleteSync());
+                         dataChangeSettings1.setDeleteSyncingSource(dataChangeSettings.getDeleteSyncingSource());
+                         dataChangeSettings1.setNewSync(dataChangeSettings.getNewSync());
+                         dataChangeSettings1.setNewtableSource(dataChangeSettings.getNewtableSource());
+                         repository.save(dataChangeSettings1);
+
+
+                    }
+                }
+
+                DataChangeSettings data = repository.findByJobId(dataChangeSettings.getJobId()).get(0);
+                map.put("status", 1);
+                map.put("message", "修改成功");
+                map.put("data", data);
+            } else {
+                DataChangeSettings dataChangeSettings2=null;
+                DataChangeSettings  data = repository.save(dataChangeSettings);
+                if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                    for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                        //判断是第一次添加还是修改
+                        dataChangeSettings2=new DataChangeSettings();
+                        dataChangeSettings2.setJobId(sysJobrelaRelated.getSlaveJobId());
+                        dataChangeSettings2.setDeleteSync(dataChangeSettings.getDeleteSync());
+                        dataChangeSettings2.setDeleteSyncingSource(dataChangeSettings.getDeleteSyncingSource());
+                        dataChangeSettings2.setNewSync(dataChangeSettings.getNewSync());
+                        dataChangeSettings2.setNewtableSource(dataChangeSettings.getNewtableSource());
+                        repository.save(dataChangeSettings2);
+                        }
                     }
 
-                     dataChangeSettings1=new DataChangeSettings();
-                     dataChangeSettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
-                     dataChangeSettings1.setDeleteSync(dataChangeSettings.getDeleteSync());
-                     dataChangeSettings1.setDeleteSyncingSource(dataChangeSettings.getDeleteSyncingSource());
-                     dataChangeSettings1.setNewSync(dataChangeSettings.getNewSync());
-                     dataChangeSettings1.setNewtableSource(dataChangeSettings.getNewtableSource());
-                     repository.save(dataChangeSettings1);
-
-
-                }
+                map.put("status", 2);
+                map.put("message", "添加成功");
+                map.put("data", data);
             }
-
-            DataChangeSettings data = repository.findByJobId(dataChangeSettings.getJobId()).get(0);
-            map.put("status", 1);
-            map.put("message", "修改成功");
-            map.put("data", data);
-        } else {
-            DataChangeSettings dataChangeSettings2=null;
-            DataChangeSettings  data = repository.save(dataChangeSettings);
-            if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
-                for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
-                    //判断是第一次添加还是修改
-                    dataChangeSettings2=new DataChangeSettings();
-                    dataChangeSettings2.setJobId(sysJobrelaRelated.getSlaveJobId());
-                    dataChangeSettings2.setDeleteSync(dataChangeSettings.getDeleteSync());
-                    dataChangeSettings2.setDeleteSyncingSource(dataChangeSettings.getDeleteSyncingSource());
-                    dataChangeSettings2.setNewSync(dataChangeSettings.getNewSync());
-                    dataChangeSettings2.setNewtableSource(dataChangeSettings.getNewtableSource());
-                    repository.save(dataChangeSettings2);
-                    }
-                }
-
-            map.put("status", 2);
-            map.put("message", "添加成功");
-            map.put("data", data);
+        }catch (NullPointerException e) {
+            logger.error("*"+e);
+            e.printStackTrace();
+            return ToDataMessage.builder().status("0").message("任务不存在").build();
+        } catch (Exception e) {
+            logger.error("*"+e);
+            e.printStackTrace();
         }
         return map;
     }

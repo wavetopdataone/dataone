@@ -8,8 +8,11 @@ import com.cn.wavetop.dataone.util.PermissionUtils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresGuest;
+import org.apache.shiro.web.session.HttpServletSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServlet;
 
 @RestController
 @RequestMapping("/sys_user")
@@ -131,9 +134,9 @@ public class SysUserController {
     }
     @ApiOperation(value = "忘记密码时修改密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改密码")
     @PostMapping("/editPasswordByEmail")
-    public Object editPasswordByEmail(String email,String password){
-
-        return sysUserService.editPasswordByEmail(email,password);
+    public Object editPasswordByEmail(String email, String password, HttpServletSession session){
+String ip=session.getHost();
+        return sysUserService.editPasswordByEmail(email,password,ip);
     }
 
     @ApiOperation(value = "初始化绑定超管邮箱和密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "绑定超管邮箱和密码")

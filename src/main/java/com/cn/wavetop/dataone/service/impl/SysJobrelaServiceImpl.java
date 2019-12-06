@@ -140,90 +140,98 @@ public class SysJobrelaServiceImpl implements SysJobrelaService {
         SysJobrela sysJobrela1 = null;
         List<Long> jobIds = new ArrayList<>();
         //只有管理员能添加
-        if (PermissionUtils.isPermitted("2")) {
-            //判断任务是否存在
-            List<SysJobrela> list = repository.findByUserIdJobName(PermissionUtils.getSysUser().getId(), sysJobrela.getJobName());
-            if (list != null && list.size() > 0) {
-//            if (repository.existsByJobName(sysJobrela.getJobName())) {
-//                return ToData.builder().status("0").message("任务已存在").build();
-                return ToData.builder().status("0").message("任务名称已存在").build();
+        try {
+            if (PermissionUtils.isPermitted("2")) {
+                //判断任务是否存在
+                List<SysJobrela> list = repository.findByUserIdJobName(PermissionUtils.getSysUser().getId(), sysJobrela.getJobName());
+                if (list != null && list.size() > 0) {
+    //            if (repository.existsByJobName(sysJobrela.getJobName())) {
+    //                return ToData.builder().status("0").message("任务已存在").build();
+                    return ToData.builder().status("0").message("任务名称已存在").build();
 
+                } else {
+                    //多目的端，所以分割
+                    String[] name = sysJobrela.getDestName().split(",");
+                    //先把没有分割的给一个变量
+                    String jobName = sysJobrela.getJobName();
+                    //分割成多个任务
+                    for (int i = 0; i < name.length; i++) {
+                        sysJobrela1 = new SysJobrela();
+                        // 查看端
+                        SysDbinfo source = sysDbinfoRespository.findByNameAndSourDestUser(PermissionUtils.getSysUser().getId(),sysJobrela.getSourceName(), 0);
+                        //目标端
+                        SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDestUser(PermissionUtils.getSysUser().getId(),name[i], 1);
+                        //主任务是原名字，后续的拼上_i
+                        if (i == 0) {
+                            sysJobrela1.setJobName(jobName);
+                        } else {
+                            jobName = null;
+                            jobName = sysJobrela.getJobName() + "_" + i;
+                            sysJobrela1.setJobName(jobName);
+                        }
+                        sysJobrela1.setSourceId(source.getId());
+                        sysJobrela1.setSourceType(source.getType());
+                        sysJobrela1.setSourceName(source.getName());
+                        //主任务目的端先是多个，等激活后再分割
+                        if (i == 0) {
+                            sysJobrela1.setDestName(sysJobrela.getDestName());
+                        } else {
+                            sysJobrela1.setDestName(name[i]);
+                        }
+                        sysJobrela1.setDestId(dest.getId());
+                        sysJobrela1.setDestType(dest.getType());
+                        //待完善的状态
+                        sysJobrela1.setJobStatus("5");
+                        save = repository.save(sysJobrela1);
+                        //把形成的多任务id放到集合
+                        jobIds.add(save.getId());
+                        //主任务先给管理员，若有子任务则在激活后添加（不然主页会直接显示多个任务）
+                        if (jobName.equals(sysJobrela.getJobName())) {
+                            sysUserJobrela = new SysUserJobrela();
+                            sysUserJobrela.setUserId(PermissionUtils.getSysUser().getId());
+                            sysUserJobrela.setDeptId(PermissionUtils.getSysUser().getDeptId());
+                            sysUserJobrela.setJobrelaId(save.getId());
+                            sysUserJobrelaRepository.save(sysUserJobrela);
+                            System.out.println(sysUserJobrela+"----------");
+                        }
+                        //python的操作流程
+                        Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(jobName).operate("添加了任务").jobId(save.getId()).build();
+                        userlogRespository.save(build);
+                        SysJobrela s = repository.findByJobName(jobName);
+                        //添加任务日志
+                        logUtil.addJoblog(s, "com.cn.wavetop.dataone.service.impl.SysJobrelaServiceImpl.addJobrela", "添加任务");
+
+                    }
+                    SysJobrelaRelated sysJobrelaRelated = null;
+                    Long jobId = jobIds.get(0);
+
+                    //主任务去掉
+                    jobIds.remove(0);
+                    //添加与主任务对应的子任务
+                    if (jobIds != null && jobIds.size() > 0) {
+                        for (Long id : jobIds) {
+                            sysJobrelaRelated = new SysJobrelaRelated();
+                            sysJobrelaRelated.setMasterJobId(jobId);
+                            sysJobrelaRelated.setSlaveJobId(id);
+                            sysJobrelaRelatedRespository.save(sysJobrelaRelated);
+                        }
+                    }
+                    Optional<SysJobrela> ss = repository.findById(jobId);
+                    map.put("status", 1);
+                    map.put("message", "添加成功");
+                    map.put("data", ss.get());
+                    return map;
+                }
             } else {
-                //多目的端，所以分割
-                String[] name = sysJobrela.getDestName().split(",");
-                //先把没有分割的给一个变量
-                String jobName = sysJobrela.getJobName();
-                //分割成多个任务
-                for (int i = 0; i < name.length; i++) {
-                    sysJobrela1 = new SysJobrela();
-                    // 查看端
-                    SysDbinfo source = sysDbinfoRespository.findByNameAndSourDestUser(PermissionUtils.getSysUser().getId(),sysJobrela.getSourceName(), 0);
-                    //目标端
-                    SysDbinfo dest = sysDbinfoRespository.findByNameAndSourDestUser(PermissionUtils.getSysUser().getId(),name[i], 1);
-                    //主任务是原名字，后续的拼上_i
-                    if (i == 0) {
-                        sysJobrela1.setJobName(jobName);
-                    } else {
-                        jobName = null;
-                        jobName = sysJobrela.getJobName() + "_" + i;
-                        sysJobrela1.setJobName(jobName);
-                    }
-                    sysJobrela1.setSourceId(source.getId());
-                    sysJobrela1.setSourceType(source.getType());
-                    sysJobrela1.setSourceName(source.getName());
-                    //主任务目的端先是多个，等激活后再分割
-                    if (i == 0) {
-                        sysJobrela1.setDestName(sysJobrela.getDestName());
-                    } else {
-                        sysJobrela1.setDestName(name[i]);
-                    }
-                    sysJobrela1.setDestId(dest.getId());
-                    sysJobrela1.setDestType(dest.getType());
-                    //待完善的状态
-                    sysJobrela1.setJobStatus("5");
-                    save = repository.save(sysJobrela1);
-                    //把形成的多任务id放到集合
-                    jobIds.add(save.getId());
-                    //主任务先给管理员，若有子任务则在激活后添加（不然主页会直接显示多个任务）
-                    if (jobName.equals(sysJobrela.getJobName())) {
-                        sysUserJobrela = new SysUserJobrela();
-                        sysUserJobrela.setUserId(PermissionUtils.getSysUser().getId());
-                        sysUserJobrela.setDeptId(PermissionUtils.getSysUser().getDeptId());
-                        sysUserJobrela.setJobrelaId(save.getId());
-                        sysUserJobrelaRepository.save(sysUserJobrela);
-                        System.out.println(sysUserJobrela+"----------");
-                    }
-                    //python的操作流程
-                    Userlog build = Userlog.builder().time(new Date()).user(PermissionUtils.getSysUser().getLoginName()).jobName(jobName).operate("添加了任务").jobId(save.getId()).build();
-                    userlogRespository.save(build);
-                    SysJobrela s = repository.findByJobName(jobName);
-                    //添加任务日志
-                    logUtil.addJoblog(s, "com.cn.wavetop.dataone.service.impl.SysJobrelaServiceImpl.addJobrela", "添加任务");
-
-                }
-                SysJobrelaRelated sysJobrelaRelated = null;
-                Long jobId = jobIds.get(0);
-
-                //主任务去掉
-                jobIds.remove(0);
-                //添加与主任务对应的子任务
-                if (jobIds != null && jobIds.size() > 0) {
-                    for (Long id : jobIds) {
-                        sysJobrelaRelated = new SysJobrelaRelated();
-                        sysJobrelaRelated.setMasterJobId(jobId);
-                        sysJobrelaRelated.setSlaveJobId(id);
-                        sysJobrelaRelatedRespository.save(sysJobrelaRelated);
-                    }
-                }
-                Optional<SysJobrela> ss = repository.findById(jobId);
-                map.put("status", 1);
-                map.put("message", "添加成功");
-                map.put("data", ss.get());
+                map.put("status", "2");
+                map.put("message", "权限不足");
                 return map;
             }
-        } else {
-            map.put("status", "2");
-            map.put("message", "权限不足");
+        } catch (Exception e) {
+            logger.error("*"+e);
+            map.put("status", "0");
+            map.put("message", "添加任务异常");
+            e.printStackTrace();
             return map;
         }
 

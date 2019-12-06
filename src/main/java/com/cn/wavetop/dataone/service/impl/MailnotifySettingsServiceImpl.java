@@ -79,48 +79,53 @@ public class MailnotifySettingsServiceImpl implements MailnotifySettingsService 
         long jobId = mailnotifySettings.getJobId();
         List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(jobId);
 
-        // 查看该任务是否存在，存在修改更新任务，不存在新建任务
-        if (repository.existsByJobId(jobId)) {
+        try {
+            // 查看该任务是否存在，存在修改更新任务，不存在新建任务
+            if (repository.existsByJobId(jobId)) {
 
-            repository.updataByJobId(mailnotifySettings.getJobError(),mailnotifySettings.getErrorQueueAlert(),mailnotifySettings.getErrorQueuePause(),mailnotifySettings.getSourceChange(),jobId);
-//            MailnotifySettings save = repository.save(mailnotifySettings);
-            //若果是编辑者修改，则先删除子任务的规则，因为管理员在修改任务已经删除过了
+                repository.updataByJobId(mailnotifySettings.getJobError(),mailnotifySettings.getErrorQueueAlert(),mailnotifySettings.getErrorQueuePause(),mailnotifySettings.getSourceChange(),jobId);
+    //            MailnotifySettings save = repository.save(mailnotifySettings);
+                //若果是编辑者修改，则先删除子任务的规则，因为管理员在修改任务已经删除过了
 
-                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
-                    MailnotifySettings mailnotifySettings2=null;
-                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                        if(PermissionUtils.isPermitted("3")) {
-                        repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                    if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                        MailnotifySettings mailnotifySettings2=null;
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                            if(PermissionUtils.isPermitted("3")) {
+                            repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                        }
+                            mailnotifySettings2=new MailnotifySettings();
+                            mailnotifySettings2.setErrorQueueAlert(mailnotifySettings.getErrorQueueAlert());
+                            mailnotifySettings2.setErrorQueuePause(mailnotifySettings.getErrorQueuePause());
+                            mailnotifySettings2.setJobError(mailnotifySettings.getJobError());
+                            mailnotifySettings2.setSourceChange(mailnotifySettings.getSourceChange());
+                            mailnotifySettings2.setJobId(sysJobrelaRelated.getSlaveJobId());
+                            repository.save(mailnotifySettings2);
                     }
-                        mailnotifySettings2=new MailnotifySettings();
-                        mailnotifySettings2.setErrorQueueAlert(mailnotifySettings.getErrorQueueAlert());
-                        mailnotifySettings2.setErrorQueuePause(mailnotifySettings.getErrorQueuePause());
-                        mailnotifySettings2.setJobError(mailnotifySettings.getJobError());
-                        mailnotifySettings2.setSourceChange(mailnotifySettings.getSourceChange());
-                        mailnotifySettings2.setJobId(sysJobrelaRelated.getSlaveJobId());
-                        repository.save(mailnotifySettings2);
                 }
+                map.put("status", 1);
+                map.put("message", "修改成功");
+    //            map.put("data", save);
+            } else {
+                MailnotifySettings save =repository.save(mailnotifySettings);
+                if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                    MailnotifySettings mailnotifySettings1=null;
+                    for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                        mailnotifySettings1=new MailnotifySettings();
+                        mailnotifySettings1.setErrorQueueAlert(mailnotifySettings.getErrorQueueAlert());
+                        mailnotifySettings1.setErrorQueuePause(mailnotifySettings.getErrorQueuePause());
+                        mailnotifySettings1.setJobError(mailnotifySettings.getJobError());
+                        mailnotifySettings1.setSourceChange(mailnotifySettings.getSourceChange());
+                        mailnotifySettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
+                        repository.save(mailnotifySettings1);
+                    }
+                    }
+                map.put("status", 2);
+                map.put("message", "添加成功");
+                map.put("data", save);
             }
-            map.put("status", 1);
-            map.put("message", "修改成功");
-//            map.put("data", save);
-        } else {
-            MailnotifySettings save =repository.save(mailnotifySettings);
-            if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
-                MailnotifySettings mailnotifySettings1=null;
-                for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
-                    mailnotifySettings1=new MailnotifySettings();
-                    mailnotifySettings1.setErrorQueueAlert(mailnotifySettings.getErrorQueueAlert());
-                    mailnotifySettings1.setErrorQueuePause(mailnotifySettings.getErrorQueuePause());
-                    mailnotifySettings1.setJobError(mailnotifySettings.getJobError());
-                    mailnotifySettings1.setSourceChange(mailnotifySettings.getSourceChange());
-                    mailnotifySettings1.setJobId(sysJobrelaRelated.getSlaveJobId());
-                    repository.save(mailnotifySettings1);
-                }
-                }
-            map.put("status", 2);
-            map.put("message", "添加成功");
-            map.put("data", save);
+        } catch (Exception e) {
+            logger.error("*"+e);
+            e.printStackTrace();
         }
         return map;
     }

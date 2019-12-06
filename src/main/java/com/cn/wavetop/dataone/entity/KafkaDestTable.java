@@ -16,10 +16,10 @@ public class KafkaDestTable {
     @Id // 标识主键
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自定义生成
     private Long id;
-    @Column(nullable = false)
+
     private Long jobId;
-    @Column(nullable = false)
+
     private Long destDbid;
-    @Column(nullable = false)
+
     private String destTable;
 }

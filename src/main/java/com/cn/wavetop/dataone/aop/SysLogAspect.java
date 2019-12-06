@@ -39,9 +39,9 @@ public class SysLogAspect {
     private SysUserlogRepository sysUserlogRepository;
     //定义切点 @Pointcut
     //在注解的位置切入代码
-    @Pointcut("@annotation(com.cn.wavetop.dataone.aop.MyLog)")
-    public void logPoinCut() {
-    }
+//    @Pointcut("@annotation(com.cn.wavetop.dataone.aop.MyLog)")
+//    public void logPoinCut() {
+//    }
 //    //切面 配置通知前置
 //    @AfterReturning("logPoinCut()")
 //    public void saveSysLog(JoinPoint joinPoint) {
@@ -173,6 +173,7 @@ public class SysLogAspect {
             sysLog.setName(joinPoint.getSignature().getName());
             sysLog.setDeclaringTypeName(joinPoint.getSignature().getDeclaringTypeName());
             sysLog.setModifiers(joinPoint.getSignature().getModifiers());
+            System.out.println(sysLog);
             sysErrorRepository.save(sysLog);
             System.out.println("【" + className + "】:" + methodName + "执行时出现异常：" + ex + "。");
         }

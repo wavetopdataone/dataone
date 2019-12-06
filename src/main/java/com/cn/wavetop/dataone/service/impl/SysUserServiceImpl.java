@@ -45,6 +45,8 @@ public class SysUserServiceImpl implements SysUserService {
     @Autowired
     private SysUserRepository sysUserRepository;
     @Autowired
+    private SysUserlogRepository sysUserlogRepository;
+    @Autowired
     private SysUserRoleRepository sysUserRoleRepository;
     @Autowired
     private SysUserJobrelaRepository sysUserJobrelaRepository;
@@ -75,7 +77,6 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public Object login(String name, String password) {
-
 
         SysUser sysUser=new SysUser();
         List<SysUserRoleVo> s=new ArrayList<>();
@@ -681,7 +682,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Transactional
     @Override
-    public Object editPasswordByEmail(String email, String password) {
+    public Object editPasswordByEmail(String email, String password ,String ip) {
         SysUser sysUser=null;
         if(PermissionUtils.flag(email)){
              sysUser= sysUserRepository.findByEmail(email);
@@ -695,8 +696,20 @@ public class SysUserServiceImpl implements SysUserService {
             sysUser.setSalt(saltAndCiphertext[0]);
             sysUser.setPassword(saltAndCiphertext[1]);
             sysUserRepository.save(sysUser);
-            logUtil.saveUserlog(sysUser, sysUserOld, "com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.editPasswordByEmail", "修改用户");
-
+            SysUserlog sysUserlog=new SysUserlog();
+           Optional<SysDept> sysDept= sysDeptRepository.findById(sysUser.getDeptId());
+            sysUserlog.setUserdept(sysDept.get().getDeptName());
+            sysUserlog.setCreateDate(new Date());
+            sysUserlog.setDeptName(sysDept.get().getDeptName());
+            sysUserlog.setDetail("修改密码");
+            sysUserlog.setMethod("com.cn.wavetop.dataone.service.impl.SysUserServiceImpl.editPasswordByEmail");
+            sysUserlog.setOperation("修改用户");
+            //todo 我只取第一个角色
+            List<SysRole> roles=sysUserRepository.findUserById(sysUser.getId());
+            sysUserlog.setRoleName(roles.get(0).getRoleName());
+            sysUserlog.setUsername(sysUser.getLoginName());
+            sysUserlog.setIp(ip);
+            sysUserlogRepository.save(sysUserlog);
         }
         return ToDataMessage.builder().status("1").message("修改成功").build();
     }

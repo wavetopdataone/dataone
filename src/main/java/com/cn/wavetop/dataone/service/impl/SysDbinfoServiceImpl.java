@@ -118,6 +118,7 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
                     return map;
                 }
             } catch (Exception e) {
+                logger.error("*"+e);
                 map.put("status", 3);
                 map.put("message", "数据库连接不对");
                 return map;
@@ -191,6 +192,7 @@ public class SysDbinfoServiceImpl implements SysDbinfoService {
                     map.put("message", "正在被使用");
                 }
             } catch (Exception e) {
+                logger.error("*"+e);
                 map.put("status", 3);
                 map.put("message", "数据库连接不对");
             } finally {

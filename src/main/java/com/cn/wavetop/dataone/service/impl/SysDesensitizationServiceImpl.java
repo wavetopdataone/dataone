@@ -40,97 +40,107 @@ public class SysDesensitizationServiceImpl implements SysDesensitizationService 
         //查询是否有子任务
         List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(sysDesensitization.getJobId());
         //批量添加脱敏规则
-        for (int i = 0; i < destName.length; i++) {
-            list = sysDesensitizationRepository.findByJobIdAndSourceTableAndSourceField(sysDesensitization.getJobId(), sysDesensitization.getSourceTable(), sourceName[i]);
-           //若存在脱敏的规则则修改
-            if (list != null && list.size() > 0) {
+        try {
+            for (int i = 0; i < destName.length; i++) {
+                list = sysDesensitizationRepository.findByJobIdAndSourceTableAndSourceField(sysDesensitization.getJobId(), sysDesensitization.getSourceTable(), sourceName[i]);
+               //若存在脱敏的规则则修改
+                if (list != null && list.size() > 0) {
 
-                list.get(0).setDesensitizationWay(sysDesensitization.getDesensitizationWay());
-               if("2".equals(sysDesensitization.getDesensitizationWay())) {
-                   list.get(0).setRemark(sysDesensitization.getRemark());
-               }
-                sysDesensitizationRepository.save(list.get(0));
-                //删除脱敏规则
-//                sysDesensitizationRepository.deleteByJobrelaId(sysDesensitization.getJobId(), sysDesensitization.getDestTable(), sysDesensitization.getDestField());
-//                插入脱敏规则
-//                SysDesensitization sysDesensitization1 = sysDesensitizationRepository.save(sysDesensitization);
-                //查询关联的任务
-                //添加子任务的脱敏规则
-                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
-                    SysDesensitization s = null;
-                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-//                        if(PermissionUtils.isPermitted("3")) {
-//                            sysDesensitizationRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId(), sysDesensitization.getDestTable(), sysDesensitization.getDestField());
-                       sysDesensitizationRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                    list.get(0).setDesensitizationWay(sysDesensitization.getDesensitizationWay());
+                   if("2".equals(sysDesensitization.getDesensitizationWay())) {
+                       list.get(0).setRemark(sysDesensitization.getRemark());
+                   }
+                    sysDesensitizationRepository.save(list.get(0));
+                    //删除脱敏规则
+    //                sysDesensitizationRepository.deleteByJobrelaId(sysDesensitization.getJobId(), sysDesensitization.getDestTable(), sysDesensitization.getDestField());
+    //                插入脱敏规则
+    //                SysDesensitization sysDesensitization1 = sysDesensitizationRepository.save(sysDesensitization);
+                    //查询关联的任务
+                    //添加子任务的脱敏规则
+                    if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                        SysDesensitization s = null;
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+    //                        if(PermissionUtils.isPermitted("3")) {
+    //                            sysDesensitizationRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId(), sysDesensitization.getDestTable(), sysDesensitization.getDestField());
+                           sysDesensitizationRepository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
 
-//                        }
-                        s = new SysDesensitization();
-                        s.setDestField(destName[i]);
-                        s.setSourceField(sourceName[i]);
-                        s.setSourceTable(sysDesensitization.getSourceTable());
-                        s.setDestTable(sysDesensitization.getDestTable());
-                        s.setDesensitizationWay(sysDesensitization.getDesensitizationWay());
-                        s.setJobId(sysJobrelaRelated.getSlaveJobId());
-                        if("2".equals(sysDesensitization.getDesensitizationWay())) {
-                            s.setRemark(sysDesensitization.getRemark());
+    //                        }
+                            s = new SysDesensitization();
+                            s.setDestField(destName[i]);
+                            s.setSourceField(sourceName[i]);
+                            s.setSourceTable(sysDesensitization.getSourceTable());
+                            s.setDestTable(sysDesensitization.getDestTable());
+                            s.setDesensitizationWay(sysDesensitization.getDesensitizationWay());
+                            s.setJobId(sysJobrelaRelated.getSlaveJobId());
+                            if("2".equals(sysDesensitization.getDesensitizationWay())) {
+                                s.setRemark(sysDesensitization.getRemark());
+                            }
+                            sysDesensitizationRepository.save(s);
+
                         }
-                        sysDesensitizationRepository.save(s);
-
                     }
-                }
-                map.put("status","1");
-                map.put("message","修改成功");
-            } else {
-                //添加脱敏规则
-               SysDesensitization sysDesensitization1=new SysDesensitization();
-                sysDesensitization1.setDestField(destName[i]);
-                sysDesensitization1.setDestTable(sysDesensitization.getDestTable());
-                sysDesensitization1.setSourceField(sourceName[i]);
-                sysDesensitization1.setSourceTable(sysDesensitization.getSourceTable());
-                sysDesensitization1.setDesensitizationWay(sysDesensitization.getDesensitizationWay());
-                sysDesensitization1.setJobId(sysDesensitization.getJobId());
-                if("2".equals(sysDesensitization.getDesensitizationWay())) {
-                    sysDesensitization1.setRemark(sysDesensitization.getRemark());
-                }
-                sysDesensitizationRepository.save(sysDesensitization1);
-                //添加子任务的脱敏规则
-                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
-                    SysDesensitization s = null;
-                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                        s = new SysDesensitization();
-                        s.setDestField(destName[i]);
-                        s.setSourceField(sourceName[i]);
-                        s.setSourceTable(sysDesensitization.getSourceTable());
-                        s.setDestTable(sysDesensitization.getDestTable());
-                        s.setDesensitizationWay(sysDesensitization.getDesensitizationWay());
-                        s.setJobId(sysJobrelaRelated.getSlaveJobId());
-                        if("2".equals(sysDesensitization.getDesensitizationWay())) {
-                            s.setRemark(sysDesensitization.getRemark());
+                    map.put("status","1");
+                    map.put("message","修改成功");
+                } else {
+                    //添加脱敏规则
+                   SysDesensitization sysDesensitization1=new SysDesensitization();
+                    sysDesensitization1.setDestField(destName[i]);
+                    sysDesensitization1.setDestTable(sysDesensitization.getDestTable());
+                    sysDesensitization1.setSourceField(sourceName[i]);
+                    sysDesensitization1.setSourceTable(sysDesensitization.getSourceTable());
+                    sysDesensitization1.setDesensitizationWay(sysDesensitization.getDesensitizationWay());
+                    sysDesensitization1.setJobId(sysDesensitization.getJobId());
+                    if("2".equals(sysDesensitization.getDesensitizationWay())) {
+                        sysDesensitization1.setRemark(sysDesensitization.getRemark());
+                    }
+                    sysDesensitizationRepository.save(sysDesensitization1);
+                    //添加子任务的脱敏规则
+                    if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                        SysDesensitization s = null;
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                            s = new SysDesensitization();
+                            s.setDestField(destName[i]);
+                            s.setSourceField(sourceName[i]);
+                            s.setSourceTable(sysDesensitization.getSourceTable());
+                            s.setDestTable(sysDesensitization.getDestTable());
+                            s.setDesensitizationWay(sysDesensitization.getDesensitizationWay());
+                            s.setJobId(sysJobrelaRelated.getSlaveJobId());
+                            if("2".equals(sysDesensitization.getDesensitizationWay())) {
+                                s.setRemark(sysDesensitization.getRemark());
+                            }
+                            sysDesensitizationRepository.save(s);
                         }
-                        sysDesensitizationRepository.save(s);
                     }
+                    map.put("status","1");
+                    map.put("message","添加成功");
                 }
-                map.put("status","1");
-                map.put("message","添加成功");
             }
+        } catch (Exception e) {
+            logger.error("*"+e);
+            e.printStackTrace();
         }
-            return map;
+        return map;
     }
 
     @Override
     public Object delDesensitization(SysDesensitization sysDesensitization) {
         String[]destName=sysDesensitization.getDestField().split(",");
-        for(int i=0;i<destName.length;i++) {
-            List<SysDesensitization> list = sysDesensitizationRepository.findByJobIdAndDestTableAndDestField(sysDesensitization.getJobId(), sysDesensitization.getDestTable(), destName[i]);
-            if (list != null && list.size() > 0) {
-                sysDesensitizationRepository.deleteByJobrelaId(sysDesensitization.getJobId(), sysDesensitization.getDestTable(), destName[i]);
-            }
-            List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(sysDesensitization.getJobId());
-            if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
-                for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                    sysDesensitizationRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId(), sysDesensitization.getDestTable(), destName[i]);
+        try {
+            for(int i=0;i<destName.length;i++) {
+                List<SysDesensitization> list = sysDesensitizationRepository.findByJobIdAndDestTableAndDestField(sysDesensitization.getJobId(), sysDesensitization.getDestTable(), destName[i]);
+                if (list != null && list.size() > 0) {
+                    sysDesensitizationRepository.deleteByJobrelaId(sysDesensitization.getJobId(), sysDesensitization.getDestTable(), destName[i]);
+                }
+                List<SysJobrelaRelated> sysJobrelaRelateds = sysJobrelaRelatedRespository.findByMasterJobId(sysDesensitization.getJobId());
+                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                        sysDesensitizationRepository.deleteByJobrelaId(sysJobrelaRelated.getSlaveJobId(), sysDesensitization.getDestTable(), destName[i]);
+                    }
                 }
             }
+        } catch (Exception e) {
+            logger.error("*"+e);
+            e.printStackTrace();
         }
         return ToDataMessage.builder().status("1").message("删除成功").build();
     }

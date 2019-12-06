@@ -79,124 +79,129 @@ public class SysJobinfoServiceImpl implements SysJobinfoService {
         }
         List<SysJobrelaRelated> sysJobrelaRelateds= sysJobrelaRelatedRespository.findByMasterJobId(jobinfo.getJobId());
 
-        // 查看该任务是否存在，存在修改更新任务，不存在新建任务
-        if (repository.existsByJobId(jobinfo.getJobId())) {
-            SysJobinfo data = repository.findByJobId(Long.valueOf(jobinfo.getJobId()));
-            data.setSyncRange(jobinfo.getSyncRange());
-            //data.setId(jobinfo.getId());
-            data.setJobId(jobinfo.getJobId());
-            data.setBeginTime(jobinfo.getBeginTime());
-            data.setDataEnc(jobinfo.getDataEnc());
-            data.setDestCaseSensitive(jobinfo.getDestCaseSensitive());
-            data.setDestWriteConcurrentNum(jobinfo.getDestWriteConcurrentNum());
-            data.setEndTime(jobinfo.getEndTime());
-            data.setMaxDestWrite(jobinfo.getMaxDestWrite());
-            data.setMaxSourceRead(jobinfo.getMaxSourceRead());
-            data.setPlayers(jobinfo.getPlayers());
-            data.setReadBegin(jobinfo.getReadBegin());
-            data.setReadWay(jobinfo.getReadWay());
-            data.setSyncWay(jobinfo.getSyncWay());
-            data.setReadFrequency(jobinfo.getReadFrequency());
-            if(jobinfo.getReadBegin()==1) {
-                data.setSourceType(jobinfo.getSourceType());
-                if (jobinfo.getSourceType().equals("1")) {
-                    data.setLogMinerScn(jobinfo.getLogMinerScn());
-                } else if (jobinfo.getSourceType().equals("2")) {
-                    data.setBinlog(jobinfo.getBinlog());
-                    data.setBinlogPostion(jobinfo.getBinlogPostion());
-                }
-            }
-            repository.save(data);
-            if(PermissionUtils.isPermitted("3")) {
-                //查询该任务有没有关联的子任务
-                if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
-                    for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                        //先删除表规则字段規則過濾规则
-                        repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+        try {
+            // 查看该任务是否存在，存在修改更新任务，不存在新建任务
+            if (repository.existsByJobId(jobinfo.getJobId())) {
+                SysJobinfo data = repository.findByJobId(Long.valueOf(jobinfo.getJobId()));
+                data.setSyncRange(jobinfo.getSyncRange());
+                //data.setId(jobinfo.getId());
+                data.setJobId(jobinfo.getJobId());
+                data.setBeginTime(jobinfo.getBeginTime());
+                data.setDataEnc(jobinfo.getDataEnc());
+                data.setDestCaseSensitive(jobinfo.getDestCaseSensitive());
+                data.setDestWriteConcurrentNum(jobinfo.getDestWriteConcurrentNum());
+                data.setEndTime(jobinfo.getEndTime());
+                data.setMaxDestWrite(jobinfo.getMaxDestWrite());
+                data.setMaxSourceRead(jobinfo.getMaxSourceRead());
+                data.setPlayers(jobinfo.getPlayers());
+                data.setReadBegin(jobinfo.getReadBegin());
+                data.setReadWay(jobinfo.getReadWay());
+                data.setSyncWay(jobinfo.getSyncWay());
+                data.setReadFrequency(jobinfo.getReadFrequency());
+                if(jobinfo.getReadBegin()==1) {
+                    data.setSourceType(jobinfo.getSourceType());
+                    if (jobinfo.getSourceType().equals("1")) {
+                        data.setLogMinerScn(jobinfo.getLogMinerScn());
+                    } else if (jobinfo.getSourceType().equals("2")) {
+                        data.setBinlog(jobinfo.getBinlog());
+                        data.setBinlogPostion(jobinfo.getBinlogPostion());
                     }
                 }
-            }
+                repository.save(data);
+                if(PermissionUtils.isPermitted("3")) {
+                    //查询该任务有没有关联的子任务
+                    if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                        for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                            //先删除表规则字段規則過濾规则
+                            repository.deleteByJobId(sysJobrelaRelated.getSlaveJobId());
+                        }
+                    }
+                }
+                    if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
+                        SysJobinfo datas=null;
+                        for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
+                            datas=new SysJobinfo();
+                            datas.setSyncRange(jobinfo.getSyncRange());
+                            //data.setId(jobinfo.getId());
+                            datas.setJobId(sysJobrelaRelated.getSlaveJobId());
+                            datas.setBeginTime(jobinfo.getBeginTime());
+                            datas.setDataEnc(jobinfo.getDataEnc());
+
+                            datas.setDestCaseSensitive(jobinfo.getDestCaseSensitive());
+                            datas.setDestWriteConcurrentNum(jobinfo.getDestWriteConcurrentNum());
+                            datas.setEndTime(jobinfo.getEndTime());
+                            datas.setMaxDestWrite(jobinfo.getMaxDestWrite());
+                            datas.setMaxSourceRead(jobinfo.getMaxSourceRead());
+
+                            datas.setPlayers(jobinfo.getPlayers());
+                            datas.setReadBegin(jobinfo.getReadBegin());
+                            datas.setReadWay(jobinfo.getReadWay());
+                            datas.setSyncWay(jobinfo.getSyncWay());
+                            datas.setReadFrequency(jobinfo.getReadFrequency());
+                            if(jobinfo.getReadBegin()==1) {
+                                datas.setSourceType(jobinfo.getSourceType());
+                                if (jobinfo.getSourceType().equals("1")) {
+                                    datas.setLogMinerScn(jobinfo.getLogMinerScn());
+                                } else if (jobinfo.getSourceType().equals("2")) {
+                                    datas.setBinlog(jobinfo.getBinlog());
+                                    datas.setBinlogPostion(jobinfo.getBinlogPostion());
+                                }
+                            }
+                            repository.save(datas);
+                        }
+                    }
+                map.put("status", 1);
+                map.put("message", "修改成功");
+                map.put("data", data);
+            } else {
+                SysJobinfo sysJobinfo1=null;
+                SysJobinfo data = repository.save(jobinfo);
                 if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
-                    SysJobinfo datas=null;
                     for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
-                        datas=new SysJobinfo();
-                        datas.setSyncRange(jobinfo.getSyncRange());
-                        //data.setId(jobinfo.getId());
-                        datas.setJobId(sysJobrelaRelated.getSlaveJobId());
-                        datas.setBeginTime(jobinfo.getBeginTime());
-                        datas.setDataEnc(jobinfo.getDataEnc());
 
-                        datas.setDestCaseSensitive(jobinfo.getDestCaseSensitive());
-                        datas.setDestWriteConcurrentNum(jobinfo.getDestWriteConcurrentNum());
-                        datas.setEndTime(jobinfo.getEndTime());
-                        datas.setMaxDestWrite(jobinfo.getMaxDestWrite());
-                        datas.setMaxSourceRead(jobinfo.getMaxSourceRead());
-
-                        datas.setPlayers(jobinfo.getPlayers());
-                        datas.setReadBegin(jobinfo.getReadBegin());
-                        datas.setReadWay(jobinfo.getReadWay());
-                        datas.setSyncWay(jobinfo.getSyncWay());
-                        datas.setReadFrequency(jobinfo.getReadFrequency());
-                        if(jobinfo.getReadBegin()==1) {
-                            datas.setSourceType(jobinfo.getSourceType());
+                            sysJobinfo1=new SysJobinfo();
+                            sysJobinfo1.setJobId(sysJobrelaRelated.getSlaveJobId());
+                            sysJobinfo1.setBeginTime(jobinfo.getBeginTime());
+                            sysJobinfo1.setEndTime(jobinfo.getEndTime());
+                            sysJobinfo1.setDataEnc(jobinfo.getDataEnc());
+                            sysJobinfo1.setPlayers(jobinfo.getPlayers());
+                            sysJobinfo1.setReadBegin(jobinfo.getReadBegin());
+                            sysJobinfo1.setReadFrequency(jobinfo.getReadFrequency());
+                            sysJobinfo1.setSyncRange(jobinfo.getSyncRange());
+                            sysJobinfo1.setSyncWay(jobinfo.getSyncWay());
+                            if(jobinfo.getReadBegin()==1) {
+                                sysJobinfo1.setSourceType(jobinfo.getSourceType());
                             if (jobinfo.getSourceType().equals("1")) {
-                                datas.setLogMinerScn(jobinfo.getLogMinerScn());
+                                sysJobinfo1.setLogMinerScn(jobinfo.getLogMinerScn());
                             } else if (jobinfo.getSourceType().equals("2")) {
-                                datas.setBinlog(jobinfo.getBinlog());
-                                datas.setBinlogPostion(jobinfo.getBinlogPostion());
+                                sysJobinfo1.setBinlog(jobinfo.getBinlog());
+                                sysJobinfo1.setBinlogPostion(jobinfo.getBinlogPostion());
                             }
                         }
-                        repository.save(datas);
+                            System.out.println(sysJobrelaRelated.getSlaveJobId()+"renwu");
+                            repository.save(sysJobinfo1);
+
                     }
                 }
-            map.put("status", 1);
-            map.put("message", "修改成功");
-            map.put("data", data);
-        } else {
-            SysJobinfo sysJobinfo1=null;
-            SysJobinfo data = repository.save(jobinfo);
-            if(sysJobrelaRelateds!=null&&sysJobrelaRelateds.size()>0) {
-                for(SysJobrelaRelated sysJobrelaRelated:sysJobrelaRelateds) {
-
-                        sysJobinfo1=new SysJobinfo();
-                        sysJobinfo1.setJobId(sysJobrelaRelated.getSlaveJobId());
-                        sysJobinfo1.setBeginTime(jobinfo.getBeginTime());
-                        sysJobinfo1.setEndTime(jobinfo.getEndTime());
-                        sysJobinfo1.setDataEnc(jobinfo.getDataEnc());
-                        sysJobinfo1.setPlayers(jobinfo.getPlayers());
-                        sysJobinfo1.setReadBegin(jobinfo.getReadBegin());
-                        sysJobinfo1.setReadFrequency(jobinfo.getReadFrequency());
-                        sysJobinfo1.setSyncRange(jobinfo.getSyncRange());
-                        sysJobinfo1.setSyncWay(jobinfo.getSyncWay());
-                        if(jobinfo.getReadBegin()==1) {
-                            sysJobinfo1.setSourceType(jobinfo.getSourceType());
-                        if (jobinfo.getSourceType().equals("1")) {
-                            sysJobinfo1.setLogMinerScn(jobinfo.getLogMinerScn());
-                        } else if (jobinfo.getSourceType().equals("2")) {
-                            sysJobinfo1.setBinlog(jobinfo.getBinlog());
-                            sysJobinfo1.setBinlogPostion(jobinfo.getBinlogPostion());
-                        }
-                    }
-                        System.out.println(sysJobrelaRelated.getSlaveJobId()+"renwu");
-                        repository.save(sysJobinfo1);
-
-                }
+                map.put("status", 2);
+                map.put("message", "添加成功");
+                map.put("data", data);
             }
-            map.put("status", 2);
-            map.put("message", "添加成功");
-            map.put("data", data);
+            //同步的方式
+            Optional<SysJobrela> sysJobrela= sysJobrelaRespository.findById(jobinfo.getJobId());
+            sysJobrela.get().setSyncRange(jobinfo.getSyncRange());
+            sysJobrelaRespository.save(sysJobrela.get());
+            if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
+                for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
+                    Optional<SysJobrela> sysJobrelas= sysJobrelaRespository.findById(sysJobrelaRelated.getSlaveJobId());
+                    sysJobrelas.get().setSyncRange(jobinfo.getSyncRange());
+                    sysJobrelaRespository.save(sysJobrelas.get());
+                }
+                }
+        } catch (Exception e) {
+            logger.error("*"+e);
+            e.printStackTrace();
         }
-        //同步的方式
-       Optional<SysJobrela> sysJobrela= sysJobrelaRespository.findById(jobinfo.getJobId());
-        sysJobrela.get().setSyncRange(jobinfo.getSyncRange());
-        sysJobrelaRespository.save(sysJobrela.get());
-        if (sysJobrelaRelateds != null && sysJobrelaRelateds.size() > 0) {
-            for (SysJobrelaRelated sysJobrelaRelated : sysJobrelaRelateds) {
-                Optional<SysJobrela> sysJobrelas= sysJobrelaRespository.findById(sysJobrelaRelated.getSlaveJobId());
-                sysJobrelas.get().setSyncRange(jobinfo.getSyncRange());
-                sysJobrelaRespository.save(sysJobrelas.get());
-            }
-            }
         return map;
     }
 
