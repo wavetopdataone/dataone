@@ -134,9 +134,10 @@ public class SysUserController {
     }
     @ApiOperation(value = "忘记密码时修改密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "修改密码")
     @PostMapping("/editPasswordByEmail")
-    public Object editPasswordByEmail(String email, String password, HttpServletSession session){
-String ip=session.getHost();
-        return sysUserService.editPasswordByEmail(email,password,ip);
+    public Object editPasswordByEmail(String email, String password){
+//        String ip=session.getHost();
+//        System.out.println(ip);
+        return sysUserService.editPasswordByEmail(email,password);
     }
 
     @ApiOperation(value = "初始化绑定超管邮箱和密码",httpMethod = "POST",protocols = "HTTP", produces ="application/json", notes = "绑定超管邮箱和密码")

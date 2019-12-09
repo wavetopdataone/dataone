@@ -72,7 +72,7 @@ public class LogDBAppender extends DBAppenderBase<ILoggingEvent> {
     private void bindLoggingEventWithInsertStatement(PreparedStatement stmt, ILoggingEvent event) throws SQLException {
         // event.getFormattedMessage() 日志打印内容
         String message = event.getFormattedMessage();
-        //todo 如果只想存储自己打印的日志，可以这样写日志：logger.info("- XXXX")
+        //todo 如果只想存储自己打印的日志，可以这样写日志：logger.info("* XXXX")
         if(message.startsWith("*")){ // 判断日志消息首字母为 - 的日志，记录到数据库表
             stmt.setString(MESSAGE, message);
             // event.getLevel().toString() 日志级别

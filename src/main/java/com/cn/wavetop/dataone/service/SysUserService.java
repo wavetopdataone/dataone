@@ -22,7 +22,7 @@ public interface SysUserService  {
     Object selectUserByParentId(Long userId);
 
     Object sendEmail(String email);
-    Object editPasswordByEmail(String email,String password,String ip);
+    Object editPasswordByEmail(String email,String password);
     Object codeEquals(String authCode);
     //绑定邮箱
     Object bindEmail(String email,String emailPassword);

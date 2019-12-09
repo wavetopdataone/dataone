@@ -93,7 +93,14 @@ public class SysUserServiceImpl implements SysUserService {
         }
         String ciphertext = null;
         List<SysUser> list=sysUserRepository.findAllByLoginName(name);
-        ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
+        ValueOperations<String, String> opsForValue=null;
+
+        try {
+            opsForValue = stringRedisTemplate.opsForValue();
+        } catch (Exception e) {
+            logger.error("*redis服务未连接");
+            e.printStackTrace();
+        }
         UsernamePasswordToken token=new UsernamePasswordToken(name,password);
         //ThreadContext.bind(SecurityUtils.getSubject());
         Subject subject= SecurityUtils.getSubject();
@@ -691,7 +698,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Transactional
     @Override
-    public Object editPasswordByEmail(String email, String password ,String ip) {
+    public Object editPasswordByEmail(String email, String password ) {
         SysUser sysUser=null;
         if(PermissionUtils.flag(email)){
              sysUser= sysUserRepository.findByEmail(email);
@@ -717,7 +724,7 @@ public class SysUserServiceImpl implements SysUserService {
             List<SysRole> roles=sysUserRepository.findUserById(sysUser.getId());
             sysUserlog.setRoleName(roles.get(0).getRoleName());
             sysUserlog.setUsername(sysUser.getLoginName());
-            sysUserlog.setIp(ip);
+//            sysUserlog.setIp(ip);
             sysUserlogRepository.save(sysUserlog);
         }
         return ToDataMessage.builder().status("1").message("修改成功").build();
